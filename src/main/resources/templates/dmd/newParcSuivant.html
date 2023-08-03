@@ -1,0 +1,288 @@
+!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+    <link href=https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+
+</head>
+<body>
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+
+<div class="card mx-auto" style="width: 50rem">
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-15" >
+
+                <h5>
+                    <strong id="dateprevue" th:text = "${dmdParcDto.datePrevue}" class="col-md-4" ></strong>
+                    <strong id="heureprevue" th:text = "${dmdParcDto.heurePrevue}" class="col-md-4"></strong>
+                    <strong id="moyen" th:text = "${dmdParcDto.moyenDemande}" class="col-md-4"></strong>
+                    <strong id="nom1" th:text = "${dmdParcDto.employe.toNomComplet()}" class="col-md-4" ></strong>
+                    <strong id="IdEmploye" th:text = "${dmdParcDto.employe.idEmploye}" hidden></strong>
+                </h5>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <!--<form class="form-group" >-->
+
+
+        <form action="" id="form" >
+            <!-- Nom Client Form Input -->
+            <div  class="form-group row">
+                <label  th:for="nom"  class="col-sm-4 col-form-label text-md-right"><strong>Nom et prenom</strong></label>
+
+                    <div class="col-md-6">
+                        <select th:field="${dto.employe}"  name="employe" id = "nom" class="select-type form-control" type = "text" required>
+                            <option value="">------ Employe -------</option>
+                            <option th:each="dto:${listEmploye}" th:value="${dto.toNomComplet}"  th:text="${dto.toNomComplet}" th:field="${dto.employe}"></option>
+                        </select>
+                    </div>
+            </div>
+
+            <div  class="form-group row">
+                <label  th:for="destination" class="col-sm-4 col-form-label text-md-right"><strong>Destination</strong></label>
+
+                <div class="col-md-6">
+                    <input class="form-control" id="destination"  th:field="${dto.destination}" type = "text" required>
+
+                </div>
+            </div>
+            <div  class="form-group row">
+                <label  th:for="motifDmd" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>
+                <div class="col-md-6">
+                    <input class="form-control" id="motifDmd" th:field="${dto.motifDmd}" type = "text" required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="button" class="col-sm-4 col-form-label text-md-left"><strong></strong></label>
+
+                <div class="col-md-6">
+                    <!--<button id="btn" type="submit" value = "btn" class="btn btn-primary" >Ajouter</button>-->
+                    <button class="btn btn-primary" type="submit" value = "btn" onclick="AddData(event)"> Ajouter </button>
+                </div>
+            </div>
+        </form>
+
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-8">
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div >
+                <div class="table-responsive-sm">
+                    <table class="table"  style="width:100%" id="index-dmd">
+                        <thead class="table-light" >
+                        <tr>
+                            <th>Nom et prenom</th>
+                            <th>Motif</th>
+                            <th>Destination</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+
+                    <script type="text/javascript" src=https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js></script>
+
+                    <script>
+                        //Function Add  Data on table
+                        function AddData(e)
+                            {
+                                    e.preventDefault();
+                                    var rows="";
+                                    var nom=document.getElementById("nom").value;
+                                    var destination =document.getElementById("destination").value;
+                                    var motif =document.getElementById("motifDmd").value;
+
+                                    rows+="<tr><td>"+nom+"</td><td>"+destination+"</td><td>"+motif+"</td>";
+                                    $(rows).appendTo("#index-dmd tbody");
+
+                                    resetForm();
+
+
+                            }
+
+                                // Function for reset Form
+                                function resetForm(){
+                                    document.getElementById("form").reset();
+                                }
+                    </script>
+
+                    <!--<script type="text/javascript">
+
+                        document.getElementById("btn").onclick=function()
+                        {
+                            document.getElementById("index-dmd").style.display="block";
+
+                            var table = document.getElementById("index-dmd");
+                            var row = table.insertRow(-1);
+                            var date = row.insertCell(0);
+                            var desc = row.insertCell(1);
+                            var amt = row.insertCell(2);
+                            date.innerHTML = document.getElementById("nom").value;
+                            desc.innerHTML = document.getElementById("destination").value;
+                            amt.innerHTML = document.getElementById("motifDmd").value;
+
+
+                            nom.value ='';
+                            destination.value ='';
+                            motifDmd.value ='';
+
+
+
+                            return false;
+
+                        }
+
+                    </script>-->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center"  style="margin: 40px; padding: 10px" >
+                        <button class="btn btn-success" type="submit" value="submit" id="button">valider</button>
+                    </div>
+
+
+                    <script type="text/javascript">
+
+                        // Get Data
+                            $('#button').on('click', function () {
+
+                                 var date =  document.getElementById("dateprevue").innerText;
+                                 var heure = document.getElementById("heureprevue").innerText;
+                                 var moyen = document.getElementById("moyen").innerText;
+                                 var nomcomplet = document.getElementById("nom1").innerText;
+                                 var idemploye = document.getElementById("IdEmploye").innerText;
+
+
+                                 let employes = [];
+
+                                 $("#index-dmd TBODY TR").each(function () {
+                                     let row = $(this);
+                                     let employe = {};
+                                     employe.nom = row.find("TD").eq(0).html();
+                                     employe.destination = row.find("TD").eq(1).html();
+                                     employe.motifDmd = row.find("TD").eq(2).html();
+                                     // alert(employe);
+                                     employes.push(employe);
+
+                                 });
+
+                                 var dmdparcdto = {
+                                    datePrevue : date,
+                                    heurePrevue : heure,
+                                    moyenDemande : moyen,
+                                    idResponsable : idemploye,
+                                    employeDmdDto : employes
+                                 }
+
+                                 //var s = JSON.stringify(dmdparcdto);
+                                 //alert(s);
+
+
+                                //Send the JSON array to Controller using AJAX.
+                                $.ajax({
+                                    type : "POST",
+                                    contentType: 'application/json',
+                                    url: '/savedmd',
+                                    dataType : 'json',
+                                    timeout : 100000,
+                                    data: JSON.stringify(dmdparcdto),
+
+                                });
+
+                                    (function(employes) {
+
+                                       alert("Operation effectuée avec success");
+                                       let tableBody = document.querySelector('#index-dmd tbody');
+                                       tableBody.innerHTML = '';
+                                       //$('#index-dmd').DataTable().clear().draw();
+
+                                    })
+                                    (function() {
+                                        // handle fail
+                                    });
+
+
+
+                            });
+
+                    </script>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<th:block th:include="main/_end_menu"></th:block>
+
+<th:block th:include="main/layout/block_script"></th:block>
+<!--<script type="text/javascript">
+    $(document).ready(function() {
+        $('#index-dmd').DataTable({
+            order: [ 0, "desc" ],
+            pageLength: 5,
+            language: {
+                /*url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/French.json'*/
+                sProcessing: "Traitement en cours...",
+                sSearch: "Rechercher&nbsp;:",
+                sLengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                sInfo: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                sInfoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+                sInfoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                sInfoPostFix: "",
+                sLoadingRecords: "Chargement en cours...",
+                &lt;!&ndash;&lt;!&ndash;sZeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",&ndash;&gt;&ndash;&gt;
+                &lt;!&ndash;&lt;!&ndash;sEmptyTable: "Aucune donn&eacute;e disponible dans le tableau",&ndash;&gt;&ndash;&gt;
+                &lt;!&ndash;&lt;!&ndash;oPaginate: {
+                    sFirst: "Premier",
+                    sPrevious: "Pr&eacute;c&eacute;dent",
+                    sNext: "Suivant",
+                    sLast: "Dernier"
+                },&ndash;&gt;&ndash;&gt;
+                oAria: {
+                    sSortAscending: ": activer pour trier la colonne par ordre croissant",
+                    sSortDescending: ": activer pour trier la colonne par ordre d&eacute;croissant"
+                }
+            },
+        });
+    } );
+
+
+</script>-->
+
+<script src=https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+</div>
+
+</body>
+</html>

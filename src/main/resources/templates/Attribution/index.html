@@ -1,0 +1,279 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+    <link rel="stylesheet" type="text/css" herf="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
+    <link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+
+</head>
+<style>
+    .new-row {
+        background-color: yellow;
+        /* Add any other styling you want for new rows */
+    }
+
+    .md-avatar{
+        vertical-align: middle;
+        width: 50px;
+        height: 50px;
+    }
+</style>
+
+<body>
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+<!-- Message pour succes de l operation -->
+<p class="alert alert-success text-center h6"   role="alert" th:text="${messagesucces}" th:if="${messagesucces}"></p>
+<div class="card mx-auto" style="width: 75rem">
+
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-8">
+                <h5><strong>Liste des attributions</strong></h5>
+            </div>
+
+
+        </div>
+    </div>
+    <div id="imageViewer" style="display: none;">
+        <span onclick="closeImageViewer()" class="close">&times;</span>
+        <img id="imageView" src="" style="max-width: 90%; max-height: 90%; margin: auto; display: block;">
+    </div>
+    <div class="card-body">
+        <div>
+
+            <form id="frm-table" action= "attribution.html" >
+
+                <div class="table-responsive">
+                    <table class="table table-sm" id="index-dmd" >
+                        <thead>
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th class="text-center">Type de l'attribution</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_ADMIN') or hasRole('ROLE_MOYEN-GENERAUX')">Nom utilisateur</th>
+                            <th class="text-center">Date de l'attribution</th>
+                            <th class="text-center">Date de depart</th>
+                            <th class="text-center">Date d'arrivée</th>
+                            <th class="text-center">Statut</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX') ">Vehicule</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')">Statut du vehicule</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')">Chauffeur</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')">Statut du chauffeur</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Photo du recu</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Montant</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Litre</th>
+                            <!--<th class="text-center">Immatriculation</th>-->
+                            <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')">Signaler</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')">Annuler</th>
+                            <!--<th class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')">Validation</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')">Annulation</th>-->
+
+
+
+                            <!-- <th class="text-center">Annuler</th>-->
+                            <!--<div sec:authorize="hasRole('ROLE_ADMIN')">
+                                <th  class="text-center">Supprimer</th>
+                            </div>-->
+                        </tr>
+
+                        </thead>
+                        <tbody>
+
+                        <tr th:each="c:${listAttribution}">
+                            <td  id = "id" th:text = "${c.id}" class="text-center"></td>
+                            <td id = "typeAttribution" th:switch="${c.typeAttribution}" >
+                                <span class="badge badge-pill badge-danger" th:case="'VEHICULE'" >VEHICULE</span>
+                                <span class="badge badge-pill badge-success" th:case="'VEHICULE_CHAUFFEUR'">VEHICULE ET CHAUFFEUR</span>
+                                <span class="badge badge-pill badge-primary" th:case="'CARBURANT'">CARBURANT</span>
+                            </td>
+                            <td  sec:authorize="hasRole('ROLE_RESPONSABLE') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_ADMIN') or hasRole('ROLE_MOYEN-GENERAUX')" id = "nom" th:text = "${c.nomComplet}" class="text-center" ></td>
+                            <td  id = "dateAttribution" th:text = "${c.dateAttribution}" class="text-center"></td>
+                            <td  id = "dateDeDepart" th:text = "${c.dateDeDepart}" class="text-center"></td>
+                            <td  id = "dateArrivee" th:text = "${c.dateArrivee}" class="text-center"></td>
+
+                            <td id = "statut" th:switch="${c.statutAttrib}" >
+                                <span class="badge badge-pill badge-danger" th:case="'EN_ATTENTE'" >EN ATTENTE</span>
+                                <span class="badge badge-pill badge-success" th:case="'EN_COURSE'">EN COURSE</span>
+                                <span class="badge badge-pill badge-warning" th:case="'TERMINEE'">TERMINEE</span>
+                                <span class="badge badge-pill badge-warning" th:case="'ANNULER'" data-toggle="tooltip" data-placement="right" th:title="${c.observation}">ANNULER</span>
+                            </td>
+
+                            <td  id = "vehicule" th:text = "${c.vehicule}" class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')"></td>
+
+                            <td id = "statut2" th:switch="${c.statutVehiculeA}" sec:authorize="hasRole('ROLE_PARCAUTO')">
+                                <span class="badge badge-pill badge-success" th:case="'DISPONIBLE'" >DISPONIBLE</span>
+                                <span class="badge badge-pill badge-danger " th:case="'INDISPONIBLE'" data-toggle="tooltip" data-placement="right" th:title="${c.motif + ' : ' + c.observation}">INDISPONIBLE</span>
+                            </td>
+
+                            <td  id = "chauffeur" th:text = "${c.employe}" class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')"></td>
+
+                            <td id = "statut3" th:switch="${c.statutChauffeurA}" sec:authorize="hasRole('ROLE_PARCAUTO')">
+                                <span class="badge badge-pill badge-success" th:case="'DISPONIBLE'" >DISPONIBLE</span>
+                                <span class="badge badge-pill badge-danger " th:case="'INDISPONIBLE'" data-toggle="tooltip" data-placement="right" th:title="${c.motifChauffeur + ' : ' + c.observationChauffeur}">INDISPONIBLE</span>
+                            </td>
+
+                           <td id="recuCarburant" class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">
+                                <img th:if="${c.typeAttribution == 'CARBURANT'}" id="pop" th:src="'../../../temp/' + ${c.recuCarburant}" class="md-avatar" onclick="openImageViewer(this)">
+                           </td>
+
+                            <td  id = "montant" th:text = "${c.montant}" class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')"></td>
+
+                            <td  id = "litre" th:text = "${c.litre}" class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')" ></td>
+
+                            <!--<td  id = "immatriculationVehicule" th:text = "${c.immatriculationVehicule}" class="text-center"></td>-->
+
+                            <!--<td id="recuCarburant" class="text-center">
+                                <img th:if="${c.typeAttribution == 'CARBURANT'}" id="pop" th:src="@{${c.recuCarburant}}" class="md-avatar">
+                            </td>-->
+
+                            <!--<td id="recuCarburant1" class="text-center">
+                                <img th:if="${c.typeAttribution == 'CARBURANT'}" id="pop1" th:src="@{'file:///C:/temp/' + ${c.recuCarburant}}" class="md-avatar">
+                            </td>-->
+
+                            <!--<td  id = "recuCarburant" th:text = "${c.recuCarburant}" class="text-center"></td>-->
+
+                            <td class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX') ">
+                                <a th:if="${c.statutAttrib == 'EN_ATTENTE' and c.typeAttribution == 'VEHICULE_CHAUFFEUR'}" th:href="'/Attribution/attribution/user/editVC/' + ${c.id}" class="btn btn-success btn-sm">
+                                    <i class="material-icons">edit</i>Commencée la course
+                                </a>
+                                <a th:if="${c.statutAttrib == 'EN_COURSE' and c.typeAttribution == 'VEHICULE_CHAUFFEUR'}" th:href="'/Attribution/attribution/user/editVC2/' + ${c.id}" class="btn btn-success btn-sm">
+                                    <i class="material-icons">edit</i>Terminée la course
+                                </a>
+                                <a th:if="${c.statutAttrib == 'EN_ATTENTE' and c.typeAttribution == 'VEHICULE'}" th:href="'/Attribution/attribution/user/editVE/' + ${c.id}" class="btn btn-danger btn-sm">
+                                    <i class="material-icons">edit</i>Commencée la course
+                                </a>
+                                <a th:if="${c.statutAttrib == 'EN_COURSE' and c.typeAttribution == 'VEHICULE'}" th:href="'/Attribution/attribution/user/editVE2/' + ${c.id}" class="btn btn-danger btn-sm">
+                                    <i class="material-icons">edit</i>Terminée la course
+                                </a>
+                                <a th:if="${c.statutAttrib == 'EN_COURSE' and c.typeAttribution == 'CARBURANT'}" th:href="'/Attribution/attribution/user/editCC/' + ${c.id}" class="btn btn-primary btn-sm">
+                                    <i class="material-icons">edit</i>Terminée la course
+                                </a>
+                            </td>
+                            <td class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')">
+                                <a th:if="${c.statutAttrib == 'EN_ATTENTE' and c.typeAttribution == 'VEHICULE'}" th:href="'/Attribution/attribution/annulerVehicule/' + ${c.id}" class="btn btn-danger btn-sm">
+                                    <i class="fa fa-window-close"></i>Annuler
+                                </a>
+                                <a th:if="${c.statutAttrib == 'EN_ATTENTE' and c.typeAttribution == 'VEHICULE_CHAUFFEUR'}" th:href="'/Attribution/attribution/annulerVehiculeChauffeur/' + ${c.id}" class="btn btn-success btn-sm">
+                                    <i class="fa fa-window-close"></i>Annuler
+                                </a>
+                            </td>
+
+                            <!--<td th:if="${c.statut} == 'DEMANDE'" class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')"><a th:href="'/dmd/dmds/user/valider/' + ${c.id}" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i>Valider</a></td>
+                            <td th:if="${c.statut} == 'DEMANDE'" class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')"><a th:href="'/dmd/dmds/user/refuser/' + ${c.id}" class="btn btn-danger btn-sm"><i class="fa fa-window-close"></i>Refuser</a></td>-->
+                             <!--<td class="text-center"><a onclick="return confirm('Êtes vous sûre d'annuler !!!')" th:href="@{/user/dmds/delete/} + ${dmds.idDmd}"  class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Annuler</a></td>-->
+                            <!--<td class="text-center"><a onclick="return confirm('Êtes vous sûre !!!')" th:href="@{/admin/dmds/delete/} + ${dmds.idDmd}"  class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Supprimer</a></td>-->
+
+                        </tr>
+
+
+                        <!--<td class="text-center"><a th:href="@{/acces/dmds/edit/} + ${c.userId}" class="btn btn-primary btn-sm" ><i class="material-icons">edit</i>Editer</a></td>-->
+                        <!--<div sec:authorize="hasRole('ROLE_ADMIN')" >
+                            <td class="text-center"><a onclick="return confirm('Êtes vous sûre !!!')" th:href="@{/admin/dmds/delete/} + ${c.userId}"  class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Supprimer</a></td>
+                        </div>-->
+
+                        </tbody>
+
+                        <tfoot>
+                        </tfoot>
+                    </table>
+
+                    <!--<p><b>Selected rows data:</b></p>
+                    <pre id="example-console-rows"></pre>-->
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- page content -->
+
+
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<br/><br/>
+
+
+
+<!-- Include SCRIPT block -->
+<th:block th:include="main/layout/block_script"></th:block>
+<script type="text/javascript">
+    // Function to open the image viewer and display the clicked image
+    function openImageViewer(imageElement) {
+        var imageViewer = document.getElementById('imageViewer');
+        var imageView = document.getElementById('imageView');
+
+        imageView.src = imageElement.src;
+        imageViewer.style.display = 'block';
+    }
+
+    // Function to close the image viewer when the close button is clicked
+    function closeImageViewer() {
+        var imageViewer = document.getElementById('imageViewer');
+        imageViewer.style.display = 'none';
+    }
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var table;
+        table = $('#index-dmd').DataTable({
+            order: [ 0, "desc" ],
+            pageLength: 5,
+            language: {
+                /*url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/French.json'*/
+                sProcessing: "Traitement en cours...",
+                sSearch: "Rechercher&nbsp;:",
+                sLengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                sInfo: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                sInfoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+                sInfoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                sInfoPostFix: "",
+                sLoadingRecords: "Chargement en cours...",
+                sZeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                sEmptyTable: "Aucune donn&eacute;e disponible dans le tableau",
+                oPaginate: {
+                    sFirst: "Premier",
+                    sPrevious: "Pr&eacute;c&eacute;dent",
+                    sNext: "Suivant",
+                    sLast: "Dernier"
+                },
+                oAria: {
+                    sSortAscending: ": activer pour trier la colonne par ordre croissant",
+                    sSortDescending: ": activer pour trier la colonne par ordre d&eacute;croissant"
+                },
+
+            },
+        });
+
+
+    });
+</script>
+
+
+</body>
+</html>

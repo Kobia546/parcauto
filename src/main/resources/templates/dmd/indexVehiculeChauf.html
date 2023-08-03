@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+    <link rel="stylesheet" type="text/css" herf="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
+    <link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+
+</head>
+
+<body>
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+<!-- Message pour succes de l operation -->
+<p class="alert alert-success text-center h6"   role="alert" th:text="${messagesucces}" th:if="${messagesucces}"></p>
+<div class="card mx-auto" style="width: 75rem">
+
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-8">
+                <h5><strong>Liste des DMD vehicule et chauffeur.</strong></h5>
+            </div>
+
+            <div class="col-md-12 page-action text-right">
+                <div>
+                    <!--<a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" th:href="@{/dmd/dmds/user}" class="btn btn-sm btn-success pull-right"> <i class="material-icons">open_in_new</i><b>NOUVELLE DMD UTILISATEUR</b></a>
+                    <a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')"  th:href="@{/dmd/dmds/parc}" class="btn btn-sm btn-success pull-right"> <i class="material-icons">open_in_new</i><b>NOUVELLE DMD PARC AUTO</b></a>-->
+                    <!--<a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" th:href="@{/dmd/dmds/attribution}"  id="attribution" class="btn btn-sm btn-primary pull-right"> <i class="material-icons">open_in_new</i><b>ATTRIBUTION</b></a>-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div>
+
+            <form id="frm-table" action= "attributionVehicule.html" >
+
+                <div class="table-responsive">
+                    <table class="table table-sm" id="index-dmd">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_ADMIN')">Nom utilisateur</th>
+                            <th class="text-center">Date de RDV</th>
+                            <th class="text-center">Heure de RDV</th>
+                            <th class="text-center">Moyen de déplacement</th>
+                            <th class="text-center">Motif</th>
+                            <th class="text-center">Destination</th>
+                            <th class="text-center">Statut</th>
+                            <th class="text-center">Date opération</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">Editer</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')">Validation</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')">Annulation</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')">Annuler</th>
+
+
+
+                            <!-- <th class="text-center">Annuler</th>-->
+                            <!--<div sec:authorize="hasRole('ROLE_ADMIN')">
+                                <th  class="text-center">Supprimer</th>
+                            </div>-->
+                        </tr>
+
+                        </thead>
+                        <tbody id="table-body">
+
+                        <tr  th:each="c:${listDmdVehiculeChauf}">
+                            <td  id = "id" th:text = "${c.id}" class="text-center"></td>
+                            <td  id = "nom" th:text = "${c.nomComplet}" class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_ADMIN')" ></td>
+                            <td  id = "datepreuve" th:text = "${c.datePrevue}" class="text-center"></td>
+                            <td  id = "heureprevue" th:text = "${c.heurePrevue}" class="text-center"></td>
+                            <td  id = "moyen" th:text = "${c.moyenDemande}"></td>
+                            <td  id = "motif" th:text = "${c.motif}" class="text-center"></td>
+                            <td  id = "destination" th:text = "${c.destination}" class="text-center"></td>
+
+
+                            <!--<td th:text = "${c.statut}" class="text-center"></td>-->
+
+                            <td id = "statut" th:switch="${c.statut}" >
+                                <span class="badge badge-pill badge-primary" th:case="'DEMANDE'" >EN COURS DE VALIDATION</span>
+                                <span class="badge badge-pill badge-success" th:case="'VALIDATION'" >VALIDER</span>
+                                <span class="badge badge-pill badge-danger" th:case="'REFUS'" th:title="${c.observation}" data-toggle="tooltip" data-placement="right">REFUSER</span>
+                                <span class="badge badge-pill badge-light" th:case="'ATTRIBUTION'" >ATTRIBUER</span>
+                                <span class="badge badge-pill badge-light" th:case="'ANNULER'" >ANNULER</span>
+                            </td>
+
+
+
+
+                            <td  id = "dateoperation" th:text = "${c.dateOperation}" class="text-center"></td>
+
+                            <td class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">
+                                <span th:if="${c.statut == 'DEMANDE'}">
+                                    <a th:href="'/dmd/dmds/user/edit/' + ${c.id}" class="btn btn-primary btn-sm">
+                                        <i class="material-icons">edit</i>Editer
+                                    </a>
+                                </span>
+                            </td>
+                            <td th:if="${c.statut} == 'DEMANDE'" class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')"><a th:href="'/dmd/dmds/user/valider/' + ${c.id}" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i>Valider</a></td>
+                            <td th:if="${c.statut} == 'DEMANDE'" class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')"><a th:href="'/dmd/dmds/annulers/' + ${c.id}" class="btn btn-danger btn-sm"><i class="fa fa-window-close"></i>Refuser</a></td>
+                            <td class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')"><a th:href="'/dmd/dmds/user/annuler/' + ${c.id}" class="btn btn-danger btn-sm"><i class="fa fa-times"></i>Annuler</a></td>
+                            <!-- <td class="text-center"><a onclick="return confirm('Êtes vous sûre d'annuler !!!')" th:href="@{/user/dmds/delete/} + ${dmds.idDmd}"  class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Annuler</a></td>-->
+                            <!--<td class="text-center"><a onclick="return confirm('Êtes vous sûre !!!')" th:href="@{/admin/dmds/delete/} + ${dmds.idDmd}"  class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Supprimer</a></td>-->
+
+                        </tr>
+
+
+                        <!--<td class="text-center"><a th:href="@{/acces/dmds/edit/} + ${c.userId}" class="btn btn-primary btn-sm" ><i class="material-icons">edit</i>Editer</a></td>-->
+                        <!--<div sec:authorize="hasRole('ROLE_ADMIN')" >
+                            <td class="text-center"><a onclick="return confirm('Êtes vous sûre !!!')" th:href="@{/admin/dmds/delete/} + ${c.userId}"  class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Supprimer</a></td>
+                        </div>-->
+
+                        </tbody>
+
+
+                        <tfoot>
+                        </tfoot>
+                    </table>
+
+                    <button  class="btn btn-primary"  id="save" sec:authorize="hasRole('ROLE_PARCAUTO')" style="margin-left: 50%">Attribuer</button>
+
+                    <!--<p><b>Selected rows data:</b></p>
+                    <pre id="example-console-rows"></pre>-->
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- page content -->
+
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<!--<br/><br/>-->
+<th:block th:include="main/layout/block_script"></th:block>
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var table;
+        table = $('#index-dmd').DataTable({
+            order: [ 0, "desc" ],
+            pageLength: 5,
+            language: {
+                /*url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/French.json'*/
+                sProcessing: "Traitement en cours...",
+                sSearch: "Rechercher&nbsp;:",
+                sLengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                sInfo: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                sInfoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+                sInfoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                sInfoPostFix: "",
+                sLoadingRecords: "Chargement en cours...",
+                sZeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                sEmptyTable: "Aucune donn&eacute;e disponible dans le tableau",
+                oPaginate: {
+                    sFirst: "Premier",
+                    sPrevious: "Pr&eacute;c&eacute;dent",
+                    sNext: "Suivant",
+                    sLast: "Dernier"
+                },
+                oAria: {
+                    sSortAscending: ": activer pour trier la colonne par ordre croissant",
+                    sSortDescending: ": activer pour trier la colonne par ordre d&eacute;croissant"
+                },
+
+            },
+            'columnDefs':[
+                {
+
+                    'targets':0,
+                    'checkboxes':{
+                       'selectRow':true
+
+                    }
+                }
+            ],
+
+            'select': {
+                'style': 'multi'
+            },
+
+
+        });
+
+
+            $('#frm-table').on('submit', function(e){
+            var form = this;
+
+            //Recuperration des elements selectionnés de la premiere colonne
+            var rows_selected = table.rows({selected:true}).data();
+
+            //Initialistation de la liste
+            var listCheckId = [];
+
+            // Boucle sur la liste des checkbox selectionnés
+            $.each(rows_selected, function(key, rowData){
+                // creation d'un element caché
+                $(form).append(
+                    $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'id[]')
+                        .val(rowData[0])
+                );
+
+
+
+                $.each(table.rows().nodes(), function(key, row){
+                    var $row = $(row);
+                    var $checkbox = $row.find('input[type="checkbox"]');
+
+                    // If the checkbox is checked, push the row object to the list
+                    if ($checkbox.is(':checked')) {
+                        var rowData = table.row($row).data();
+                        var rowObject = {
+                            id: rowData[0],
+                            nom: rowData[1],
+                            datepreuve: rowData[2],
+                            heureprevue: rowData[3],
+                            moyen: rowData[4],
+                            motif: rowData[5],
+                            destination: rowData[6],
+                            statut: rowData[7],
+                            dateoperation: rowData[8],
+
+                        };
+
+
+
+                        var isDuplicate = listCheckId.some(function(item) {
+                            return item.id === rowObject.id;
+                        });
+
+
+
+                        // Only push the row object if it doesn't already exist in the list
+                        if (!isDuplicate) {
+                            listCheckId.push(rowObject);
+                            $checkbox.prop('checked', false);
+                            table.row($row).remove().draw(false);
+                            localStorage.setItem('listCheckId', JSON.stringify(listCheckId));
+                        }
+                    }
+                });
+            });
+
+            if (listCheckId.length > 0) {
+
+                var result = JSON.stringify(listCheckId);
+                e.preventDefault();
+                sessionStorage.setItem('listCheckId', JSON.stringify(listCheckId));
+                window.location.replace('/dmd/dmds/attributions');
+
+            } else {
+
+               e.preventDefault();
+            }
+
+        });
+    });
+
+</script>
+
+
+</body>
+</html>

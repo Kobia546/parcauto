@@ -1,0 +1,241 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+
+</head>
+<body>
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+
+<div class="card mx-auto" style="width: 40rem">
+
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <h3><span class="badge badge-info">Editer</span> <span th:text ="${vehicule.immatriculation}" class="badge badge-secondary"></span></h3>
+            </div>
+            <div>
+                <input th:field="${vehicule.id}" type="hidden">
+
+            </div>
+            <div class="col-md-4 page-action text-right">
+                <a th:href="@{/vehicule/vehicules}" class="btn btn-default btn-sm"> <i class="material-icons">backspace</i> Retour</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <form th:action="@{/vehicule/vehicules/raison}"  method="post">
+
+            <div  class="form-group row d-none">
+                <label for="id" class="col-sm-4 col-form-label text-md-right"><strong>Identifiant</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="id" type="text" name="id"  class="form-control" th:field="${vehicule.id}" required  autofocus>
+
+                </div>
+            </div>
+
+            <div class="form-group row d-none">
+                <label for="couleur" class="col-sm-4 form-control-label text-md-right"><strong>Couleur</strong></label>
+
+                <div class="col-md-6">
+                    <select  th:field="${vehicule.couleur}" id="couleur" name="couleur" class="select-type form-control"  required >
+                        <option value="">------- Couleur ---------</option>
+                        <option th:each="c:${listCouleurs}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == vehicule.couleur}"></option>
+                    </select>
+
+                </div>
+            </div>
+
+            <div  class="form-group row d-none ">
+                <label for="carteGrise" class="col-sm-4 col-form-label text-md-right"><strong>Carte Grise</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="carteGrise" type="text" name="cartegrise"  class="form-control" th:field="${vehicule.carteGrise}" required  autofocus>
+
+                </div>
+            </div>
+
+            <div  class="form-group row d-none">
+                <label for="dateAchat" class="col-sm-4 col-form-label text-md-right"><strong>Date Achat</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="dateAchat" type="date" name="dateAchat" class="form-control" th:field="${vehicule.dateAchat}"  required autofocus >
+
+                </div>
+            </div>
+
+            <div class="form-group row d-none">
+                <label for="marque" class="col-sm-4 form-control-label text-md-right"><strong>Marque</strong></label>
+
+                <div class="col-md-6">
+                    <select th:field="${vehicule.marque}"  id="marque" name="marque" class="select-type form-control"  required >
+                        <option value="">------- Marque ---------</option>
+                        <option th:each="c:${listMarques}" th:value="${c.idMarque}" th:text="${c.name}" th:selected="${c.idMarque == vehicule.marque}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Type Vehicule  select -->
+            <div class="form-group row d-none">
+                <label for="typeVehicule" class="col-sm-4 form-control-label text-md-right"><strong>Type Vehicule</strong></label>
+
+                <div class="col-md-6">
+                    <select th:field="${vehicule.typevehicule}"  id="typeVehicule" name="typeVehicule" class="select-type form-control" required  >
+                        <option value="">------- Type Vehicule ---------</option>
+                        <option th:each="c:${listTypevehicules}" th:value="${c.idTypevehicule}" th:text="${c.libelle}" th:selected="${c.idTypevehicule == vehicule.typevehicule}"></option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="form-group row d-none">
+
+                <div class="form-group row ">
+                    <label for="statutVehicule" class="col-sm-4 form-control-label text-md-right"><strong>Type Vehicule</strong></label>
+
+                    <div class="col-md-6">
+                        <select th:field="${vehicule.statutVehicule}"  id="statutVehicule" name="statutVehicule" class="select-type form-control" required  >
+                            <option value="">------- Type Vehicule ---------</option>
+                            <option th:each="c:${listStatutVehicule}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == vehicule.statutVehicule}"></option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row d-none">
+
+                <label for="immatriculation" class="col-sm-4 col-form-label text-md-right"><strong>Immatriculation</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="immatriculation" name="immatriculation" class="form-control" th:field="${vehicule.immatriculation}"></input>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group row">
+
+                <label for="raison" class="col-sm-4 col-form-label text-md-right"><strong>Raison</strong></label>
+
+                <div class="col-md-6">
+
+                    <textarea id="raison" name="raison" class="form-control" th:field="${vehicule.raison}" required autofocus></textarea>
+
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+
+                <label for="dateIndisponibilité" class="col-sm-4 col-form-label text-md-right"><strong>Date de l'indisponibilité</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="dateIndisponibilité" type = "date" name="dateIndisponibilité" class="form-control" th:field="${vehicule.dateIndisponibilité}" required autofocus>
+
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <label for="contact" class="col-sm-4 col-form-label text-md-right"><strong></strong></label>
+
+                <div id="contact" class="col-md-6">
+                    <button type="submit" class="btn btn-primary">Enregister</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+
+
+
+<!-- page content -->
+
+
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<br/><br/>
+
+
+
+<!-- Include SCRIPT block -->
+<th:block th:include="main/layout/block_script"></th:block>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+            // Get the form
+            var form = $('form');
+
+            // Add a submit handler to the form
+            form.submit(function(event) {
+                // Prevent the default form submission
+                event.preventDefault();
+
+                // Get the selected values for chauffeur and vehicule
+                var dateIndisponibilité = $("#dateIndisponibilité").val();
+                var raison = $("#raison").val();
+                var id = $("#id").val();
+
+                var vehiculeHistorique = {
+                dateIndisponibilité: dateIndisponibilité,
+                raison: raison,
+                id: id,
+
+                }
+
+                var data = JSON.stringify(vehiculeHistorique);
+
+
+                // Send the data to the server via AJAX
+                //Send the JSON array to Controller using AJAX.
+                $.ajax({
+                    type : "POST",
+                    contentType: 'application/json',
+                    url: '/vehiculeHistorique',
+                    dataType : 'json',
+                    timeout : 100000,
+                    data: data,
+
+                });
+
+
+                alert(data);
+
+
+            });
+    });
+
+
+</script>
+
+</body>
+</html>

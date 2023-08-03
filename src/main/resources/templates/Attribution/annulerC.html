@@ -1,0 +1,145 @@
+!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+
+</head>
+<body>
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+
+<div class="card mx-auto" style="width: 50rem">
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-8">
+                <h5><strong>Annuler l'attribution</strong></h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <form th:action="@{/Attribution/attribution/annulerCC}"  method="post">
+
+            <!-- IdEmployeDmdForm Input -->
+            <input th:field="${attributionDto.id}" type="hidden"/>
+            <input th:field="${attributionDto.employeDmd}" type="hidden"/>
+            <input th:field="${attributionDto.employe}" type="hidden"/>
+            <!--<input th:field="${attributionDto.vehicule}" type="hidden"/>-->
+            <div class="form-group row d-none">
+                <label  th:for="id" class="col-sm-4 col-form-label text-md-right"><strong>Identifiant</strong></label>
+
+                <div class="col-md-6">
+
+                    <input class="form-control"  th:field="${attributionDto.id}" required>
+
+                </div>
+            </div>
+
+            <div  class="form-group row d-none">
+                <label th:for="employeDmd" class="col-sm-4 col-form-label text-md-right"><strong>Nom de l'utilisateur</strong></label>
+
+                <div class="col-md-6">
+                    <select th:field="${attributionDto.employeDmd}"  name="employeDmd" class="select-type form-control" required >
+                        <option value="">--------- Nom de l'utilisateur --------</option>
+                        <option th:each="c:${listEmployee}" th:value="${c.idEmployeDmd}" th:text="${c.employe.toNomComplet}" th:selected="*{employeDmd}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div  class="form-group row d-none">
+                <label   class="col-sm-4 col-form-label text-md-right"><strong>Date d'attribution</strong></label>
+
+                <div class="col-md-6">
+
+                    <input class="form-control"  th:field="${attributionDto.dateAttribution}" required>
+
+                </div>
+            </div>
+
+            <!--<div  class="form-group row d-none">
+                <label th:for="employe" class="col-sm-4 col-form-label text-md-right"><strong>Chauffeur</strong></label>
+
+                <div class="col-md-6">
+                    <select th:field="${attributionDto.employe}"  name="employe" class="select-type form-control" required >
+                        <option value="">&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Chauffeur -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>
+                        <option th:each="c:${listChauffeur}" th:value="${c.idEmploye}" th:text="${c.toNomComplet}" th:selected="*{employe}"></option>
+                    </select>
+                </div>
+            </div>-->
+
+
+            <!--<div  class="form-group row d-none">
+                <label th:for="vehicule" class="col-sm-4 col-form-label text-md-right"><strong>Vehicule</strong></label>
+
+                <div class="col-md-6">
+                    <select th:field="${attributionDto.vehicule}"  name="vehicule" class="select-type form-control" required  >
+                        <option value="">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Vehicule -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>
+                        <option th:each="c:${listVehicule}" th:value="${c.idVehicule}" th:text="${c.immatriculation}" th:selected="*{vehicule}"></option>
+                    </select>
+                </div>
+            </div>-->
+
+            <div  class="form-group row ">
+                <label   class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>
+
+                <div class="col-md-6">
+
+                    <textarea class="form-control"  th:field="${attributionDto.Observation}" required></textarea>
+
+                </div>
+            </div>
+
+
+
+            <!--<div  class="form-group row">
+                <label  th:for="datetime-local" class="col-sm-4 col-form-label text-md-right"><strong>Date d'attribution</strong></label>
+
+                <div class="col-md-6">
+
+                    <input class="form-control" type="datetime-local" th:field="${attributionDto.dateAttribution}" required disabled>
+
+                </div>
+            </div>-->
+
+
+
+
+            <div class="form-group row">
+                <label for="btn" class="col-sm-4 col-form-label text-md-right"><strong></strong></label>
+
+                <div class="col-md-6">
+                    <button id="btn" type="submit" class="btn btn-primary">Enregister</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- page content -->
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<br/><br/>
+
+<!-- Include SCRIPT block -->
+<th:block th:include="main/layout/block_script"></th:block>
+
+</body>
+</html>

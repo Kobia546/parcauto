@@ -1,0 +1,364 @@
+!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+    <link rel="stylesheet" type="text/css" herf="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css"  />
+
+</head>
+<body>
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+
+<br>
+
+<div class="card mx-auto" style="width: 50rem">
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-8">
+                <h5>
+                    <strong>Nouvelle Attribution</strong>
+
+                </h5>
+
+            </div>
+
+            <div class="col-md-4 page-action text-right">
+                <a th:href="@{/dmd/dmds}" class="btn btn-default btn-sm"> <i class="material-icons">backspace</i> Retour</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <form th:action="@{/dmd/dmds/user/saves}" th:object = "${dmdUserDto}"  method="post">
+
+
+
+            <div  class="form-group row">
+                <label th:for="vehicule" class="col-sm-4 col-form-label text-md-right"><strong>Vehicule</strong></label>
+                <div class="col-md-6">
+                    <select th:field="*{vehicule}" name="vehicule" id="vehicule"  class="select-type form-control"  required>
+                        <option value="">-------vehicule------</option>
+                        <option th:each="c:${listVehicule}" th:value="${c.idVehicule}" th:text="${c.immatriculation}" th:field="*{vehicule}" ></option>
+                    </select>
+                </div>
+            </div>
+
+            <!--<div  class="form-group row">
+                <label th:for="chauffeur" class="col-sm-4 col-form-label text-md-right"><strong>Chauffeur</strong></label>
+                <div class="col-md-6">
+                    <select th:field="*{employe}" name="employe" id="chauffeur" class="select-type form-control"  required>
+                        <option value="">-&#45;&#45;&#45;&#45;&#45;&#45; Chauffeur -&#45;&#45;&#45;&#45;</option>
+                        <option th:each="c:${listChauffeur}" th:value="${c.idEmploye}" th:text="${c.toNomComplet}" th:field="*{employe}"></option>
+                    </select>
+                </div>
+            </div>-->
+
+            <!--<div  class="form-group row">
+                <label  th:for="dateheure" class="col-sm-4 col-form-label text-md-right"><strong>Date et heure de l'attribution</strong></label>
+
+                <div class="col-md-6">
+
+                    <input class="form-control" id="dateheure" type="datetime-local" th:field="*{dateAttribution}" required>
+
+                </div>
+            </div>-->
+
+            <div class="card-body" >
+                <div>
+                    <div class="table-responsive">
+                        <table class="table table-sm" id="targetTable" >
+                            <thead class="table-light">
+                            <tr>
+                                <th class="text-center">Id</th>
+                                <th class="text-center">Nom utilisateur</th>
+                                <th class="text-center">Date de RDV</th>
+                                <th class="text-center">Heure de RDV</th>
+                                <th class="text-center">Moyen de déplacement</th>
+                                <th class="text-center">Motif</th>
+                                <th class="text-center">Destination</th>
+                                <th class="text-center">Supprimer</th>
+
+                            </tr>
+                            </thead>
+                            <tbody >
+
+                            </tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group row">
+                <label for="btn" class="col-sm-4 col-form-label text-md-right"><strong></strong></label>
+                <div class="col-md-6">
+                    <button id="btn" type="submit" value="submit" class="btn btn-primary">Enregister</button>
+                </div>
+            </div>
+
+
+        </form>
+
+    </div>
+</div>
+
+
+
+
+<!-- page content -->
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+<br/><br/>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>-->
+
+<!--<script type="text/javascript">
+    var table = $('#index-dmd').DataTable({
+            'columnDefs': [{
+                'targets': 0,
+                'checkboxes': {
+                    'selectRow': true
+                }
+            }],
+            'select': {
+                'style': 'multi'
+            },
+            order: [ 1, "desc" ],
+        });
+        $.each(listCheckId, function(key, rowId) {
+
+            // Récupération de la ligne correspondante dans la table
+            var row = table.row('#' + rowId);
+
+            // Clonage de la ligne et ajout dans le deuxième tableau
+            var clone = row.node().cloneNode(true);
+            $('#targetTable tbody').append(clone);
+        });
+
+        $('#targetTable').DataTable();
+    });
+</script>-->
+<!--<script th:inline="javascript" >
+
+        var table = $('#index-dmd')
+        var listCheckId = JSON.parse(sessionStorage.getItem("listCheckId"));
+
+        $(document).ready(function() {
+            // Boucle sur la liste des identifiants
+            $.each(listCheckId, function(key, rowId) {
+                console.log('rowId:', rowId);
+                table.find('tr').each(function() {
+                  console.log('data-id value:', $(this).attr('data-id'));
+                });
+                // Récupération de la ligne correspondante dans la table
+                var row = table.find('tr[data-id="' + rowId + '"]');
+                console.log('data-id value:', row.attr('data-id'));
+
+                // Clonage de la ligne et ajout dans le deuxième tableau
+                var clone = row.clone(true,true);
+
+                $('#targetTable tbody').append(clone);
+                console.log('clone:', clone.attr('data-id'));
+            });
+            $('#targetTable').DataTable();
+        });
+
+</script>-->
+
+<!--<script th:inline="javascript">
+
+        var table = $('#index-dmd');
+        var listCheckId = JSON.parse(sessionStorage.getItem("listCheckId"));
+
+        $(document).ready(function() {
+            // Boucle sur la liste des identifiants
+            $.each(listCheckId, function(key, rowId) {
+
+                // Récupération de la ligne correspondante dans la table
+                var row = table.find('tr[data-id="' + rowId + '"]');
+
+                // Clonage de la ligne et ajout dans le deuxième tableau
+                var clone = row.clone();
+                $('#targetTable tbody').append(clone);
+            });
+            $('#targetTable').DataTable();
+        });
+
+</script>-->
+<!--<script type="text/javascript" th:inline="javascript">
+    function populateTable() {
+        var targetTable = document.getElementById("targetTable");
+        var sourceTable = document.getElementById("frm-table");
+        var rows = sourceTable.getElementsByTagName("tr");
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td");
+            var newRow = targetTable.insertRow(-1);
+            for (var j = 0; j < cells.length; j++) {
+                var newCell = newRow.insertCell(j);
+                newCell.innerHTML = cells[j].innerHTML;
+            }
+        }
+        sessionStorage.removeItem("listCheckId");
+    }
+
+</script>-->
+
+<!--<script type="text/javascript">
+    function populateTable() {
+        var targetTable = document.getElementById("targetTable");
+        var data = JSON.parse(sessionStorage.getItem("listCheckId"));
+        for (var i = 0; i < data.length; i++) {
+             var newRow = targetTable.insertRow(-1);
+             for (var j = 0; j < data[i].length; j++) {
+                  var newCell = newRow.insertCell(j);
+                  newCell.innerHTML = data[i][j];
+             }
+        }
+        sessionStorage.removeItem("listCheckId");
+    }
+
+</script>-->
+
+<script type="text/javascript">
+       // Get the JSON string from the sessionStorage object
+       var listCheckIdJSON = sessionStorage.getItem("listCheckId");
+
+       // Parse the JSON string back into an array of objects
+       var listCheckId = JSON.parse(listCheckIdJSON);
+
+       // Create a new table
+       var newTable = $('<table>');
+
+       var existingTable = $('#targetTable tbody');
+
+
+
+       // Loop through the listCheckId array and add the rows to the new table
+       $.each(listCheckId, function(key, row){
+
+           // Create a new row
+           var newRow = $('<tr>');
+
+           // Add the data cells to the row
+           var idCell = $('<td>').text(row.id);
+           var nomCell = $('<td>').text(row.nom);
+           var datepreuveCell = $('<td>').text(row.datepreuve);
+           var heureprevueCell = $('<td>').text(row.heureprevue);
+           var moyenCell = $('<td>').text(row.moyen);
+           var motifCell = $('<td>').text(row.motif);
+           var destinationCell = $('<td>').text(row.destination);
+
+
+           var deleteButton = $('<button>').text('Supprimer');
+           deleteButton.click(function() {
+               // Get the row ID
+               var rowId = $(this).closest('tr').find('td:first').text();
+               // Remove the row from the table
+               $(this).closest('tr').remove();
+               
+           });
+           var deleteCell = $('<td>').append(deleteButton);
+
+
+
+           // Add the cells to the row
+           newRow.append(idCell);
+           newRow.append(nomCell);
+           newRow.append(datepreuveCell);
+           newRow.append(heureprevueCell);
+           newRow.append(moyenCell);
+           newRow.append(motifCell);
+           newRow.append(destinationCell);
+           newRow.append(deleteCell);
+
+           // Add the row to the table
+           existingTable.append(newRow);
+
+           console.log(row.id);
+
+           $(window).on('beforeunload', function() {
+               // Remove the "listCheckId" object from sessionStorage
+               sessionStorage.removeItem("listCheckId");
+           });
+       });
+
+       $(document).ready(function() {
+            // Get the form
+            var form = $('form');
+
+            // Add a submit handler to the form
+            form.submit(function(event) {
+                // Prevent the default form submission
+                event.preventDefault();
+
+                // Get the selected values for chauffeur and vehicule
+
+                 var vehicule = $("#vehicule").val();
+
+                var employeDmds = [];
+                $('#targetTable tr').each(function() {
+                    var id = $(this).find('td:first').text().trim(); // assuming the ID is in the first column
+                    if (id !== "") { // check if the ID is not an empty string
+                        employeDmds.push(id);
+                    }
+                });
+
+
+                var dmd = {
+                vehicule: vehicule,
+                dmdUserDto: employeDmds
+                }
+
+                var data = JSON.stringify(dmd);
+
+
+                // Send the data to the server via AJAX
+                //Send the JSON array to Controller using AJAX.
+                $.ajax({
+                    type : "POST",
+                    contentType: 'application/json',
+                    url: '/create',
+                    dataType : 'json',
+                    timeout : 100000,
+                    data: data,
+
+
+                });
+
+                window.location.reload();
+                window.location.href = '/Attribution/attribution';
+
+            });
+       });
+
+
+
+</script>
+
+<!---->
+
+<!-- Include SCRIPT block -->
+
+</body>
+</html>

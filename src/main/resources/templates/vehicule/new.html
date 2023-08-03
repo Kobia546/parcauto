@@ -1,0 +1,158 @@
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+
+</head>
+<body>
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+
+<div class="card mx-auto" style="width: 40rem">
+
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-8">
+                <h5><strong>Nouveau Vehicule</strong></h5>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="card-body">
+        <form th:action="@{/vehicule/vehicules/save}" th:object="${vehiculedto}"  method="post">
+            <!-- Immatriculation Form Input -->
+            <div  class="form-group row">
+                <label for="name" class="col-sm-4 col-form-label text-md-right"><strong>Immatriculation</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="name"  type="text" class="form-control" th:field="*{immatriculation}" required autofocus>
+                    <span th:if="${#fields.hasErrors('immatriculation')}" th:errors="*{immatriculation}" th:class="help-block"></span>
+                </div>
+            </div>
+
+
+            <!-- Carte Grise -->
+            <div  class="form-group row">
+                <label for="carteGrise" class="col-sm-4 col-form-label text-md-right"><strong>Carte Grise</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="carteGrise" type="text"  class="form-control" th:field="*{carteGrise}" required  autofocus>
+                    <span th:if="${#fields.hasErrors('carteGrise')}" th:errors="*{carteGrise}"  th:class="help-block"></span>
+
+                </div>
+            </div>
+
+            <div  class="form-group row">
+                <label for="numeroChassis" class="col-sm-4 col-form-label text-md-right"><strong>Numero de chassis</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="numeroChassis" type="text"  class="form-control" th:field="*{numeroChassis}" required  autofocus>
+                    <span th:if="${#fields.hasErrors('numeroChassis')}" th:errors="*{numeroChassis}"  th:class="help-block"></span>
+
+                </div>
+            </div>
+
+            <!-- Couleur  select -->
+            <div class="form-group row">
+                <label for="couleur" class="col-sm-4 form-control-label text-md-right"><strong>Couleur</strong></label>
+
+                <div class="col-md-6">
+                    <select  id="couleur" name="couleur" class="select-type form-control"  required >
+                        <option value="">------- Couleur ---------</option>
+                        <option th:each="c:${listCouleurs}" th:value="${c.name}" th:text="${c.name}" th:field="*{couleur}"></option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('couleur')}" th:errors="*{couleur}"></span>
+                </div>
+            </div>
+
+            <!-- Marque  select -->
+            <div class="form-group row">
+                <label for="marque" class="col-sm-4 form-control-label text-md-right"><strong>Marque</strong></label>
+
+                <div class="col-md-6">
+                    <select  id="marque" name="marque" class="select-type form-control"  required >
+                        <option value="">------- Marque ---------</option>
+                        <option th:each="c:${listMarques}" th:value="${c.idMarque}" th:text="${c.name}" th:field="*{marque}"></option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('marque')}" th:errors="*{marque}"></span>
+                </div>
+            </div>
+
+            <!-- Type Vehicule  select -->
+            <div class="form-group row">
+                <label for="typeVehicule" class="col-sm-4 form-control-label text-md-right"><strong>Type Vehicule</strong></label>
+
+                <div class="col-md-6">
+                    <select  id="typeVehicule" name="typeVehicule" class="select-type form-control" required  >
+                        <option value="">------- Type Vehicule ---------</option>
+                        <option th:each="c:${listTypevehicules}" th:value="${c.idTypevehicule}" th:text="${c.libelle}" th:field="*{typeVehicule}"></option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('typeVehicule')}" th:errors="*{typeVehicule}"></span>
+                </div>
+            </div>
+
+            <!-- Date de saisie Form Input -->
+            <div  class="form-group row">
+                <label for="dateAchat" class="col-sm-4 col-form-label text-md-right"><strong>Date Achat</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="dateAchat" type="date" name="dateAchat" class="form-control" th:field="*{dateAchat}"  required autofocus >
+                    <span th:if="${#fields.hasErrors('dateAchat')}" th:errors="*{dateAchat}"  th:class="help-block"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="contact" class="col-sm-4 col-form-label text-md-right"><strong></strong></label>
+
+                <div id="contact" class="col-md-6">
+                    <button type="submit" class="btn btn-primary">Enregister</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+
+
+
+<!-- page content -->
+
+
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<br/><br/>
+
+
+
+<!-- Include SCRIPT block -->
+<th:block th:include="main/layout/block_script"></th:block>
+
+</body>
+</html>

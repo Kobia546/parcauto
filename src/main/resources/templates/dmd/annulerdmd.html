@@ -1,0 +1,133 @@
+!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+
+</head>
+<body>
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+
+<div class="card mx-auto" style="width: 50rem">
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-8">
+                <h5><strong>Annuler la Dmd</strong></h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <form th:action="@{/dmd/dmds/annuler}"   method="post">
+
+            <!-- IdEmployeDmdForm Input -->
+            <input th:field="${dmdUserDto.id}" type="hidden"/>
+
+
+            <!-- Nom Client Form Input -->
+            <div  class="form-group row d-none">
+                <label  th:for="Date" class="col-sm-4 col-form-label text-md-right"><strong>Date prévue</strong></label>
+
+                <div class="col-md-6">
+
+                    <input class="form-control" type="date" th:field="${dmdUserDto.datePrevue}" required>
+
+                </div>
+            </div>
+            <div  class="form-group row d-none">
+                <label  th:for="heure" class="col-sm-4 col-form-label text-md-right"><strong>Heure prévue</strong></label>
+
+                <div class="col-md-6">
+                    <input class="form-control" type="time" th:field="${dmdUserDto.heurePrevue}" required>
+
+                </div>
+            </div>
+
+
+            <div  class="form-group row d-none">
+                <label th:for="moyen" class="col-sm-4 col-form-label text-md-right"><strong>Moyen demande</strong></label>
+
+                <div class="col-md-6">
+                    <select th:field="${dmdUserDto.moyenDemande}"    name="moyenDemande" class="select-type form-control"  required>
+                        <option value="">------- Moyen demandé ---------</option>
+                        <option th:each="c:${listMoyenDemandes}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == dmdUserDto.moyenDemande}"></option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div  class="form-group row d-none">
+                <label th:for="status" class="col-sm-4 col-form-label text-md-right"><strong>Statut</strong></label>
+
+                <div class="col-md-6">
+                    <select th:field="${dmdUserDto.statut}"    name="statut" class="select-type form-control"  required>
+                        <option value="">------- Moyen demandé ---------</option>
+                        <option th:each="c:${listStatuts}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == dmdUserDto.statut}"></option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-group row d-none">
+                <label th:for="motif" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>
+                <div class="col-md-6">
+                    <input class="form-control" th:field="${dmdUserDto.motif}"  required>
+                    <!--<span th:errors="*{dateEnregistrement}"></span>-->
+                </div>
+            </div>
+
+            <div  class="form-group row d-none">
+                <label th:for="destination" class="col-sm-4 col-form-label text-md-right"><strong>Destination</strong></label>
+                <div class="col-md-6">
+                    <input class="form-control" th:field="${dmdUserDto.destination}"  required>
+                    <!--<span th:errors="*{dateEnregistrement}"></span>-->
+                </div>
+            </div>
+
+            <div  class="form-group row">
+                <label th:for="observation" class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>
+                <div class="col-md-6">
+                    <textarea class="form-control" th:field="${dmdUserDto.observation}"  required></textarea>
+                    <!--<span th:errors="*{dateEnregistrement}"></span>-->
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="btn" class="col-sm-4 col-form-label text-md-right"><strong></strong></label>
+
+                <div class="col-md-6">
+                    <button id="btn" type="submit" class="btn btn-primary">Enregister</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- page content -->
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<br/><br/>
+
+<!-- Include SCRIPT block -->
+<th:block th:include="main/layout/block_script"></th:block>
+
+</body>
+</html>
