@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+
+</head>
+<style>
+    /* Custom styles to reduce the size of checkboxes */
+    .form-check-input.custom-check-input {
+        width: 18px;
+        height: 18px;
+    }
+</style>
+<body>
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+
+<div class="card mx-auto" style="width: 40rem">
+
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-8">
+                <h5><strong>Nouvelle entretien</strong></h5>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="card-body">
+            <form>
+                <!-- Immatriculation Form Input -->
+                <div class="form-group row">
+                    <label for="Vehicule" class="col-sm-4 col-form-label text-md-right"><strong>Vehicule</strong></label>
+                    <div class="col-md-6">
+                        <select id="Vehicule" name="Vehicule" class="select-type form-control" required>
+                            <option value="">------- Vehicule ---------</option>
+                            <!--<option th:each="c:${listTypevehicules}" th:value="${c.idTypevehicule}" th:text="${c.libelle}" th:field="*{typeVehicule}"></option>-->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="name" class="col-sm-4 col-form-label text-md-right"><strong>Litre</strong></label>
+                    <div class="col-md-6">
+                        <input id="name" type="text" class="form-control" required autofocus>
+                        <!--<span th:if="${#fields.hasErrors('immatriculation')}" th:errors="*{immatriculation}" th:class="help-block"></span>-->
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-md-right"><strong>Choix de l'entretien</strong></label>
+                    <div class="col-md-6">
+                        <div class="border p-3">
+                            <div class="form-row">
+                                <div class="col-auto">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input custom-check-input" id="lavage">
+                                        <label class="form-check-label custom-check-label" for="lavage">Lavage</label>
+                                    </div>
+                                </div>
+                                <div class="col-auto ml-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input custom-check-input"  id="carburant">
+                                        <label class="form-check-label custom-check-label" for="carburant" >Carburant</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-6 offset-sm-4">
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-8">
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div >
+                <div class="table-responsive-sm">
+                    <table class="table"  style="width:100%" id="index-dmd">
+                        <thead class="table-light" >
+                        <tr>
+                            <th>Vehicule</th>
+                            <th>Lavage</th>
+                            <th>Carburant</th>
+                            <th>Litre</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center"  style="margin: 40px; padding: 10px" >
+                        <button class="btn btn-success" type="submit" value="submit" id="button">valider</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- page content -->
+
+
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<br/><br/>
+
+
+
+<!-- Include SCRIPT block -->
+<th:block th:include="main/layout/block_script"></th:block>
+
+</body>
+</html>
