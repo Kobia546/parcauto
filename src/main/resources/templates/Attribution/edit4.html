@@ -66,11 +66,11 @@
     </div>
 
     <div class="card-body">
-        <form th:action="@{/Attribution/attribution/user/terminéeVehicule}"  method="post">
+        <form th:action="@{/Attribution/attribution/user/terminéeVehicule}" th:object="${attributionDto}"  method="post">
 
             <!-- IdEmployeDmdForm Input -->
             <input th:field="${attributionDto.id}" type="hidden"/>
-            <input th:field="${attributionDto.employeDmd}" type="hidden"/>
+            <input th:field="${attributionDto.DetailVehiculeA}" type="hidden"/>
             <!--<input th:field="${attributionDto.employe}" type="hidden"/>-->
             <!--<input th:field="${attributionDto.vehicule}" type="hidden"/>-->
             <div class="form-group row d-none">
@@ -83,14 +83,24 @@
                 </div>
             </div>
 
-            <div  class="form-group row d-none">
+            <!--<div  class="form-group row d-none">
                 <label th:for="employeDmd" class="col-sm-4 col-form-label text-md-right"><strong>Nom de l'utilisateur</strong></label>
 
                 <div class="col-md-6">
                     <select th:field="${attributionDto.employeDmd}"  name="employeDmd" class="select-type form-control" required >
-                        <option value="">--------- Nom de l'utilisateur --------</option>
+                        <option value="">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Nom de l'utilisateur &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>
                         <option th:each="c:${listEmployee}" th:value="${c.idEmployeDmd}" th:text="${c.employe.toNomComplet}" th:selected="*{employeDmd}"></option>
                     </select>
+                </div>
+            </div>-->
+
+            <div  class="form-group row d-none">
+                <label   class="col-sm-4 col-form-label text-md-right"><strong>Nom de l'utilisateur</strong></label>
+
+                <div class="col-md-6">
+
+                    <input class="form-control"  th:field="${attributionDto.detailVehiculeA}" required >
+
                 </div>
             </div>
 
@@ -114,12 +124,21 @@
                 </div>
             </div>
 
-            <div  class="form-group row ">
-                <label th:for="dateArrivee"  class="col-sm-4 col-form-label text-md-right"><strong>Date d'arrivée</strong></label>
+            <div class="form-group row">
+                <label th:for="dateArrivee" class="col-sm-4 col-form-label text-md-right"><strong>Date d'arrivée</strong></label>
+                <div class="col-md-6">
+                    <input class="form-control" type="datetime-local" th:field="*{dateArrivee}" required>
+                    <span class="text-danger" th:if="${#fields.hasErrors('dateArrivee')}" th:errors="*{dateArrivee}"></span>
+                    <span id="dateArriveeWarning" class="text-danger"></span> <!-- Warning message -->
+                </div>
+            </div>
+            <div class="form-group row">
+                <label  th:for="kilometrageFin" class="col-sm-4 col-form-label text-md-right"><strong>Kilometrage Arrrivé</strong></label>
 
                 <div class="col-md-6">
 
-                    <input class="form-control" type="datetime-local"  th:field="${attributionDto.dateArrivee}" required>
+                    <input class="form-control" id="kilometragefin" type="text" th:field="*{kilometrageFin}">
+                    <!-- <span th:if="${#fields.hasErrors('datePrevue')}" th:errors="*{datePrevue}"  th:class="help-block"></span>-->
 
                 </div>
             </div>
@@ -165,7 +184,7 @@
                     </div>
                 </div>
             </div>
-            <!--<div class="form-group row">
+            <div class="form-group row">
                 <label class="col-sm-4 col-form-label text-md-right"><strong>Statut du chauffeur</strong></label>
                 <div class="col-md-6">
                     <div class="border p-3">
@@ -188,12 +207,12 @@
             </div>
 
             <div class="form-group row additional-fields2" id="additional-fields2">
-                &lt;!&ndash; Additional fields here &ndash;&gt;
+                <!-- Additional fields here -->
                 <div class="form-group row ">
                     <label th:for="motif" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>
                     <div class="col-md-5">
                         <select  th:field="${attributionDto.motifChauffeur}" id="motifChauffeur" name="motifChauffeur" class="select-type form-control" >
-                            <option value="">&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Motif -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>
+                            <option value="">-------------------- Motif -------------------------</option>
                             <option th:each="c:${listMotifChauffeur}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == attributionDto.motifChauffeur}"></option>
                         </select>
 
@@ -235,10 +254,10 @@
             </div>
 
             <div class="form-group row">
-                <label for="btn" class="col-sm-4 col-form-label text-md-right"><strong></strong></label>
+                <label for="btnEnregistrer" class="col-sm-4 col-form-label text-md-right"><strong></strong></label>
 
                 <div class="col-md-6">
-                    <button id="btn" type="submit" class="btn btn-primary" name="btn" >Enregister</button>
+                    <button id="btnEnregistrer" type="submit" class="btn btn-primary" name="btn">Enregistrer</button>
                 </div>
             </div>
         </form>
@@ -256,7 +275,32 @@
 
 <!-- Include SCRIPT block -->
 <th:block th:include="main/layout/block_script"></th:block>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("radio-disponible").checked = true;
+    });
+</script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("btnEnregistrer").addEventListener("click", function (e) {
+            var dateDeDepart = new Date(document.querySelector("[name='dateDeDepart']").value);
+            var dateArrivee = new Date(document.querySelector("[name='dateArrivee']").value);
+            var kilometrageFin = document.querySelector("[name='kilometragefin']").value;
 
+            if (dateArrivee < dateDeDepart) {
+                e.preventDefault(); // Prevent form submission
+                document.getElementById("dateArriveeWarning").textContent = "La date d'arrivée doit être ultérieure à la date de départ.";
+            } else {
+                // Reset the warning message if the dates are valid
+                document.getElementById("dateArriveeWarning").textContent = "";
+            }
+            if (kilometrageFin <kilometrage) {
+                e.preventDefault(); // Prevent form submission
+                alert("Veuillez entrer le kilométrage d'arrivée.");
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

@@ -2,9 +2,7 @@ package ci.nkagou.parcauto.services;
 
 import ci.nkagou.parcauto.dtos.chauffeurhistorique.ChauffeurHistoriqueDto;
 import ci.nkagou.parcauto.dtos.chauffeurhistorique.ChauffeurHistoriqueDtoOut;
-import ci.nkagou.parcauto.dtos.vehiculeIndisponible.VehiculeHistoriqueDto;
-import ci.nkagou.parcauto.dtos.vehiculeIndisponible.VehiculeHistoriqueDtoOut;
-import ci.nkagou.parcauto.entities.ChauffeurHistorique;
+import ci.nkagou.parcauto.dtos.dmd.EtatChauffeurDto;
 import ci.nkagou.parcauto.entities.ChauffeurHistorique;
 
 import java.util.List;
@@ -17,5 +15,7 @@ public interface ChauffeurHistoriqueService {
     ChauffeurHistorique findById(Long id);
     ChauffeurHistorique create(ChauffeurHistorique chauffeurHistorique);
     ChauffeurHistorique update(ChauffeurHistorique chauffeurHistorique);
+    List<ChauffeurHistorique> listChauffeurHistoriqueByDateBetweenAndVehiculeChauffeurAttVehicule(EtatChauffeurDto dto);
+    List<ChauffeurHistorique> listChauffeurHistoriqueByDateBetweenAndVehiculeChauffeurAttEmploye(EtatChauffeurDto dto);
 
 }

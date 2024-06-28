@@ -1,5 +1,7 @@
 package ci.nkagou.parcauto.repositories;
 
+import ci.nkagou.parcauto.entities.AppUser;
+import ci.nkagou.parcauto.entities.Direction;
 import ci.nkagou.parcauto.entities.Employe;
 import ci.nkagou.parcauto.enums.StatutChauffeur;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +13,7 @@ import java.util.List;
 public interface EmployeRepository  extends JpaRepository <Employe, Long> {
 
     
-
+    Employe findByDirectionAndEstSuperieureHierachique(Direction direction, boolean estSuperieurHirachique);
     Employe findByNumMatEmpl (Long matricule);
     Employe findByEmail(String email);
     List<Employe> findEmployesByEstUtilisateur (Boolean estUtilisateur);
@@ -20,6 +22,8 @@ public interface EmployeRepository  extends JpaRepository <Employe, Long> {
     Employe findByNomAndPrenom(String nom, String prenom);
     List<Employe> findEmployesByEstChauffeur (Boolean estChauffeur);
     List<Employe> findEmployesByEstChauffeurAndStatutChauffeur(Boolean estChauffeur, StatutChauffeur statutChauffeur);
+
+    /*Employe findEmployeByAppUser(AppUser user);*/
 
     //List<Employe> findEmployesByEstChauffeurStatutChauffeur(Boolean estChauffeur, StatutChauffeur statutChauffeur);
 

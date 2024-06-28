@@ -321,10 +321,11 @@
             form.submit(function(event) {
                 // Prevent the default form submission
                 event.preventDefault();
-                var dateDeDepart = $("#dateDeDepart").val();
-                var montant = $("#montant").val();
 
+                // Get the selected value for moyenDemande
+                var selectedValue = $("select[name='moyenDemande']").val();
 
+                // Get common data from the table
                 var employeDmds = [];
                 $('#targetTable tr').each(function() {
                     var id = $(this).find('td:first').text().trim(); // assuming the ID is in the first column
@@ -333,33 +334,51 @@
                     }
                 });
 
-
                 var dmd = {
-                  montant: montant,
-                  dateDeDepart: dateDeDepart,
-                  dmdUserDto: employeDmds
+                    dmdUserDto: employeDmds
+                };
+
+                if (selectedValue === "VEHICULE_CHAUFFEUR") {
+                    dmd.vehicule = $("#vehicule").val();
+                    dmd.employe = $("#chauffeur").val();
+                } else if (selectedValue === "VEHICULE") {
+                    dmd.vehicule = $("#vehicule").val();
+                } else  (selectedValue === "CARBURANT") {
+
                 }
 
                 var data = JSON.stringify(dmd);
 
-
                 // Send the data to the server via AJAX
-                //Send the JSON array to Controller using AJAX.
+                var url = '';
+                if (selectedValue === "VEHICULE_CHAUFFEUR") {
+                    url = '/createVehiculeChauffeur';
+                } else if (selectedValue === "VEHICULE") {
+                    url = '/create';
+                } else if (selectedValue === "CARBURANT") {
+                    url = '/createCarburant';
+                }
+
                 $.ajax({
-                    type : "POST",
+                    type: "POST",
                     contentType: 'application/json',
-                    url: '/createCarburant',
-                    dataType : 'json',
-                    timeout : 100000,
+                    url: url,
+                    dataType: 'json',
+                    timeout: 100000,
                     data: data,
-
-
+                    success: function() {
+                        // Handle success
+                        window.location.href = '/Attribution/attribution';
+                    },
+                    error: function() {
+                        // Handle error
+                    }
                 });
 
                 window.location.reload();
-                window.location.href = '/Attribution/attribution';
+
             });
-       });
+        });
 
 
 

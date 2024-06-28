@@ -38,6 +38,7 @@
                 <label  th:for="Date" class="col-sm-4 col-form-label text-md-right"><strong>Date prévue</strong></label>
                 <div class="col-md-6">
                     <input class="form-control" type="date"  th:field="*{datePrevue}" required>
+                    <span class="text-danger"  th:if="${#fields.hasErrors('datePrevue')}" th:errors="*{datePrevue}"></span>
                 </div>
             </div>
             <div  class="form-group row">
@@ -57,15 +58,15 @@
                     </select>
                 </div>
             </div>
-            <div  class="form-group row">
+            <!--<div  class="form-group row">
                 <label th:for="responsable" class="col-sm-4 col-form-label text-md-right"><strong>Responsable</strong></label>
                 <div class="col-md-6">
                     <select th:field="*{employe}" name="employe" class="select-type form-control"  required>
-                        <option value="">------- Responsable -----</option>
+                        <option value="">-&#45;&#45;&#45;&#45;&#45;&#45; Responsable -&#45;&#45;&#45;&#45;</option>
                         <option th:each="c:${listresponsable}" th:value="${c.idEmploye}" th:text="${c.toNomComplet}" th:field="*{employe}"></option>
                     </select>
                 </div>
-            </div>
+            </div>-->
 
             <div class="form-group row">
                 <label for="btn" class="col-sm-4 col-form-label text-md-left"><strong></strong></label>

@@ -101,6 +101,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Config for Logout Page
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login");
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // Config Remember Me.
         http.authorizeRequests().and() //
                 .rememberMe().tokenRepository(this.persistentTokenRepository()) //

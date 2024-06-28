@@ -1,4 +1,4 @@
-!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
@@ -22,26 +22,42 @@
         .additional-fields2 {
             display: none;
         }
+        .form-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 10px 20px;
+        }
+        .form-body {
+            padding: 20px;
+        }
+        .form-footer {
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+        .form-footer button {
+            width: 100%;
+        }
     </style>
     <script>
-    function toggleAdditionalFields2() {
-        var radioIndisponible = document.getElementById("radio-indisponible2");
-        var additionalFields = document.getElementById("additional-fields2");
+        function toggleAdditionalFields2() {
+            var radioIndisponible = document.getElementById("radio-indisponible2");
+            var additionalFields = document.getElementById("additional-fields2");
 
-        additionalFields.style.display = radioIndisponible.checked ? "block" : "none";
-    }
+            additionalFields.style.display = radioIndisponible.checked ? "block" : "none";
+        }
     </script>
     <script>
-    function toggleAdditionalFields() {
-        var radioIndisponible = document.getElementById("radio-indisponible");
-        var additionalFields = document.getElementById("additional-fields");
+        function toggleAdditionalFields() {
+            var radioIndisponible = document.getElementById("radio-indisponible");
+            var additionalFields = document.getElementById("additional-fields");
 
-        if (radioIndisponible.checked) {
-            additionalFields.style.display = "block";
-        } else {
-            additionalFields.style.display = "none";
+            if (radioIndisponible.checked) {
+                additionalFields.style.display = "block";
+            } else {
+                additionalFields.style.display = "none";
+            }
         }
-    }
     </script>
 
 </head>
@@ -51,76 +67,67 @@
 <!-- Include MENU block -->
 <th:block th:include="main/_menu"></th:block>
 
-
 <!-- page content -->
 <br>
 
 <div class="card mx-auto" style="width: 50rem">
-    <div class="card-header">
+    <div class="card-header form-header">
         <div class="row">
-
             <div class="col-md-8">
                 <h5><strong>Terminée la course</strong></h5>
             </div>
         </div>
     </div>
 
-    <div class="card-body">
-        <form th:action="@{/Attribution/attribution/user/terminée}"  method="post">
+    <div class="card-body form-body">
+        <form th:action="@{/Attribution/attribution/user/terminée}" th:object="${attributionDto}" method="post">
 
             <!-- IdEmployeDmdForm Input -->
             <input th:field="${attributionDto.id}" type="hidden"/>
-            <input th:field="${attributionDto.employeDmd}" type="hidden"/>
+            <input th:field="${attributionDto.detailVehiculeChauffeurA}" type="hidden"/>
             <input th:field="${attributionDto.employe}" type="hidden"/>
-            <!--<input th:field="${attributionDto.vehicule}" type="hidden"/>-->
+
             <div class="form-group row d-none">
-                <label  th:for="id" class="col-sm-4 col-form-label text-md-right"><strong>Identifiant</strong></label>
-
+                <label th:for="id" class="col-sm-4 col-form-label text-md-right"><strong>Identifiant</strong></label>
                 <div class="col-md-6">
-
-                    <input class="form-control"  th:field="${attributionDto.id}" required>
-
+                    <input class="form-control" th:field="${attributionDto.id}" required>
                 </div>
             </div>
 
-            <div  class="form-group row d-none">
-                <label th:for="employeDmd" class="col-sm-4 col-form-label text-md-right"><strong>Nom de l'utilisateur</strong></label>
-
+            <div class="form-group row d-none">
+                <label class="col-sm-4 col-form-label text-md-right"><strong>Nom de l'utilisateur</strong></label>
                 <div class="col-md-6">
-                    <select th:field="${attributionDto.employeDmd}"  name="employeDmd" class="select-type form-control" required >
-                        <option value="">--------- Nom de l'utilisateur --------</option>
-                        <option th:each="c:${listEmployee}" th:value="${c.idEmployeDmd}" th:text="${c.employe.toNomComplet}" th:selected="*{employeDmd}"></option>
-                    </select>
+                    <input class="form-control" th:field="${attributionDto.detailVehiculeChauffeurA}" required>
                 </div>
             </div>
 
-            <div  class="form-group row d-none">
-                <label   class="col-sm-4 col-form-label text-md-right"><strong>Date d'attribution</strong></label>
-
+            <div class="form-group row d-none">
+                <label class="col-sm-4 col-form-label text-md-right"><strong>Date d'attribution</strong></label>
                 <div class="col-md-6">
-
-                    <input class="form-control"  th:field="${attributionDto.dateAttribution}" required >
-
+                    <input class="form-control" th:field="${attributionDto.dateAttribution}" required>
                 </div>
             </div>
 
-            <div  class="form-group row ">
-                <label th:for="dateDeDepart"  class="col-sm-4 col-form-label text-md-right"><strong>Date de depart</strong></label>
-
+            <div class="form-group row">
+                <label th:for="dateDeDepart" class="col-sm-4 col-form-label text-md-right"><strong>Date de départ</strong></label>
                 <div class="col-md-6">
-
-                    <input class="form-control" type="datetime-local"  th:field="${attributionDto.dateDeDepart}" required disabled>
-
+                    <input class="form-control" type="datetime-local" th:field="${attributionDto.dateDeDepart}" required disabled>
                 </div>
             </div>
 
-            <div  class="form-group row ">
-                <label th:for="dateArrivee"  class="col-sm-4 col-form-label text-md-right"><strong>Date d'arrivée</strong></label>
-
+            <div class="form-group row">
+                <label th:for="dateArrivee" class="col-sm-4 col-form-label text-md-right"><strong>Date d'arrivée</strong></label>
                 <div class="col-md-6">
+                    <input class="form-control" type="datetime-local" th:field="*{dateArrivee}" required>
+                    <span class="text-danger" th:if="${#fields.hasErrors('dateArrivee')}" th:errors="*{dateArrivee}"></span>
+                    <span id="dateArriveeWarning" class="text-danger"></span> <!-- Warning message -->
+                </div>
+            </div>
 
-                    <input class="form-control" type="datetime-local"  th:field="${attributionDto.dateArrivee}" required>
-
+            <div class="form-group row">
+                <label th:for="kilometrageFin" class="col-sm-4 col-form-label text-md-right"><strong>Kilométrage Fin</strong></label>
+                <div class="col-md-6">
+                    <input class="form-control"  type="text" th:field="*{kilometrageFin}" required>
                 </div>
             </div>
 
@@ -131,13 +138,13 @@
                         <div class="form-row">
                             <div class="col-auto">
                                 <div class="form-check">
-                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutVehiculeA}" th:value="DISPONIBLE" id="radio-disponible" th:checked="${attributionDto.statutVehiculeA == 'DISPONIBLE'}" onclick="toggleAdditionalFields()">
+                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutVehiculeA}" th:value="DISPONIBLE" id="radio-disponible" onclick="toggleAdditionalFields()">
                                     <label class="form-check-label custom-check-label" for="radio-disponible">Disponible</label>
                                 </div>
                             </div>
                             <div class="col-auto ml-3">
                                 <div class="form-check">
-                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutVehiculeA}" th:value="INDISPONIBLE" id="radio-indisponible" th:checked="${attributionDto.statutVehiculeA == 'INDISPONIBLE'}" onclick="toggleAdditionalFields()">
+                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutVehiculeA}" th:value="INDISPONIBLE" id="radio-indisponible" onclick="toggleAdditionalFields()">
                                     <label class="form-check-label custom-check-label" for="radio-indisponible" th:classappend="${attributionDto.statutVehiculeA == 'INDISPONIBLE'} ? 'text-danger'">Indisponible</label>
                                 </div>
                             </div>
@@ -148,23 +155,23 @@
 
             <div class="form-group row additional-fields" id="additional-fields">
                 <!-- Additional fields here -->
-                <div class="form-group row ">
+                <div class="form-group row">
                     <label th:for="motif" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>
                     <div class="col-md-5">
-                        <select  th:field="${attributionDto.motif}" id="motif" name="motif" class="select-type form-control">
+                        <select th:field="${attributionDto.motif}" id="motif" name="motif" class="select-type form-control">
                             <option value="">------------------ Motif -----------------</option>
                             <option th:each="c:${listMotif}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == attributionDto.motif}"></option>
                         </select>
-
                     </div>
                 </div>
-                <div class="form-group row ">
+                <div class="form-group row">
                     <label th:for="observation" class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>
                     <div class="col-md-5">
-                        <textarea class="form-control" type="text" th:field="${attributionDto.observation}" ></textarea>
+                        <textarea class="form-control" type="text" th:field="${attributionDto.observation}"></textarea>
                     </div>
                 </div>
             </div>
+
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label text-md-right"><strong>Statut du chauffeur</strong></label>
                 <div class="col-md-6">
@@ -173,13 +180,13 @@
                             <div class="col-auto">
                                 <div class="form-check">
                                     <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutChauffeurA}" th:value="DISPONIBLE" id="radio-disponible2" th:checked="${attributionDto.statutChauffeurA == 'DISPONIBLE'}" onclick="toggleAdditionalFields2()">
-                                    <label class="form-check-label custom-check-label" for="radio-disponible">Disponible</label>
+                                    <label class="form-check-label custom-check-label" for="radio-disponible2">Disponible</label>
                                 </div>
                             </div>
                             <div class="col-auto ml-3">
                                 <div class="form-check">
                                     <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutChauffeurA}" th:value="INDISPONIBLE" id="radio-indisponible2" th:checked="${attributionDto.statutChauffeurA == 'INDISPONIBLE'}" onclick="toggleAdditionalFields2()">
-                                    <label class="form-check-label custom-check-label" for="radio-indisponible" th:classappend="${attributionDto.statutChauffeurA == 'INDISPONIBLE'} ? 'text-danger'">Indisponible</label>
+                                    <label class="form-check-label custom-check-label" for="radio-indisponible2" th:classappend="${attributionDto.statutChauffeurA == 'INDISPONIBLE'} ? 'text-danger'">Indisponible</label>
                                 </div>
                             </div>
                         </div>
@@ -189,74 +196,88 @@
 
             <div class="form-group row additional-fields2" id="additional-fields2">
                 <!-- Additional fields here -->
-                <div class="form-group row ">
-                    <label th:for="motif" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>
+                <div class="form-group row">
+                    <label th:for="motifChauffeur" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>
                     <div class="col-md-5">
-                        <select  th:field="${attributionDto.motifChauffeur}" id="motifChauffeur" name="motifChauffeur" class="select-type form-control" >
+                        <select th:field="${attributionDto.motifChauffeur}" id="motifChauffeur" name="motifChauffeur" class="select-type form-control">
                             <option value="">-------------------- Motif -------------------------</option>
                             <option th:each="c:${listMotifChauffeur}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == attributionDto.motifChauffeur}"></option>
                         </select>
-
                     </div>
                 </div>
-                <div class="form-group row ">
+                <div class="form-group row">
                     <label th:for="observationChauffeur" class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>
                     <div class="col-md-5">
-                        <textarea class="form-control" type="text" th:field="${attributionDto.observationChauffeur}" ></textarea>
+                        <textarea class="form-control" type="text" th:field="${attributionDto.observationChauffeur}"></textarea>
                     </div>
                 </div>
             </div>
 
-
-
-
-
-            <div  class="form-group row d-none">
+            <div class="form-group row d-none">
                 <label th:for="employe" class="col-sm-4 col-form-label text-md-right"><strong>Chauffeur</strong></label>
-
                 <div class="col-md-6">
-                    <select th:field="${attributionDto.employe}"  name="employe" class="select-type form-control" required>
+                    <select th:field="${attributionDto.employe}" name="employe" class="select-type form-control" required>
                         <option value="">------- Chauffeur --------</option>
                         <option th:each="c:${listChauffeur}" th:value="${c.idEmploye}" th:text="${c.toNomComplet}" th:selected="*{employe}"></option>
                     </select>
                 </div>
             </div>
 
-
-            <div  class="form-group row d-none">
-                <label th:for="vehicule" class="col-sm-4 col-form-label text-md-right"><strong>Vehicule</strong></label>
-
+            <div class="form-group row d-none">
+                <label th:for="vehicule" class="col-sm-4 col-form-label text-md-right"><strong>Véhicule</strong></label>
                 <div class="col-md-6">
-                    <select th:field="${attributionDto.vehicule}"  name="vehicule" class="select-type form-control" required>
-                        <option value="">--------- Vehicule ---------</option>
+                    <select th:field="${attributionDto.vehicule}" name="vehicule" class="select-type form-control" required>
+                        <option value="">--------- Véhicule ---------</option>
                         <option th:each="c:${listVehicule}" th:value="${c.idVehicule}" th:text="${c.immatriculation}" th:selected="*{vehicule}"></option>
                     </select>
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label for="btn" class="col-sm-4 col-form-label text-md-right"><strong></strong></label>
-
-                <div class="col-md-6">
-                    <button id="btn" type="submit" class="btn btn-primary" name="btn" >Enregister</button>
-                </div>
+            <div class="form-footer">
+                <button id="btnEnregistrer" type="submit" class="btn btn-primary" name="btn">Enregistrer</button>
             </div>
         </form>
     </div>
 </div>
 
-
-<!-- page content -->
 <!-- Include END MENU block -->
 <th:block th:include="main/_end_menu"></th:block>
-
-
 
 <br/><br/>
 
 <!-- Include SCRIPT block -->
 <th:block th:include="main/layout/block_script"></th:block>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("radio-disponible").checked = true;
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("radio-disponible2").checked = true;
+    });
+</script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("btnEnregistrer").addEventListener("click", function (e) {
+            var dateDeDepart = new Date(document.querySelector("[name='dateDeDepart']").value);
+            var dateArrivee = new Date(document.querySelector("[name='dateArrivee']").value);
+            var kilometrageFin=document.querySelector("[name='kilometrageFin']").value;
 
+            if (dateArrivee < dateDeDepart) {
+                e.preventDefault(); // Prevent form submission
+                document.getElementById("dateArriveeWarning").textContent = "La date d'arrivée doit être ultérieure à la date de départ.";
+            } else {
+                // Reset the warning message if the dates are valid
+                document.getElementById("dateArriveeWarning").textContent = "";
+            }
+            if (kilometrageFin === "") {
+                e.preventDefault(); // Prevent form submission
+                alert("Veuillez entrer le kilométrage d'arrivée.");
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

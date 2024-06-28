@@ -16,10 +16,12 @@ import java.time.LocalDateTime;
 @Setter
 public class ChauffeurHistoriqueDtoOut {
 
-
     private Long id;
     private String statutHistorique;
     private String dateParcours;
-    private VehiculeChauffeurAtt vehiculeChauffeurAtt;
+    private String employe;
+    private String vehicule;
+    private StringBuilder nomEmploye;
+    private StringBuilder destination;
 
 }

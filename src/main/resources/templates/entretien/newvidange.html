@@ -1,10 +1,179 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+
 </head>
 <body>
-$END$
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+
+<div class="card mx-auto" style="width: 40rem">
+
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-8">
+                <h5><strong>Nouvelle entretien</strong></h5>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="card-body">
+        <form th:action="@{/Vidange/vidange/suivant}" th:object="${entretienVDto}"   method="post" >
+            <!-- Immatriculation Form Input -->
+            <div  class="form-group row">
+                <label for="name" class="col-sm-4 col-form-label text-md-right"><strong>date vidange</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="name"  type="date" class="form-control" th:field="*{dateEntretien}" required>
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="Vehicule" class="col-sm-4 col-form-label text-md-right"><strong>Vehicule</strong></label>
+                <div class="col-md-6">
+                    <select th:field="*{vehicule}" id="Vehicule" name="Vehicule" class="select-type form-control" onchange="toggleAdditionalFields()">
+                        <option value="">------- Vehicule ---------</option>
+                        <option th:each="c:${listVehicule}" th:value="${c.idVehicule}" th:text="${c.immatriculation + '(' + c.marque.name + ')'}" th:field="*{vehicule}" required></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row additional-fields" id="additional-fields" style="display: none;">
+                <div class="col-md-12">
+                    <div class="row">
+                        <label for="DateDernierVidange" class="col-sm-4 col-form-label text-md-right"><strong>Date Derniere Vidange</strong></label>
+                        <div class="col-md-6">
+                            <input id="DateDernierVidange" type="text" class="form-control" th:field="*{dateEntretien}"  disabled required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 ">
+                    <div class="row">
+                        <label for="NouveauKilometrage" class="col-sm-4 col-form-label text-md-right"><strong>Ancien Kilometrage</strong></label>
+                        <div class="col-md-6">
+                            <input id="NouveauKilometrage" type="text" class="form-control" th:field="*{nouveauKilometrage}" readonly required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mt-4">
+                    <div class="row">
+                        <label for="Kilometrage" class="col-sm-4 col-form-label text-md-right"><strong>Nouveau Kilometrage</strong></label>
+                        <div class="col-md-6">
+                            <input id="Kilometrage" type="text" class="form-control"  th:field="${entretienVDto.ancienKilometrage}" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group row">
+                <label for="contact" class="col-sm-4 col-form-label text-md-right"><strong></strong></label>
+
+                <div id="contact" class="col-md-6">
+                    <button type="submit" class="btn btn-primary">Suivant</button>
+                </div>
+
+            </div>
+
+
+
+        </form>
+    </div>
+
+
+
+</div>
+
+
+
+
+
+<!-- page content -->
+
+
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<br/><br/>
+
+
+
+<!-- Include SCRIPT block -->
+<th:block th:include="main/layout/block_script"></th:block>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function toggleAdditionalFields() {
+        var selectElement = document.getElementById('Vehicule');
+        var additionalFieldsDiv = document.getElementById('additional-fields');
+
+        if (selectElement.value !== '') {
+            additionalFieldsDiv.style.display = 'flex';
+        } else {
+            additionalFieldsDiv.style.display = 'none';
+        }
+
+        loadMaintenanceData(); // Call the function to load maintenance data
+    }
+
+    function loadMaintenanceData() {
+        var selectedVehiculeId = $("#Vehicule").val();
+
+        $.ajax({
+            type: "GET",
+            url: "/retrieveVehiculeVidange/" + selectedVehiculeId, // Update with your URL
+            data: { idVehicule: selectedVehiculeId },
+            dataType: "json",
+            success: function(data) {
+                $("#additional-fields").show(); // Show additional fields
+                $("#DateDernierVidange").val(data.dateEntretien);
+                $("#NouveauKilometrage").val(data.nouveauKilometrage);
+            }
+        });
+    }
+</script>
+
+<!--<script>
+    function loadMaintenanceData() {
+        var selectedVehiculeId = $("#Vehicule").val();
+
+        $.ajax({
+            type: "GET",
+            url: "/retrieveVehiculeVidange", // Update with your URL
+            data: { idVehicule: selectedVehiculeId },
+            dataType: "json",
+            success: function(data) {
+                $("#additional-fields").show(); // Show additional fields
+                $("#DateDernierVidange").val(data.dateEntretien);
+                $("#Kilometrage").val(data.ancienKilometrage);
+                $("#NouveauKilometrage").val(data.nouveauKilometrage);
+            }
+        });
+    }
+</script>-->
+
 </body>
 </html>

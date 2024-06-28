@@ -21,13 +21,14 @@
 <!-- page content -->
 <br>
 
-<div class="card mx-auto" style="width: 50rem">
+<div class="card mx-auto" style="width: 50rem" >
     <div class="card-header">
         <div class="row">
 
             <div class="col-md-8">
                 <h5><strong>Nouveau Dmd</strong></h5>
             </div>
+
         </div>
     </div>
 
@@ -41,7 +42,8 @@
                 <div class="col-md-6">
 
                     <input class="form-control" type="date" th:field="*{datePrevue}">
-                    <span th:errors="*{datePrevue}"></span>
+                   <!-- <span th:if="${#fields.hasErrors('datePrevue')}" th:errors="*{datePrevue}"  th:class="help-block"></span>-->
+                    <span class="text-danger"  th:if="${#fields.hasErrors('datePrevue')}" th:errors="*{datePrevue}"></span>
                 </div>
             </div>
             <div class="form-group row">
@@ -63,21 +65,30 @@
                         <option th:each="c:${listMoyenDemandes}" th:value="${c.name}" th:text="${c.name}" th:field="*{moyenDemande}"></option>
                     </select>
                 </div>
-
             </div>
+
+
             <div class="form-group row">
                 <label th:for="motif" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>
+
                 <div class="col-md-6">
-                    <input class="form-control" name="motif" required>
-                    <!--<span th:errors="*{dateEnregistrement}"></span>-->
+                    <select th:field="*{motif}"  name="motif" class="select-type form-control"  required>
+                        <option value="">------- Motif ---------</option>
+                        <option th:each="c:${listMotif}" th:value="${c.idMotif}" th:text="${c.nomMotif}" th:field="*{motif}"></option>
+                    </select>
                 </div>
             </div>
 
+
+
             <div class="form-group row">
                 <label th:for="destination" class="col-sm-4 col-form-label text-md-right"><strong>Destination</strong></label>
+
                 <div class="col-md-6">
-                    <input class="form-control" name="destination"  required>
-                    <!--<span th:errors="*{dateEnregistrement}"></span>-->
+                    <select  th:field="*{destination}" name="destination" class="select-type form-control"  required>
+                        <option value="">------- Destination ---------</option>
+                        <option th:each="c:${listDestination}" th:value="${c.idDestination}" th:text="${c.nomDestination}" th:field="*{destination}"></option>
+                    </select>
                 </div>
             </div>
 

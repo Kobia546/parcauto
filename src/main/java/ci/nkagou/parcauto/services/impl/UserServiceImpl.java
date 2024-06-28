@@ -2,6 +2,7 @@ package ci.nkagou.parcauto.services.impl;
 
 import ci.nkagou.parcauto.entities.AppRole;
 import ci.nkagou.parcauto.entities.AppUser;
+import ci.nkagou.parcauto.entities.Employe;
 import ci.nkagou.parcauto.repositories.UserRepository;
 import ci.nkagou.parcauto.services.UserService;
 import lombok.AllArgsConstructor;
@@ -78,4 +79,10 @@ public class UserServiceImpl implements UserService {
     public Boolean existsByUserName(String userName) {
         return userRepository.existsByUserName(userName);
     }
+
+    @Override
+    public AppUser findByEmploye(Employe employe) {
+        return userRepository.findByEmploye(employe);
+    }
+
 }

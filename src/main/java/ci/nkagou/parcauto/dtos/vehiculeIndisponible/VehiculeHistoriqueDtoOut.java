@@ -19,5 +19,7 @@ public class VehiculeHistoriqueDtoOut {
     private Long id;
     private String statutHistorique;
     private String dateParcours;
-    private VehiculeAtt vehiculeAtt;
+    private StringBuilder nomEmploye;
+    private String vehicule;
+    private StringBuilder destination;
 }

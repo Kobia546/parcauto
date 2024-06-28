@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "detail_carburant")
-public class DetailCarburantAttribution {
+public class DetailCarburantA {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +24,7 @@ public class DetailCarburantAttribution {
     private EmployeDmd employeDmd;
 
     @ManyToOne
-    @JoinColumn(name = "idAttribution")
+    @JoinColumn(name = "id_attribution")
     private Attribution attribution;
+
 }

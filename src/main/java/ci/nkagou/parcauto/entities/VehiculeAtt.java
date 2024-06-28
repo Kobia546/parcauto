@@ -1,6 +1,6 @@
 package ci.nkagou.parcauto.entities;
 
-import ci.nkagou.parcauto.enums.Motif;
+import ci.nkagou.parcauto.enums.Motifs;
 import ci.nkagou.parcauto.enums.StatutVehiculeA;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +24,7 @@ public class VehiculeAtt extends Attribution {
     private StatutVehiculeA statutVehiculeA;
 
     @Enumerated(EnumType.ORDINAL)
-    private Motif motif;
+    private Motifs motif;
 
     @Size(max = 600)
     private String observation;

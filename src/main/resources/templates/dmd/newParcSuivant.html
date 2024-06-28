@@ -31,8 +31,9 @@
                     <strong id="dateprevue" th:text = "${dmdParcDto.datePrevue}" class="col-md-4" ></strong>
                     <strong id="heureprevue" th:text = "${dmdParcDto.heurePrevue}" class="col-md-4"></strong>
                     <strong id="moyen" th:text = "${dmdParcDto.moyenDemande}" class="col-md-4"></strong>
-                    <strong id="nom1" th:text = "${dmdParcDto.employe.toNomComplet()}" class="col-md-4" ></strong>
-                    <strong id="IdEmploye" th:text = "${dmdParcDto.employe.idEmploye}" hidden></strong>
+                    <!--<strong id="nom1" th:text = "${dmdParcDto.employe.toNomComplet()}" class="col-md-4" ></strong>
+                    <strong id="IdEmploye" th:text = "${dmdParcDto.employe.idEmploye}" hidden></strong>-->
+
                 </h5>
 
             </div>
@@ -45,7 +46,7 @@
 
         <form action="" id="form" >
             <!-- Nom Client Form Input -->
-            <div  class="form-group row">
+            <div class="form-group row">
                 <label  th:for="nom"  class="col-sm-4 col-form-label text-md-right"><strong>Nom et prenom</strong></label>
 
                     <div class="col-md-6">
@@ -56,7 +57,7 @@
                     </div>
             </div>
 
-            <div  class="form-group row">
+            <!--<div class="form-group row">
                 <label  th:for="destination" class="col-sm-4 col-form-label text-md-right"><strong>Destination</strong></label>
 
                 <div class="col-md-6">
@@ -64,10 +65,33 @@
 
                 </div>
             </div>
+
             <div  class="form-group row">
                 <label  th:for="motifDmd" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>
                 <div class="col-md-6">
                     <input class="form-control" id="motifDmd" th:field="${dto.motifDmd}" type = "text" required>
+                </div>
+            </div>-->
+
+            <div class="form-group row">
+                <label th:for="motif" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>
+
+                <div class="col-md-6">
+                    <select th:field="${dto.motif}" id="motifDmd"  name="motif" class="select-type form-control"  required>
+                        <option value="">------- Motif ---------</option>
+                        <option th:each="c:${listMotif}" th:value="${c.nomMotif}" th:text="${c.nomMotif}" th:field="${dto.motif}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label th:for="destination" class="col-sm-4 col-form-label text-md-right"><strong>Destination</strong></label>
+
+                <div class="col-md-6">
+                    <select  th:field="${dto.destination}" id="destination" name="destination" class="select-type form-control"  required>
+                        <option value="">------- Destination ---------</option>
+                        <option th:each="c:${listDestination}" th:value="${c.nomDestination}" th:text="${c.nomDestination}" th:field="${dto.destination}"></option>
+                    </select>
                 </div>
             </div>
 
@@ -112,16 +136,16 @@
                         //Function Add  Data on table
                         function AddData(e)
                             {
-                                    e.preventDefault();
-                                    var rows="";
-                                    var nom=document.getElementById("nom").value;
-                                    var destination =document.getElementById("destination").value;
-                                    var motif =document.getElementById("motifDmd").value;
+                                  e.preventDefault();
+                                  var rows="";
+                                  var nom=document.getElementById("nom").value;
+                                  var destination =document.getElementById("destination").value;
+                                  var motif =document.getElementById("motifDmd").value;
 
-                                    rows+="<tr><td>"+nom+"</td><td>"+destination+"</td><td>"+motif+"</td>";
-                                    $(rows).appendTo("#index-dmd tbody");
+                                  rows+="<tr><td>"+nom+"</td><td>"+destination+"</td><td>"+motif+"</td>";
+                                  $(rows).appendTo("#index-dmd tbody");
 
-                                    resetForm();
+                                  resetForm();
 
 
                             }
@@ -172,8 +196,8 @@
                                  var date =  document.getElementById("dateprevue").innerText;
                                  var heure = document.getElementById("heureprevue").innerText;
                                  var moyen = document.getElementById("moyen").innerText;
-                                 var nomcomplet = document.getElementById("nom1").innerText;
-                                 var idemploye = document.getElementById("IdEmploye").innerText;
+
+
 
 
                                  let employes = [];
@@ -183,23 +207,23 @@
                                      let employe = {};
                                      employe.nom = row.find("TD").eq(0).html();
                                      employe.destination = row.find("TD").eq(1).html();
-                                     employe.motifDmd = row.find("TD").eq(2).html();
+                                     employe.motif = row.find("TD").eq(2).html();
                                      // alert(employe);
                                      employes.push(employe);
 
                                  });
 
                                  var dmdparcdto = {
-                                    datePrevue : date,
-                                    heurePrevue : heure,
-                                    moyenDemande : moyen,
-                                    idResponsable : idemploye,
-                                    employeDmdDto : employes
+                                     datePrevue : date,
+                                     heurePrevue : heure,
+                                     moyenDemande : moyen,
+
+                                     employeDmdDto : employes
                                  }
 
                                  //var s = JSON.stringify(dmdparcdto);
                                  //alert(s);
-
+                                alert("Operation reussi")
 
                                 //Send the JSON array to Controller using AJAX.
                                 $.ajax({
@@ -212,18 +236,9 @@
 
                                 });
 
-                                    (function(employes) {
 
-                                       alert("Operation effectuée avec success");
-                                       let tableBody = document.querySelector('#index-dmd tbody');
-                                       tableBody.innerHTML = '';
-                                       //$('#index-dmd').DataTable().clear().draw();
 
-                                    })
-                                    (function() {
-                                        // handle fail
-                                    });
-
+                                window.location.href = '/dmd/dmdVehiculeChauffeur';
 
 
                             });

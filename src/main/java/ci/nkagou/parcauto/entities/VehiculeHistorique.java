@@ -31,6 +31,4 @@ public class VehiculeHistorique {
     @JoinColumn(name = "attribution")
     private VehiculeAtt vehiculeAtt;
 
-
-
 }

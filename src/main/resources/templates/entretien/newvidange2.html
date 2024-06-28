@@ -1,10 +1,276 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+
 </head>
+<style>
+    /* Custom styles to reduce the size of checkboxes */
+    .form-check-input.custom-check-input {
+        width: 18px;
+        height: 18px;
+    }
+</style>
 <body>
-$END$
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+
+<div class="card mx-auto" style="width: 40rem">
+
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-15">
+                <h5>
+                    <strong id="DateEntretien" th:text = "${entretienVDto.dateEntretien}" class="col-md-4" ></strong>
+                    <strong id="NouveauKilometrage" th:text = "${entretienVDto.nouveauKilometrage}" class="col-md-4" ></strong>
+                    <strong id="AncienKilometrage" th:text = "${entretienVDto.ancienKilometrage}" class="col-md-4" ></strong>
+                    <strong id="Vehicule1" th:text = "${entretienVDto.vehicule.immatriculation + '(' + entretienVDto.vehicule.marque.name + ')'}" class="col-md-4" ></strong>
+                    <!--<strong id="Vehicule1" th:text = "${entretienVDto.vehicule.marque.name}" class="col-md-4" ></strong>-->
+                    <strong id="Vehicule" th:text = "${entretienVDto.vehicule.idVehicule}" hidden ></strong>
+                </h5>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="card-body">
+            <form  >
+                <!-- Immatriculation Form Input -->
+                <div class="form-group row">
+                    <label for="Article" class="col-sm-4 col-form-label text-md-right"><strong>Article</strong></label>
+                    <div class="col-md-6">
+                        <select id="Article" name="Article" class="select-type form-control" required>
+                            <option value="">------- Article ---------</option>
+                            <option th:each="c:${listArticle}" th:value="${c.id}" th:text="${c.libelle}" ></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="Montant" class="col-sm-4 col-form-label text-md-right"><strong>Montant</strong></label>
+                    <div class="col-md-6">
+                        <input id="Montant" type="text" class="form-control" required autofocus>
+                        <!--<span th:if="${#fields.hasErrors('immatriculation')}" th:errors="*{immatriculation}" th:class="help-block"></span>-->
+                    </div>
+                </div>
+
+
+
+                <div class="form-group row">
+                    <label for="button" class="col-sm-4 col-form-label text-md-left"><strong></strong></label>
+
+                    <div class="col-md-6">
+                        <!--<button id="btn" type="submit" value = "btn" class="btn btn-primary" >Ajouter</button>-->
+                        <button class="btn btn-primary" type="submit" value = "btn" onclick="AddData(event)"> Ajouter </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--<div class="card-header">
+            <div class="row">
+                <div class="col-md-8">
+                </div>
+            </div>
+        </div>-->
+
+        <div class="card-body">
+            <div >
+                <div class="table-responsive-sm">
+                    <table class="table"  style="width:100%" id="index-vidange">
+                        <thead class="table-light" >
+                        <tr>
+                            <th >Article</th>
+                            <th  >Montant</th>
+                            <!--<th>recu vidange</th>-->
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+
+                    </table>
+
+                    <div style="float:right ;margin-top:50px">
+                        <span>Total Montant: <span id="TotalMontant">0</span></span>
+                    </div>
+
+                    <div class="form-group row" style="margin-top: 120px">
+                        <label for="RecuVidange" class="col-sm-4 col-form-label text-md-right"><strong>Recu de vidange</strong></label>
+                        <div class="col-md-6">
+                            <div class="custom-file">
+                                <input class="custom-file-input" type="file" id="RecuVidange" name="RecuVidange" required>
+                                <label class="custom-file-label" for="RecuVidange">Photo</label>
+                            </div>
+                            <img id="previewImage" src="#" alt="Preview" class="img-fluid mt-2" style="display: none; max-width: 100%; max-height: 200px;">
+                        </div>
+                    </div>
+
+                    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+                    <script>
+                        // Function Add Data on table
+                        function AddData(e) {
+                            e.preventDefault();
+                            var article = document.getElementById("Article").value;
+                            var montant = parseInt(document.getElementById("Montant").value);
+
+                            var newRow = "<tr><td>" + article + "</td><td>" + montant + "</td></tr>";
+                            $("#index-vidange tbody").append(newRow);
+
+                            // Calculate and update total Montant
+
+                            calculateTotalMontant();
+
+                            resetForm();
+
+
+                        }
+
+                        // Function to calculate and update total Montant
+                        function calculateTotalMontant() {
+                            const montantCells = document.querySelectorAll('#index-vidange tbody tr td:nth-child(2)');
+                            let totalMontant = 0;
+                            montantCells.forEach(function (cell) {
+                                totalMontant += parseInt(cell.textContent);
+                            });
+
+                            const totalMontantSpan = document.getElementById('TotalMontant');
+                            totalMontantSpan.textContent = totalMontant;
+                        }
+
+                        // Function for reset Form
+                        function resetForm() {
+                            document.getElementById("Article").value = "";
+                            document.getElementById("Montant").value = "";
+
+                        }
+
+
+                    </script>
+
+
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center"  style="margin: 10px; padding: 100px" >
+                        <button class="btn btn-success" type="submit" value="submit" id="button">valider</button>
+                    </div>
+
+                    <script type="text/javascript">
+
+                        // Get Data
+
+                        $(document).ready(function () {
+                            $('#button').on('click', function () {
+                                var date = document.getElementById("DateEntretien").innerText;
+
+                                // Parse the vehicle information
+                                var vehiculeInfo = document.getElementById("Vehicule").innerText;
+                                var ancienKilometrage = document.getElementById("AncienKilometrage").innerText;
+                                var nouveauKilometrage = document.getElementById("NouveauKilometrage").innerText;
+                                var totalMontant = document.getElementById("TotalMontant").innerText;
+                                var recuVidange = $("#RecuVidange").val();
+
+
+                                let details = [];
+
+                                $("#index-vidange TBODY TR").each(function () {
+                                    let row = $(this);
+                                    let detail = {};
+                                    detail.article = {
+                                        id: parseInt(row.find("TD").eq(0).html()) // Assuming this is the ID of the article
+                                    };
+                                    detail.montant = row.find("TD").eq(1).html();
+
+                                    details.push(detail);
+                                });
+
+                                var entretienVDto = {
+
+                                    dateEntretien: date,
+                                    vehicule: vehiculeInfo,
+                                    ancienKilometrage: parseInt(nouveauKilometrage),
+                                    nouveauKilometrage: parseInt(ancienKilometrage),
+                                    detailVidangeDto: details,
+                                    montantTotal: parseInt(totalMontant),
+                                    recuEntretienFilename: recuVidange,
+
+                                }
+
+                                $.ajax({
+                                    type: "POST",
+                                    contentType: 'application/json',
+                                    url: '/createEntretienVidange',
+                                    dataType: 'json',
+                                    timeout: 100000,
+                                    data: JSON.stringify(entretienVDto),
+                                })
+
+                                .done(function () {
+                                    alert("Operation effectuée avec succès");
+                                    $('#index-vidange tbody').empty();
+                                    $("#TotalMontant").text("0");
+                                })
+
+                                .fail(function () {
+                                    alert("Une erreur s'est produite lors de l'opération.");
+                                })
+
+
+                                window.location.href = '/Vidange/vidange';
+                                window.location.reload();
+                            });
+                        });
+
+                    </script>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- page content -->
+
+
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<br/><br/>
+
+
+
+<!-- Include SCRIPT block -->
+<th:block th:include="main/layout/block_script"></th:block>
+
 </body>
 </html>

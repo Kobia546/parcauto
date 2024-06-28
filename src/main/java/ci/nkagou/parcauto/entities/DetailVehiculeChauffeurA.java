@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "detail_chauffeur")
-public class DetailVehiculeChauffeurAttribution {
+public class DetailVehiculeChauffeurA {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +25,7 @@ public class DetailVehiculeChauffeurAttribution {
     private EmployeDmd employeDmd;
 
     @ManyToOne
-    @JoinColumn(name = "idAttribution")
+    @JoinColumn(name = "id_attribution")
     private Attribution attribution;
 
 }

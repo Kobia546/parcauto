@@ -32,11 +32,12 @@ DOCTYPE HTML>
     </div>
 
     <div class="card-body">
-        <form th:action="@{/Attribution/attribution/user/termineeCarburant}"  method="post" enctype="multipart/form-data">
+
+        <form th:action="@{/Attribution/attribution/user/termineeCarburant}" th:object="${attributionDto}" method="post" enctype="multipart/form-data" id="attributionForm">
 
             <!-- IdEmployeDmdForm Input -->
             <input th:field="${attributionDto.id}" type="hidden"/>
-            <input th:field="${attributionDto.employeDmd}" type="hidden"/>
+            <input th:field="${attributionDto.detailCarburantA}" type="hidden"/>
 
             <div class="form-group row d-none">
                 <label  th:for="id" class="col-sm-4 col-form-label text-md-right"><strong>Identifiant</strong></label>
@@ -49,41 +50,49 @@ DOCTYPE HTML>
             </div>
 
 
-
-            <div  class="form-group row d-none">
+           <!-- <div  class="form-group row d-none">
                 <label th:for="employeDmd" class="col-sm-4 col-form-label text-md-right"><strong>Nom de l'utilisateur</strong></label>
 
                 <div class="col-md-6">
                     <select th:field="${attributionDto.employeDmd}"  name="employeDmd" class="select-type form-control" required >
-                        <option value="">--------- Nom de l'utilisateur --------</option>
+                        <option value="">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Nom de l'utilisateur &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>
                         <option th:each="c:${listEmployee}" th:value="${c.idEmployeDmd}" th:text="${c.employe.toNomComplet}" th:selected="*{employeDmd}"></option>
                     </select>
+                </div>
+            </div>-->
+
+            <div  class="form-group row d-none">
+                <label   class="col-sm-4 col-form-label text-md-right"><strong> Nom des utilisateurs </strong></label>
+
+                <div class="col-md-6">
+
+                    <input class="form-control"  th:field="${attributionDto.detailCarburantA}" required >
+
                 </div>
             </div>
 
 
 
-            <div  class="form-group row d-none">
+            <div  class="form-group row ">
                 <label th:for="dateDeDepart"  class="col-sm-4 col-form-label text-md-right"><strong>Date de depart</strong></label>
 
                 <div class="col-md-6">
 
-                    <input class="form-control" type="datetime-local"  th:field="${attributionDto.dateDeDepart}" required >
-
+                    <input class="form-control" type="datetime-local"  th:field="*{dateDeDepart}" required >
+                    <span class="text-danger"  th:if="${#fields.hasErrors('dateDeDepart')}" th:errors="*{dateDeDepart}"></span>
                 </div>
             </div>
 
-            <div  class="form-group row ">
-                <label th:for="dateArrivee"  class="col-sm-4 col-form-label text-md-right"><strong>Date d'arrivée</strong></label>
-
+            <div class="form-group row">
+                <label th:for="dateArrivee" class="col-sm-4 col-form-label text-md-right"><strong>Date d'arrivée</strong></label>
                 <div class="col-md-6">
-
-                    <input class="form-control" type="datetime-local"  th:field="${attributionDto.dateArrivee}" required >
-
+                    <input class="form-control" type="datetime-local" th:field="*{dateArrivee}" required>
+                    <span class="text-danger" th:if="${#fields.hasErrors('dateArrivee')}" th:errors="*{dateArrivee}"></span>
+                    <span id="dateArriveeWarning" class="text-danger"></span> <!-- Warning message -->
                 </div>
             </div>
 
-            <div  class="form-group row ">
+            <!--<div  class="form-group row ">
                 <label th:for="litre"  class="col-sm-4 col-form-label text-md-right"><strong>Litre</strong></label>
 
                 <div class="col-md-6">
@@ -91,9 +100,9 @@ DOCTYPE HTML>
                     <input class="form-control" type="text"  th:field="${attributionDto.litre}" required >
 
                 </div>
-            </div>
+            </div>-->
 
-            <div  class="form-group row d-none">
+            <div  class="form-group row ">
                 <label th:for="montant"  class="col-sm-4 col-form-label text-md-right"><strong>Montant</strong></label>
 
                 <div class="col-md-6">
@@ -108,7 +117,7 @@ DOCTYPE HTML>
 
                 <div class="col-md-6">
 
-                    <input class="form-control" type="text"  th:field="${attributionDto.immatriculationVehicule}" required >
+                    <input class="form-control" type="text"  th:field="${attributionDto.immatriculationVehicule}"  >
 
                 </div>
             </div>
@@ -117,7 +126,7 @@ DOCTYPE HTML>
                 <label for="recuCarburant" class="col-sm-4 col-form-label text-md-right"><strong>Recu de carburant</strong></label>
                 <div class="col-md-6">
                     <div class="custom-file">
-                        <input class="custom-file-input" type="file" id="recuCarburant" name="recuCarburant" required>
+                        <input class="custom-file-input" type="file" id="recuCarburant" name="recuCarburant" >
                         <label class="custom-file-label" for="recuCarburant">Photo</label>
                     </div>
                     <img id="previewImage" src="#" alt="Preview" class="img-fluid mt-2" style="display: none; max-width: 100%; max-height: 200px;">
@@ -131,7 +140,7 @@ DOCTYPE HTML>
                 <div class="col-md-6">
                     <select th:field="${attributionDto.typeAttribution}"  name="typeAttribution" class="select-type form-control"   >
                         <option value="">----------- Type de l'attribution ----------</option>
-                        <option th:each="c:${listTypeAttribution}" th:value="${c.name}" th:text="${c.name}" th:selected="*{listTypeAttribution}"></option>
+                        <option th:each="c:${listTypeAttribution}" th:value="${c.name}" th:text="${c.name}" th:field="${attributionDto.typeAttribution}"></option>
                     </select>
                 </div>
             </div>
@@ -152,13 +161,14 @@ DOCTYPE HTML>
 
 
             <div class="form-group row">
-                <label for="btn" class="col-sm-4 col-form-label text-md-right"><strong></strong></label>
+                <label for="btnEnregistrer" class="col-sm-4 col-form-label text-md-right"><strong></strong></label>
 
                 <div class="col-md-6">
-                    <button id="btn" type="submit" class="btn btn-primary">Enregister</button>
+                    <button id="btnEnregistrer" type="submit" class="btn btn-primary" name="btn">Enregistrer</button>
                 </div>
             </div>
         </form>
+
     </div>
 </div>
 
@@ -189,6 +199,22 @@ DOCTYPE HTML>
         reader.readAsDataURL(file);
     });
 
+</script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("btnEnregistrer").addEventListener("click", function (e) {
+            var dateDeDepart = new Date(document.querySelector("[name='dateDeDepart']").value);
+            var dateArrivee = new Date(document.querySelector("[name='dateArrivee']").value);
+
+            if (dateArrivee < dateDeDepart) {
+                e.preventDefault(); // Prevent form submission
+                document.getElementById("dateArriveeWarning").textContent = "La date d'arrivée doit être ultérieure à la date de départ.";
+            } else {
+                // Reset the warning message if the dates are valid
+                document.getElementById("dateArriveeWarning").textContent = "";
+            }
+        });
+    });
 </script>
 </body>
 </html>

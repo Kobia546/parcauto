@@ -25,7 +25,7 @@
 <br>
 <!-- Message pour succes de l operation -->
 <p class="alert alert-success text-center h6"   role="alert" th:text="${messagesucces}" th:if="${messagesucces}"></p>
-<div class="card mx-auto" style="width: 75rem">
+<div class="card mx-auto" style="width: 95rem">
 
     <div class="card-header">
         <div class="row">
@@ -36,8 +36,8 @@
 
             <div class="col-md-12 page-action text-right">
                 <div>
-                    <!--<a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" th:href="@{/dmd/dmds/user}" class="btn btn-sm btn-success pull-right"> <i class="material-icons">open_in_new</i><b>NOUVELLE DMD UTILISATEUR</b></a>
-                    <a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')"  th:href="@{/dmd/dmds/parc}" class="btn btn-sm btn-success pull-right"> <i class="material-icons">open_in_new</i><b>NOUVELLE DMD PARC AUTO</b></a>-->
+                    <!--<a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" th:href="@{/dmd/dmds/user}" class="btn btn-sm btn-success pull-right"> <i class="material-icons">open_in_new</i><b>NOUVELLE DMD UTILISATEUR</b></a>-->
+                    <a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')"  th:href="@{/dmd/dmds/parc}" class="btn btn-sm btn-success pull-right"> <i class="material-icons">open_in_new</i><b>NOUVELLE DMD PARC AUTO</b></a>
                     <!--<a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" th:href="@{/dmd/dmds/attribution}"  id="attribution" class="btn btn-sm btn-primary pull-right"> <i class="material-icons">open_in_new</i><b>ATTRIBUTION</b></a>-->
                 </div>
 
@@ -164,6 +164,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+
         var table;
         table = $('#index-dmd').DataTable({
             order: [ 0, "desc" ],
@@ -198,7 +199,6 @@
                     'targets':0,
                     'checkboxes':{
                        'selectRow':true
-
                     }
                 }
             ],
@@ -208,7 +208,11 @@
             },
 
 
+
         });
+
+
+
 
 
             $('#frm-table').on('submit', function(e){
@@ -228,6 +232,7 @@
                         .attr('type', 'hidden')
                         .attr('name', 'id[]')
                         .val(rowData[0])
+
                 );
 
 
@@ -281,7 +286,21 @@
             } else {
 
                e.preventDefault();
+
             }
+
+             // Function to reload the page once after a delay
+            function reloadPageOnce() {
+                window.location.reload();
+            }
+
+            // Automatic refresh after a delay (e.g., 5 minutes)
+            setTimeout(reloadPageOnce, 300000); // 300000 milliseconds = 5 minutes
+
+
+
+
+
 
         });
     });

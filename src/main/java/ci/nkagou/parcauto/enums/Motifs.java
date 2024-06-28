@@ -1,6 +1,6 @@
 package ci.nkagou.parcauto.enums;
 
-public enum Motif {
+public enum Motifs {
 
     REPARATION
 }

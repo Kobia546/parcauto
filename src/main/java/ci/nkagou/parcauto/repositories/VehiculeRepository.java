@@ -3,6 +3,7 @@ package ci.nkagou.parcauto.repositories;
 import ci.nkagou.parcauto.entities.Marque;
 import ci.nkagou.parcauto.entities.Typevehicule;
 import ci.nkagou.parcauto.entities.Vehicule;
+import ci.nkagou.parcauto.entities.VehiculeHistorique;
 import ci.nkagou.parcauto.enums.Couleur;
 import ci.nkagou.parcauto.enums.StatutVehicule;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +21,6 @@ public interface VehiculeRepository  extends JpaRepository<Vehicule, Long> {
     List<Vehicule> findVehiculesByDateAchat(LocalDate dateAchat);
 
     List<Vehicule> findVehiculesByStatutVehicule(StatutVehicule statutVehicule);
+    //List<Vehicule> findAllByDateParcoursBetween(LocalDate debut, LocalDate fin);
+
 }

@@ -35,14 +35,14 @@
         </div>
     </div>
     <div class="card-body">
-        <form th:action="@{/Entretien/entretien/Suivant}" >
+        <form th:action="@{/Entretien/entretien/Suivant}" th:object="${entretienHerbDto}"   method="post" >
             <!-- Immatriculation Form Input -->
             <div  class="form-group row">
-                <label for="name" class="col-sm-4 col-form-label text-md-right"><strong>date</strong></label>
+                <label for="name" class="col-sm-4 col-form-label text-md-right"><strong>date entretien</strong></label>
 
                 <div class="col-md-6">
 
-                    <input id="name"  type="date" class="form-control">
+                    <input id="name"  type="date" class="form-control" th:field="*{dateEntretien}" required>
                     <!--<span th:if="${#fields.hasErrors('immatriculation')}" th:errors="*{immatriculation}" th:class="help-block"></span>-->
                 </div>
             </div>

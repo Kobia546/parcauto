@@ -27,69 +27,73 @@
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <h3><span class="badge badge-info">Editer</span> <span th:text ="${vehicule.immatriculation}" class="badge badge-secondary"></span></h3>
+                <h3><span class="badge badge-info">Editer</span> <span th:text ="${vehiculedto.immatriculation}" class="badge badge-secondary"></span></h3>
             </div>
-            <div>
-                <input th:field="${vehicule.id}" type="hidden">
 
-            </div>
             <div class="col-md-4 page-action text-right">
                 <a th:href="@{/vehicule/vehicules}" class="btn btn-default btn-sm"> <i class="material-icons">backspace</i> Retour</a>
             </div>
         </div>
     </div>
     <div class="card-body">
-        <form th:action="@{/vehicule/vehicules/raison}"  method="post">
+        <form th:action="@{/vehicule/vehicules/raison}"  th:object="${vehiculedto}" method="post">
+
+            <!-- IdVehicule Form Input -->
 
             <div  class="form-group row d-none">
-                <label for="id" class="col-sm-4 col-form-label text-md-right"><strong>Identifiant</strong></label>
+                <label for="id" class="col-sm-4 col-form-label text-md-right"><strong>id</strong></label>
 
                 <div class="col-md-6">
 
-                    <input id="id" type="text" name="id"  class="form-control" th:field="${vehicule.id}" required  autofocus>
+                    <input id="id" name="id"  type="text" class="form-control" th:field="${vehiculedto.idVehicule}" required autofocus>
 
                 </div>
             </div>
 
+            <!-- Immatriculation Form Input -->
+            <div  class="form-group row d-none">
+                <label for="name" class="col-sm-4 col-form-label text-md-right"><strong>Immatriculation</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="name" name="immatriculation"  type="text" class="form-control" th:field="${vehiculedto.immatriculation}" required autofocus>
+
+                </div>
+            </div>
+
+
+            <!-- Carte Grise -->
+            <div  class="form-group row d-none">
+                <label for="carteGrise" class="col-sm-4 col-form-label text-md-right"><strong>Carte Grise</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="carteGrise" type="text" name="cartegrise"  class="form-control" th:field="${vehiculedto.carteGrise}" required  autofocus>
+
+                </div>
+            </div>
+
+            <!-- Couleur  select -->
             <div class="form-group row d-none">
                 <label for="couleur" class="col-sm-4 form-control-label text-md-right"><strong>Couleur</strong></label>
 
                 <div class="col-md-6">
-                    <select  th:field="${vehicule.couleur}" id="couleur" name="couleur" class="select-type form-control"  required >
+                    <select  th:field="${vehiculedto.couleur}" id="couleur" name="couleur" class="select-type form-control"  required >
                         <option value="">------- Couleur ---------</option>
-                        <option th:each="c:${listCouleurs}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == vehicule.couleur}"></option>
+                        <option th:each="c:${listCouleurs}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == vehiculedto.couleur}"></option>
                     </select>
 
                 </div>
             </div>
 
-            <div  class="form-group row d-none ">
-                <label for="carteGrise" class="col-sm-4 col-form-label text-md-right"><strong>Carte Grise</strong></label>
-
-                <div class="col-md-6">
-
-                    <input id="carteGrise" type="text" name="cartegrise"  class="form-control" th:field="${vehicule.carteGrise}" required  autofocus>
-
-                </div>
-            </div>
-
-            <div  class="form-group row d-none">
-                <label for="dateAchat" class="col-sm-4 col-form-label text-md-right"><strong>Date Achat</strong></label>
-
-                <div class="col-md-6">
-
-                    <input id="dateAchat" type="date" name="dateAchat" class="form-control" th:field="${vehicule.dateAchat}"  required autofocus >
-
-                </div>
-            </div>
-
+            <!-- Marque  select -->
             <div class="form-group row d-none">
                 <label for="marque" class="col-sm-4 form-control-label text-md-right"><strong>Marque</strong></label>
 
                 <div class="col-md-6">
-                    <select th:field="${vehicule.marque}"  id="marque" name="marque" class="select-type form-control"  required >
+                    <select th:field="${vehiculedto.marque}"  id="marque" name="marque" class="select-type form-control"  required >
                         <option value="">------- Marque ---------</option>
-                        <option th:each="c:${listMarques}" th:value="${c.idMarque}" th:text="${c.name}" th:selected="${c.idMarque == vehicule.marque}"></option>
+                        <option th:each="c:${listMarques}" th:value="${c.idMarque}" th:text="${c.name}" th:selected="${c.idMarque == vehiculedto.marque}"></option>
                     </select>
                 </div>
             </div>
@@ -99,63 +103,65 @@
                 <label for="typeVehicule" class="col-sm-4 form-control-label text-md-right"><strong>Type Vehicule</strong></label>
 
                 <div class="col-md-6">
-                    <select th:field="${vehicule.typevehicule}"  id="typeVehicule" name="typeVehicule" class="select-type form-control" required  >
+                    <select th:field="${vehiculedto.typeVehicule}"  id="typeVehicule" name="typeVehicule" class="select-type form-control" required  >
                         <option value="">------- Type Vehicule ---------</option>
-                        <option th:each="c:${listTypevehicules}" th:value="${c.idTypevehicule}" th:text="${c.libelle}" th:selected="${c.idTypevehicule == vehicule.typevehicule}"></option>
+                        <option th:each="c:${listTypevehicules}" th:value="${c.idTypevehicule}" th:text="${c.libelle}" th:field="${vehiculedto.typeVehicule}"></option>
                     </select>
 
                 </div>
             </div>
-            <div class="form-group row d-none">
 
-                <div class="form-group row ">
-                    <label for="statutVehicule" class="col-sm-4 form-control-label text-md-right"><strong>Type Vehicule</strong></label>
-
-                    <div class="col-md-6">
-                        <select th:field="${vehicule.statutVehicule}"  id="statutVehicule" name="statutVehicule" class="select-type form-control" required  >
-                            <option value="">------- Type Vehicule ---------</option>
-                            <option th:each="c:${listStatutVehicule}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == vehicule.statutVehicule}"></option>
-                        </select>
-
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row d-none">
-
-                <label for="immatriculation" class="col-sm-4 col-form-label text-md-right"><strong>Immatriculation</strong></label>
+            <!-- Date de saisie Form Input -->
+            <div  class="form-group row d-none">
+                <label for="dateAchat" class="col-sm-4 col-form-label text-md-right"><strong>Date Achat</strong></label>
 
                 <div class="col-md-6">
 
-                    <input id="immatriculation" name="immatriculation" class="form-control" th:field="${vehicule.immatriculation}"></input>
+                    <input id="dateAchat"  name="dateAchat" class="form-control" th:field="${vehiculedto.dateAchat}"  required autofocus >
 
                 </div>
-
             </div>
-
 
             <div class="form-group row">
 
-                <label for="raison" class="col-sm-4 col-form-label text-md-right"><strong>Raison</strong></label>
+                <label for="raison" class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>
 
                 <div class="col-md-6">
 
-                    <textarea id="raison" name="raison" class="form-control" th:field="${vehicule.raison}" required autofocus></textarea>
+                    <textarea id="raison" name="raison" class="form-control" th:field="${vehiculedto.raison}" required autofocus></textarea>
 
                 </div>
 
             </div>
 
-            <div class="form-group row">
+           <!-- <div class="form-group row">
+                <label for="countdownTimer" class="col-sm-4 col-form-label text-md-right"><strong>Compte a reboure</strong></label>
+                <div class="col-md-6">
+                    <input id="countdownTimer" name="countdownTimer" type="number" class="form-control" th:field="${vehiculedto.countdownTimer}" required>
+                </div>
+                <div class="col-md-2">
+                    <select id="countdownUnit" name="countdownUnit" class="form-control" required>
+                        <option value="d">Days</option>
+                        <option value="h">Hours</option>
+                        <option value="m">Minutes</option>
+                        <option value="s">Seconds</option>
+                    </select>
+                </div>
+            </div>-->
+
+
+
+            <!--<div class="form-group row">
 
                 <label for="dateIndisponibilité" class="col-sm-4 col-form-label text-md-right"><strong>Date de l'indisponibilité</strong></label>
 
                 <div class="col-md-6">
 
-                    <input id="dateIndisponibilité" type = "date" name="dateIndisponibilité" class="form-control" th:field="${vehicule.dateIndisponibilité}" required autofocus>
+                    <input id="dateIndisponibilité" type = "date" name="dateIndisponibilité" class="form-control" th:field="${vehiculedto.dateIndisponibilité}" required autofocus>
 
                 </div>
 
-            </div>
+            </div>-->
 
             <div class="form-group row">
                 <label for="contact" class="col-sm-4 col-form-label text-md-right"><strong></strong></label>
@@ -187,6 +193,33 @@
 
 
 <!-- Include SCRIPT block -->
+<th:block th:include="main/layout/block_script"></th:block>
+
+</body>
+</html>
+
+<!--
+</div>
+
+
+
+
+
+
+
+&lt;!&ndash; page content &ndash;&gt;
+
+
+&lt;!&ndash; Include END MENU block &ndash;&gt;
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<br/><br/>
+
+
+
+&lt;!&ndash; Include SCRIPT block &ndash;&gt;
 <th:block th:include="main/layout/block_script"></th:block>
 
 <script type="text/javascript">
@@ -238,4 +271,4 @@
 </script>
 
 </body>
-</html>
+</html>-->

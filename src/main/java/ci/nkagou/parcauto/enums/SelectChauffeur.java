@@ -1,2 +1,5 @@
-package ci.nkagou.parcauto.enums;public enum SelectChauffeur {
+package ci.nkagou.parcauto.enums;
+
+public enum SelectChauffeur {
+    TOUS,CHAUFFEURS
 }

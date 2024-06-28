@@ -1,6 +1,8 @@
 package ci.nkagou.parcauto.dtos.dmd;
 
+import ci.nkagou.parcauto.entities.Destination;
 import ci.nkagou.parcauto.entities.Employe;
+import ci.nkagou.parcauto.entities.Motif;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,10 +18,7 @@ public class EmployeDmdDto {
 
     private String nom;
     private String destination;
-    private String motifDmd;
+    private String motif;
     private Employe employe;
-
-
-
 
 }

@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "detail_vehicule")
-public class DetailVehiculeAttribution {
+public class DetailVehiculeA {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDetailVehicule;
@@ -23,7 +23,7 @@ public class DetailVehiculeAttribution {
     private EmployeDmd employeDmd;
 
     @ManyToOne
-    @JoinColumn(name = "idAttribution")
+    @JoinColumn(name = "id_attribution")
     private Attribution attribution;
 
 }

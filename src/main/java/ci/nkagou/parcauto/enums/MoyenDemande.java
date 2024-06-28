@@ -1,5 +1,5 @@
 package ci.nkagou.parcauto.enums;
 
 public enum MoyenDemande {
-    VEHICULE,  VEHICULE_CHAUFFEUR,  CARBURANT
+    VEHICULE_CHAUFFEUR, VEHICULES, ORIENTATION_TRANSPORT
 }

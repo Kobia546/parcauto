@@ -25,6 +25,7 @@
 <br>
 
 <div class="card mx-auto" style="width: 50rem">
+  <div id="alertMessage" class="alert alert-danger" style="display: none;"></div>
   <div class="card-header">
     <div class="row">
 
@@ -36,6 +37,7 @@
 
       </div>
 
+
       <div class="col-md-4 page-action text-right">
         <a th:href="@{/dmd/dmds}" class="btn btn-default btn-sm"> <i class="material-icons">backspace</i> Retour</a>
       </div>
@@ -45,26 +47,43 @@
   <div class="card-body">
     <form th:action="@{/dmd/dmds/user/savess}" th:object = "${dmdUserDto}"  method="post">
 
-
-
       <div  class="form-group row">
+        <label th:for="moyen" class="col-sm-4 col-form-label text-md-right"><strong>Moyen de déplacement</strong></label>
+        <div class="col-md-6">
+          <select th:field="*{moyenDemande}" id="filterOption"   name="moyenDemande" class="select-type form-control"  required>
+            <option value="">-------Moyen demandé-------</option>
+            <option th:each="c:${listMoyenDemandes}" th:value="${c.name}" th:text="${c.name}" th:field="*{moyenDemande}" ></option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label  th:for="Kilometrage" class="col-sm-4 col-form-label text-md-right"><strong>Kilometrage Debut</strong></label>
+
+        <div class="col-md-6">
+
+          <input class="form-control" id="kilometrageDebut" type="text" th:field="*{kilometrageDebut}">
+          <!-- <span th:if="${#fields.hasErrors('datePrevue')}" th:errors="*{datePrevue}"  th:class="help-block"></span>-->
+
+        </div>
+      </div>
+      <div  class="form-group row vehicule-section">
         <label th:for="vehicule" class="col-sm-4 col-form-label text-md-right"><strong>Vehicule</strong></label>
         <div class="col-md-6">
-          <select th:field="*{vehicule}" name="vehicule" id="vehicule"  class="select-type form-control"  required>
+          <select th:field="*{vehicule}" name="vehicule" id="vehicule"  class="select-type form-control"  >
             <option value="">-------vehicule------</option>
             <option th:each="c:${listVehicule}" th:value="${c.idVehicule}" th:text="${c.immatriculation}" th:field="*{vehicule}" ></option>
           </select>
         </div>
       </div>
 
-      <div  class="form-group row">
-          <label th:for="chauffeur" class="col-sm-4 col-form-label text-md-right"><strong>Chauffeur</strong></label>
-          <div class="col-md-6">
-              <select th:field="*{employe}" name="employe" id="chauffeur" class="select-type form-control"  required>
-                  <option value="">------------- Chauffeur ------------</option>
-                  <option th:each="c:${listChauffeur}" th:value="${c.idEmploye}" th:text="${c.toNomComplet}" th:field="*{employe}"></option>
-              </select>
-          </div>
+      <div  class="form-group row chauffeur-section">
+        <label th:for="chauffeur" class="col-sm-4 col-form-label text-md-right"><strong>Chauffeur</strong></label>
+        <div class="col-md-6">
+          <select th:field="*{employe}" name="employe" id="chauffeur" class="select-type form-control"  >
+            <option value="">------------- Chauffeur ------------</option>
+            <option th:each="c:${listChauffeur}" th:value="${c.idEmploye}" th:text="${c.toNomComplet}" th:field="*{employe}"></option>
+          </select>
+        </div>
       </div>
 
       <!--<div  class="form-group row">
@@ -131,116 +150,12 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
-<!--<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!--<script type="text/javascript">
-    var table = $('#index-dmd').DataTable({
-            'columnDefs': [{
-                'targets': 0,
-                'checkboxes': {
-                    'selectRow': true
-                }
-            }],
-            'select': {
-                'style': 'multi'
-            },
-            order: [ 1, "desc" ],
-        });
-        $.each(listCheckId, function(key, rowId) {
-
-            // Récupération de la ligne correspondante dans la table
-            var row = table.row('#' + rowId);
-
-            // Clonage de la ligne et ajout dans le deuxième tableau
-            var clone = row.node().cloneNode(true);
-            $('#targetTable tbody').append(clone);
-        });
-
-        $('#targetTable').DataTable();
-    });
-</script>-->
-<!--<script th:inline="javascript" >
-
-        var table = $('#index-dmd')
-        var listCheckId = JSON.parse(sessionStorage.getItem("listCheckId"));
-
-        $(document).ready(function() {
-            // Boucle sur la liste des identifiants
-            $.each(listCheckId, function(key, rowId) {
-                console.log('rowId:', rowId);
-                table.find('tr').each(function() {
-                  console.log('data-id value:', $(this).attr('data-id'));
-                });
-                // Récupération de la ligne correspondante dans la table
-                var row = table.find('tr[data-id="' + rowId + '"]');
-                console.log('data-id value:', row.attr('data-id'));
-
-                // Clonage de la ligne et ajout dans le deuxième tableau
-                var clone = row.clone(true,true);
-
-                $('#targetTable tbody').append(clone);
-                console.log('clone:', clone.attr('data-id'));
-            });
-            $('#targetTable').DataTable();
-        });
-
-</script>-->
-
-<!--<script th:inline="javascript">
-
-        var table = $('#index-dmd');
-        var listCheckId = JSON.parse(sessionStorage.getItem("listCheckId"));
-
-        $(document).ready(function() {
-            // Boucle sur la liste des identifiants
-            $.each(listCheckId, function(key, rowId) {
-
-                // Récupération de la ligne correspondante dans la table
-                var row = table.find('tr[data-id="' + rowId + '"]');
-
-                // Clonage de la ligne et ajout dans le deuxième tableau
-                var clone = row.clone();
-                $('#targetTable tbody').append(clone);
-            });
-            $('#targetTable').DataTable();
-        });
-
-</script>-->
-<!--<script type="text/javascript" th:inline="javascript">
-    function populateTable() {
-        var targetTable = document.getElementById("targetTable");
-        var sourceTable = document.getElementById("frm-table");
-        var rows = sourceTable.getElementsByTagName("tr");
-        for (var i = 0; i < rows.length; i++) {
-            var cells = rows[i].getElementsByTagName("td");
-            var newRow = targetTable.insertRow(-1);
-            for (var j = 0; j < cells.length; j++) {
-                var newCell = newRow.insertCell(j);
-                newCell.innerHTML = cells[j].innerHTML;
-            }
-        }
-        sessionStorage.removeItem("listCheckId");
-    }
-
-</script>-->
-
-<!--<script type="text/javascript">
-    function populateTable() {
-        var targetTable = document.getElementById("targetTable");
-        var data = JSON.parse(sessionStorage.getItem("listCheckId"));
-        for (var i = 0; i < data.length; i++) {
-             var newRow = targetTable.insertRow(-1);
-             for (var j = 0; j < data[i].length; j++) {
-                  var newCell = newRow.insertCell(j);
-                  newCell.innerHTML = data[i][j];
-             }
-        }
-        sessionStorage.removeItem("listCheckId");
-    }
-
-</script>-->
 
 <script type="text/javascript">
+
+
        // Get the JSON string from the sessionStorage object
        var listCheckIdJSON = sessionStorage.getItem("listCheckId");
 
@@ -252,35 +167,29 @@
 
        var existingTable = $('#targetTable tbody');
 
-
-
        // Loop through the listCheckId array and add the rows to the new table
-       $.each(listCheckId, function(key, row){
-
+       $.each(listCheckId, function (key, row) {
            // Create a new row
            var newRow = $('<tr>');
 
            // Add the data cells to the row
            var idCell = $('<td>').text(row.id);
            var nomCell = $('<td>').text(row.nom);
+
            var datepreuveCell = $('<td>').text(row.datepreuve);
            var heureprevueCell = $('<td>').text(row.heureprevue);
            var moyenCell = $('<td>').text(row.moyen);
            var motifCell = $('<td>').text(row.motif);
            var destinationCell = $('<td>').text(row.destination);
 
-
            var deleteButton = $('<button>').text('Supprimer');
-           deleteButton.click(function() {
+           deleteButton.click(function () {
                // Get the row ID
                var rowId = $(this).closest('tr').find('td:first').text();
                // Remove the row from the table
                $(this).closest('tr').remove();
-
            });
            var deleteCell = $('<td>').append(deleteButton);
-
-
 
            // Add the cells to the row
            newRow.append(idCell);
@@ -295,67 +204,209 @@
            // Add the row to the table
            existingTable.append(newRow);
 
-           console.log(row.id);
-
-           $(window).on('beforeunload', function() {
-               // Remove the "listCheckId" object from sessionStorage
-               sessionStorage.removeItem("listCheckId");
-           });
        });
 
+
        $(document).ready(function() {
+
+
+            $(".vehicule-section, .chauffeur-section").hide();
+
+
+
+            $("select[name='moyenDemande']").change(function () {
+                $(".vehicule-section, .chauffeur-section").hide();
+                $("#targetTable tbody tr").show();
+
+                var selectedValue = $(this).val();
+
+                $('#targetTable tbody tr').find('.row-checkbox').remove();
+                $('#targetTable tbody tr td:first-child').show();
+
+                if (selectedValue === "VEHICULE_CHAUFFEUR") {
+                    $(".vehicule-section").show();
+                    $(".chauffeur-section").show();
+                    $('#targetTable tbody tr').not(':has(td:eq(4):contains("VEHICULE_CHAUFFEUR"))').hide();
+                } else if (selectedValue === "VEHICULES") {
+                    $(".vehicule-section").show();
+                    $(".chauffeur-section").hide(); // Hide chauffeur section
+                    $('#targetTable tbody tr').not(':has(td:eq(4):contains("VEHICULES"))').hide();
+                }else if (selectedValue === "TRANSPORT") {
+                    $(".vehicule-section").hide();
+                    $(".chauffeur-section").hide();
+                    $('#targetTable tbody tr').not(':has(td:eq(4):contains("TRANSPORT"))').show();
+                    $('#targetTable tbody tr').not(':has(td:eq(4):contains("VEHICULES"))').show();
+                    $('#targetTable tbody tr').not(':has(td:eq(4):contains("VEHICULE_CHAUFFEUR"))').show();
+                }
+
+            });
+
+
             // Get the form
             var form = $('form');
 
             // Add a submit handler to the form
             form.submit(function(event) {
+
                 // Prevent the default form submission
                 event.preventDefault();
 
-                // Get the selected values for chauffeur and vehicule
-                 var vehicule = $("#vehicule").val();
-                 var chauffeur = $("#chauffeur").val();
+                // Get the selected value for moyenDemande
+                var selectedValue = $("select[name='moyenDemande']").val();
 
-                var employeDmds = [];
-                $('#targetTable tr').each(function() {
-                    var id = $(this).find('td:first').text().trim(); // assuming the ID is in the first column
-                    if (id !== "") { // check if the ID is not an empty string
-                        employeDmds.push(id);
-                    }
-                });
+                var vehiculeValue = $("#vehicule").val();
+                var chauffeurValue = $("#chauffeur").val();
+                 var kilometrageDebut = $("#kilometrageDebut").val();
 
-
-                var dmd = {
-                vehicule: vehicule,
-                employe: chauffeur,
-                dmdUserDto: employeDmds
+                // Get the values of vehicule and chauffeur fields
+                if (selectedValue === "VEHICULES" && (!vehiculeValue)) {
+                    $("#alertMessage").text("Le champ Vehicule est requis pour VEHICULES.").removeClass("alert-danger").addClass("alert-success").show();
+                    return; // Do not proceed with form submission
                 }
 
-                var data = JSON.stringify(dmd);
+                if (selectedValue === "VEHICULE_CHAUFFEUR" && (!vehiculeValue)) {
+                    $("#alertMessage").text("Le champ Vehicule est requis pour VEHICULE_CHAUFFEUR.").removeClass("alert-danger").addClass("alert-success").show();
+                    return; // Do not proceed with form submission
+                }
+
+                // Get common data from the table
+                var details = [];
+
+                $('#targetTable tbody tr:visible').each(function() {
+                    var id = $(this).find('td:first').text().trim();
+                    if (id !== "") {
+                        details.push({idEmployeDmd:id});
+                    }
+                });
+              $('#targetTable tbody tr:visible').each(function() {
+                var id = $(this).find('td:first').text().trim();
+                if (id !== "") {
+                  details.push({idEmployeDmd: id, kilometrageDebut: kilometrageDebut}); // Ajoutez kilometrageDebut ici
+                }
+              });
+
+                // Check if the table is empty
+                if (details.length === 0) {
+                    $("#alertMessage").text("La table est vide. Ajoutez des éléments avant de soumettre le formulaire.").removeClass("alert-danger").addClass("alert-success").show();
+                    window.location.href = '/dmd/dmdVehiculeChauffeur';
+                    return; // Do not proceed with form submission
+                }
+
+                var detail = {};
+
+                if (selectedValue === "VEHICULE_CHAUFFEUR") {
+                    if (!chauffeurValue) {
+                      //console.log(kilometrageDebut);
+                        detail.detailVehiculeADto = details;
+                        detail.vehicule = vehiculeValue;
+
+                    }
+
+                    detail.detailVehiculeChauffeurADto = details;
+                    detail.vehicule = vehiculeValue;
+                    detail.employe = chauffeurValue;
+                    detail.kilometrageDebut=kilometrageDebut;
 
 
-                // Send the data to the server via AJAX
-                //Send the JSON array to Controller using AJAX.
+                } else if (selectedValue === "VEHICULES") {
+                    detail.detailVehiculeADto = details;
+                    detail.vehicule = vehiculeValue;
+                    detail.kilometrageDebut=kilometrageDebut;
+
+                } else if (selectedValue === "ORIENTATION_TRANSPORT") {
+                    detail.detailCarburantADto = details;
+                }
+
+                var data = JSON.stringify(detail);
+
+                var url = '/create';  // Default URL
+
+                if (selectedValue === "VEHICULES") {
+                    url = '/create';
+                } else if (selectedValue === "VEHICULE_CHAUFFEUR" && chauffeurValue) {
+                    url = '/createVehiculeChauffeur';
+                } else if (selectedValue === "ORIENTATION_TRANSPORT") {
+                    url = '/createCarburant';
+                }
+
+
+                $('#targetTable tbody tr:visible').remove();
+
+
+
+                $("#vehicule").val("");
+                $("#chauffeur").val("");
+
                 $.ajax({
-                    type : "POST",
+                    type: "POST",
                     contentType: 'application/json',
-                    url: '/createVehiculeChauffeur',
-                    dataType : 'json',
-                    timeout : 100000,
+                    url: url,
+                    dataType: 'json',
+                    timeout: 100000,
                     data: data,
+                    success: function(data) {
+                        if (data.success) {
+                            $("#alertMessage").text("Operation réussie").removeClass("alert-danger").addClass("alert-success").show();
+
+
+
+                        } else {
+                            $("#alertMessage").text("Operation failed: " + data.message).removeClass("alert-danger").addClass("alert-success").show();
+
+                        }
+
+                        if ($('#targetTable tbody tr').length === 0) {
+
+                            window.location.href = '/dmd/dmdVehiculeChauffeur';
+                        }
+
+                    },
+                    error: function(xhr, status, error) {
+                        $("#alertMessage").text("Operation failed. Error: " + error).removeClass("alert-success").addClass("alert-danger").show();
+                    }
+
+
+
 
 
                 });
 
-                window.location.reload();
-                window.location.href = '/Attribution/attribution';
+
+
             });
        });
-
-
-
 </script>
 
+
+<!--<script>
+    $(document).ready(function () {
+        $(".vehicule-section, .chauffeur-section").hide();
+
+        $("select[name='moyenDemande']").change(function () {
+            $(".vehicule-section, .chauffeur-section").hide();
+            $("#targetTable tbody tr").show();
+
+            var selectedValue = $(this).val();
+
+            if (selectedValue === "VEHICULE_CHAUFFEUR") {
+                $(".vehicule-section").show();
+                $(".chauffeur-section").show();
+                $('#targetTable tbody tr').not(':has(td:eq(4):contains("VEHICULE_CHAUFFEUR"))').hide();
+            } else if (selectedValue === "VEHICULES") {
+                $(".vehicule-section").show();
+                $(".chauffeur-section").hide(); // Hide chauffeur section
+                $('#targetTable tbody tr').not(':has(td:eq(4):contains("VEHICULES"))').hide();
+            }else {
+                $(".vehicule-section").hide();
+                $(".chauffeur-section").hide();
+                $('#targetTable tbody tr').not(':has(td:eq(4):contains("CARBURANT"))').hide();
+            }
+        });
+    });
+</script>-->
+<script>
+
+</script>
 <!---->
 <!--
 window.location.reload();

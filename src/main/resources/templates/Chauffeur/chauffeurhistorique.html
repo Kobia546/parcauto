@@ -33,7 +33,9 @@
         <div class="row">
 
             <div class="col-md-8">
-                <h5><strong>Liste des Vehicules.</strong></h5>
+
+                <h5><strong>Liste historique chauffeur et vehicule</strong></h5>
+
             </div>
 
 
@@ -59,8 +61,8 @@
                         <th class="text-center">Destination</th>
                         <th class="text-center">Date du parcours</th>
                         <th class="text-center">Statut</th>
-                        <!-- <th class="text-center">Disponibilité</th>
-                        <th class="text-center">Date d'achat</th>-->
+                        <th class="text-center">Imprimer</th>
+                        
                         <!--<th class="text-center" sec:authorize="hasRole('ROLE_ADMIN' )">Editer</th>
                         <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN' )">Supprimer</th>
                         <th class="text-center">Changer statut</th>
@@ -71,10 +73,10 @@
                     <tbody>
                     <tr th:each = "c:${listChauffeurHistoriques}">
                         <td th:text="${c.id}" class="text-center"></td>
-                        <td th:text="${c.vehiculeChauffeurAtt.employe.toNomComplet()}" class="text-center"></td>
-                        <td th:text="${c.vehiculeChauffeurAtt.vehicule.immatriculation}" class="text-center"></td>
-                        <td th:text="${c.vehiculeChauffeurAtt.employeDmd.employe.toNomComplet()}" class="text-center"></td>
-                        <td th:text="${c.vehiculeChauffeurAtt.employeDmd.destination}" class="text-center"></td>
+                        <td th:text="${c.employe}" class="text-center"></td>
+                        <td th:text="${c.vehicule}" class="text-center"></td>
+                        <td th:text="${c.nomEmploye}" class="text-center"></td>
+                        <td th:text="${c.destination}" class="text-center"></td>
                         <td th:text="${c.dateParcours}" class="text-center"></td>
 
                         <td id="statut" th:switch="${c.statutHistorique}">
@@ -82,6 +84,18 @@
                             <span class="badge badge-pill badge-success" th:case="'EN_COURSE'">EN COURSE</span>
                             <span class="badge badge-pill badge-danger" th:case="'TERMINEE'">TERMINEE</span>
 
+                        </td>
+                        <td class="text-center">
+                            <div th:if="${c.statutHistorique.equals('TERMINEE')}">
+<!--                                <button type="button" class="btn btn-danger btn-sm" onclick="printHistorique(${c.id})">-->
+<!--                                    <i class="material-icons">print</i> Imprimer-->
+<!--                                </button>-->
+                                <span>
+                                    <a th:href="'/Dmd/print1/' + ${c.id}" class="btn btn-danger btn-sm">
+                                        <i class="material-icons">edit</i>Imprimer
+                                    </a>
+                                </span>
+                            </div>
                         </td>
                         <!--<td th:text = "${c.dateAchat}" class="text-center"></td>
                         <td sec:authorize="hasRole('ROLE_ADMIN' )" class="text-center"><a th:href="@{/vehicule/vehicules/edit/} + ${c.id}" class="btn btn-primary btn-sm" ><i class="material-icons">edit</i>Editer</a></td>

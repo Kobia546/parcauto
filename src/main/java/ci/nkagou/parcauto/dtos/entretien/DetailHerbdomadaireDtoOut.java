@@ -5,26 +5,26 @@ import ci.nkagou.parcauto.entities.Vehicule;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
-import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class EntretienHerbdomadaireDtoOut {
+public class DetailHerbdomadaireDtoOut {
 
 
     private Long id;
-    private String dateEntretien;
-    private String estLavage;
+    //private String dateEntretien;
+    /*private String estLavage;
 
-    private String estCarburant;
+    private String estCarburant;*/
 
-    private int litre;
+    private boolean estLavage;
 
-    //private Entretien entretien;
+    private boolean estCarburant;
+
+    private double litre;
+
+    private Entretien entretien;
 
     private String vehicule;
 }

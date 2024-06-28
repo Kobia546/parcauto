@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
+import javax.validation.constraints.FutureOrPresent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -26,13 +27,16 @@ public class Dmd {
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDmd;
 
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate datePrevue;
+
 
     private LocalTime heurePrevue;
 
     @Enumerated(EnumType.ORDINAL)
     private MoyenDemande moyenDemande;
+
 
     private LocalDateTime dateOperation;
 

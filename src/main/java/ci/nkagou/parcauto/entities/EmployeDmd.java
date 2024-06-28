@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAccessor;
 
 
 @Getter
@@ -28,14 +30,21 @@ public class EmployeDmd{
     private Employe employe;
 
 
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name ="idDmd" , nullable = false)
     private Dmd dmd;
 
-    private String destination;
+    /*private String destination;
 
-    private String motifDmd;
+    private String motifDmd;*/
+
+    @ManyToOne
+    @JoinColumn(name = "idDestination")
+    private Destination destination;
+
+    @ManyToOne
+    @JoinColumn(name = "idMotif")
+    private Motif motif;
 
     @Enumerated(EnumType.ORDINAL)
     private Statut statut;
@@ -43,9 +52,7 @@ public class EmployeDmd{
     @Size(max = 600)
     private String observation;
 
-    @Column(nullable = true, columnDefinition = "bigint default 0")
+   @Column(nullable = true, columnDefinition = "bigint default 0")
     private Long responsable;
-
-
 
 }

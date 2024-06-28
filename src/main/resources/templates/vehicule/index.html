@@ -28,7 +28,7 @@
 <p class="alert alert-danger text-center h6"   role="alert" th:text="${messagedanger}" th:if="${messagedanger}"></p>
 
 
-<div class="card mx-auto" style="width: 70rem;">
+<div class="card mx-auto" style="width: 90rem;">
     <div class="card-header">
         <div class="row">
 
@@ -62,6 +62,9 @@
                         <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN' )">Editer</th>
                         <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN' )">Supprimer</th>
                         <th class="text-center">Disponibilité</th>
+                        <!--<th class="text-center">compte a rebours</th>-->
+
+
 
 
                     </tr>
@@ -74,23 +77,30 @@
                         <td th:text = "${c.typeVehicule}" class="text-center"></td>
                         <td th:text = "${c.carteGrise}" class="text-center"></td>
                         <td id = "statut" th:switch="${c.statutVehicule}" >
-                            
+
                             <span class="badge badge-pill badge-success" th:case="'DISPONIBLE'">DISPONIBLE</span>
-                            <span class="badge badge-pill badge-danger" th:case="'INDISPONIBLE'">INDISPONIBLE</span>
+                            <span th:if="${c.statutVehicule == 'INDISPONIBLE'}" class="badge badge-pill badge-danger" data-toggle="tooltip" data-placement="right" th:title="'Observation: ' + ${c.raison} " id="indisponible-badge">INDISPONIBLE</span>
                             <span class="badge badge-pill badge-primary" th:case="'REPARATION'" >REPARATION</span>
                             <span class="badge badge-pill badge-secondary" th:case="'EN_COURSE'" >EN COURSE</span>
 
                         </td>
+
+
                         <td th:text = "${c.dateAchat}" class="text-center"></td>
                         <td sec:authorize="hasRole('ROLE_ADMIN' )" class="text-center"><a th:href="@{/vehicule/vehicules/edit/} + ${c.id}" class="btn btn-primary btn-sm" ><i class="material-icons">edit</i>Editer</a></td>
                         <td sec:authorize="hasRole('ROLE_ADMIN' )" class="text-center"><a onclick="return confirm('Êtes vous sûre !!!')"  th:href="@{/vehicule/vehicules/delete/} + ${c.id}" class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Supprimer</a></td>
                         <td class="text-center">
                             <div class="btn-group">
-                                <a th:if="${c.statutVehicule} == 'INDISPONIBLE'" sec:authorize="hasRole('ROLE_ADMIN' ) or hasRole('ROLE_PARCAUTO')" th:href="@{/vehicule/vehicules/disponible/} + ${c.id}" class="btn btn-outline-success btn-sm" ><i class="fas fa-check-circle"></i>Disponible</a>
-                                <a th:if="${c.statutVehicule} == 'DISPONIBLE'" th:href="@{/vehicule/vehicules/indisponible/} + ${c.id}" class="btn btn-outline-danger btn-sm" ><i class="fas fa-ban"></i> Indisponible</a>
+                                <a th:if="${c.statutVehicule} == 'INDISPONIBLE'" sec:authorize="hasRole('ROLE_ADMIN' ) or hasRole('ROLE_PARCAUTO')"  th:href="@{/Chauffeur/chauffeur/disponible/{id}(id=${c.id})}" class="btn btn-outline-success btn-sm" id="disponible-button" ><i class="fas fa-check-circle"></i>Disponible</a>
+                                <a th:if="${c.statutVehicule} == 'DISPONIBLE'"  sec:authorize="hasRole('ROLE_ADMIN' ) or hasRole('ROLE_PARCAUTO')" th:href="@{/Chauffeur/chauffeur/indisponible/{id}(id=${c.id})}" class="btn btn-outline-danger btn-sm" ><i class="fas fa-ban"></i> Indisponible</a>
                                 <!--<a sec:authorize="hasRole('ROLE_ADMIN' )" th:href="@{/vehicule/vehicules/reparation/} + ${c.id}" class="btn btn-outline-light btn-sm" ><i class="fas fa-wrench"></i> Reparation</a>-->
                             </div>
                         </td>
+
+                        <!--<td th:if="${c.statutVehicule == 'INDISPONIBLE'}" th:id="'countdown-display-' + ${c.id}">
+                            <span th:text="${c.countdownTimer}"></span>
+                        </td>-->
+
 
 
                     </tr>
@@ -123,6 +133,235 @@
 
 <!-- Include SCRIPT block -->
 <th:block th:include="main/layout/block_script"></th:block>
+
+
+<!--<script th:inline="javascript">
+    /* Iterate over the list of vehicles and generate countdown timers */
+    var vehicles = /*[[${listVehicules}]]*/ [[${listVehicules}]];
+
+    var countdownIntervals = {}; // Store countdown intervals for each vehicle
+
+    function updateCountdowns() {
+        vehicles.forEach(function (vehicule) {
+            if (vehicule && vehicule.statutVehicule === 'INDISPONIBLE') {
+                var text = document.querySelector('#countdown-display-' + vehicule.id);
+                if (text) {
+                    function startCountdown(id) {
+                        var countdownEndTime = localStorage.getItem('countdown-end-time-' + id);
+                        if (countdownEndTime) {
+                            countdownEndTime = parseInt(countdownEndTime);
+                        } else {
+                            // If there's no stored countdown end time, calculate it and store it
+                            var now = new Date().getTime();
+                            countdownEndTime = now + (vehicule.countdownTimer * 1000);
+                            localStorage.setItem('countdown-end-time-' + id, countdownEndTime);
+                        }
+
+                        // Update the countdown timer every second
+                        countdownIntervals[id] = setInterval(function () {
+                            var current = new Date().getTime();
+                            var distanceBase = countdownEndTime - current;
+                            if (distanceBase <= 0) {
+                                clearInterval(countdownIntervals[id]);
+                                text.innerText = 'Expiré'; // Countdown has ended
+
+                                // Enable the button
+                                var button = document.querySelector('#disponible-button');
+                                button.removeAttribute('disabled');
+
+                                console.log('Button should be enabled.'); // Debugging log
+
+                                var startNextButton = document.createElement('button');
+                                startNextButton.innerText = 'Start Next';
+                                startNextButton.onclick = function () {
+                                    startNextOrStopCountdown(id, true);
+                                };
+                                text.appendChild(startNextButton);
+                            } else {
+                                var days = Math.floor(distanceBase / (1000 * 60 * 60 * 24));
+                                var hours = Math.floor((distanceBase % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                var minutes = Math.floor((distanceBase % (1000 * 60 * 60)) / (1000 * 60));
+                                var seconds = Math.floor((distanceBase % (1000 * 60)) / 1000);
+                                text.innerText = days + 'j ' + hours + 'h ' + minutes + 'm ' + seconds + 's';
+
+                                // Disable the button during the countdown
+                                var button = document.querySelector('#disponible-button');
+                                button.setAttribute('disabled', 'disabled');
+
+                                console.log('Button should be disabled.'); // Debugging log
+
+                                var stopButton = document.createElement('button');
+                                stopButton.innerText = 'Stop';
+                                stopButton.onclick = function () {
+                                    startNextOrStopCountdown(id, false);
+                                };
+                                text.appendChild(stopButton);
+                            }
+                        }, 1000); // Update every 1 second
+                    }
+
+                    startCountdown(vehicule.id);
+                }
+            }
+        });
+    }
+
+    function startNextOrStopCountdown(id, isStartNext) {
+        var text = document.querySelector('#countdown-display-' + id);
+        clearInterval(countdownIntervals[id]);
+        if (isStartNext) {
+            text.innerText = ''; // Clear the countdown text
+            localStorage.removeItem('countdown-end-time-' + id); // Remove stored countdown end time
+            startCountdown(id); // Start a new countdown for this specific row
+        } else {
+            text.innerText = 'Countdown stopped';
+            localStorage.removeItem('countdown-end-time-' + id);
+        }
+
+        // Enable the button when the countdown is stopped
+        var button = document.querySelector('#disponible-button');
+        button.removeAttribute('disabled');
+
+        console.log('Button should be enabled.'); // Debugging log
+    }
+
+    updateCountdowns();
+</script>-->
+
+
+
+
+
+<!--<script th:inline="javascript">
+    /* Iterate over the list of vehicles and generate countdown timers */
+    var vehicles = /*[[${listVehicules}]]*/ [[${listVehicules}]];
+
+    var countdownIntervals = {}; // Store countdown intervals for each vehicle
+
+    function updateCountdowns() {
+        vehicles.forEach(function (vehicule) {
+            if (vehicule && vehicule.statutVehicule === 'INDISPONIBLE') {
+                var text = document.querySelector('#countdown-display-' + vehicule.id);
+                if (text) {
+                    function startCountdown() {
+                        var countdownEndTime = localStorage.getItem('countdown-end-time-' + vehicule.id);
+                        if (countdownEndTime) {
+                            countdownEndTime = parseInt(countdownEndTime);
+                        } else {
+                            // If there's no stored countdown end time, calculate it and store it
+                            var now = new Date().getTime();
+                            countdownEndTime = now + (vehicule.countdownTimer * 1000);
+                            localStorage.setItem('countdown-end-time-' + vehicule.id, countdownEndTime);
+                        }
+
+                        // Update the countdown timer every second
+                        countdownIntervals[vehicule.id] = setInterval(function () {
+                            var current = new Date().getTime();
+                            var distanceBase = countdownEndTime - current;
+                            if (distanceBase <= 0) {
+                                clearInterval(countdownIntervals[vehicule.id]);
+                                text.innerText = 'Expired'; // Countdown has ended
+                                text.innerHTML += '<button onclick="startNextCountdown(' + vehicule.id + ')">Start Next</button>';
+                            } else {
+                                var days = Math.floor(distanceBase / (1000 * 60 * 60 * 24));
+                                var hours = Math.floor((distanceBase % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                var minutes = Math.floor((distanceBase % (1000 * 60 * 60)) / (1000 * 60));
+                                var seconds = Math.floor((distanceBase % (1000 * 60)) / 1000);
+                                text.innerText = days + 'j ' + hours + 'h ' + minutes + 'm ' + seconds + 's';
+                            }
+                        }, 1000); // Update every 1 second
+                    }
+
+                    startCountdown();
+                }
+            }
+        });
+    }
+
+    // Function to manually start the next countdown
+    function startNextCountdown(id) {
+        var text = document.querySelector('#countdown-display-' + id);
+        clearInterval(countdownIntervals[id]);
+        text.innerText = ''; // Clear the countdown text
+        localStorage.removeItem('countdown-end-time-' + id); // Remove stored countdown end time
+        updateCountdowns(); // Start a new countdown
+    }
+
+    updateCountdowns();
+</script>-->
+
+<!--<script th:inline="javascript">
+    /* Iterate over the list of vehicles and generate countdown timers */
+    var vehicles = /*[[${listVehicules}]]*/ [[${listVehicules}]];
+
+    var countdownIntervals = {}; // Store countdown intervals for each vehicle
+
+    function updateCountdowns() {
+        vehicles.forEach(function (vehicule) {
+            if (vehicule && vehicule.statutVehicule === 'INDISPONIBLE') {
+                var text = document.querySelector('#countdown-display-' + vehicule.id);
+                var stopButton = document.querySelector('#stop-button-' + vehicule.id);
+
+                if (text && stopButton) {
+                    var countdownInterval;
+
+                    function startCountdown() {
+                        var countdownEndTime = localStorage.getItem('countdown-end-time-' + vehicule.id);
+                        if (countdownEndTime) {
+                            countdownEndTime = parseInt(countdownEndTime);
+                        } else {
+                            // If there's no stored countdown end time, calculate it and store it
+                            var now = new Date().getTime();
+                            countdownEndTime = now + (vehicule.countdownTimer * 1000);
+                            localStorage.setItem('countdown-end-time-' + vehicule.id, countdownEndTime);
+                        }
+
+                        // Update the countdown timer every second
+                        countdownInterval = setInterval(function () {
+                            var current = new Date().getTime();
+                            var distanceBase = countdownEndTime - current;
+                            if (distanceBase <= 0) {
+                                clearInterval(countdownInterval);
+                                text.innerText = 'Expired'; // Countdown has ended
+                                text.innerHTML += '<button onclick="startNextCountdown(' + vehicule.id + ')">Start Next</button>';
+                                stopButton.style.display = 'none'; // Hide the Stop button
+                            } else {
+                                var days = Math.floor(distanceBase / (1000 * 60 * 60 * 24));
+                                var hours = Math.floor((distanceBase % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                var minutes = Math.floor((distanceBase % (1000 * 60 * 60)) / (1000 * 60));
+                                var seconds = Math.floor((distanceBase % (1000 * 60)) / 1000);
+                                text.innerText = days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's';
+                            }
+                        }, 1000); // Update every 1 second
+                    }
+
+                    startCountdown();
+
+                    stopButton.onclick = function () {
+                        clearInterval(countdownInterval);
+                        text.innerText = 'Countdown Stopped'; // Display a message when stopped
+                        stopButton.style.display = 'none'; // Hide the Stop button
+                    }
+                }
+            }
+        });
+    }
+
+    // Function to manually start the next countdown
+    function startNextCountdown(id) {
+        var text = document.querySelector('#countdown-display-' + id);
+        var stopButton = document.querySelector('#stop-button-' + id);
+
+        clearInterval(countdownIntervals[id]);
+        text.innerText = ''; // Clear the countdown text
+        localStorage.removeItem('countdown-end-time-' + id); // Remove stored countdown end time
+        stopButton.style.display = 'block'; // Show the Stop button again
+        updateCountdowns(); // Start a new countdown
+    }
+
+    updateCountdowns();
+</script>-->
+
 <script type="text/javascript">
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();

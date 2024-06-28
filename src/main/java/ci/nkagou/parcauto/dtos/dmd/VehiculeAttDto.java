@@ -1,15 +1,15 @@
 package ci.nkagou.parcauto.dtos.dmd;
 
-import ci.nkagou.parcauto.entities.Vehicule;
 import ci.nkagou.parcauto.entities.VehiculeHistorique;
-import ci.nkagou.parcauto.enums.Motif;
-import ci.nkagou.parcauto.enums.StatutVehiculeA;
+import ci.nkagou.parcauto.enums.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -19,9 +19,11 @@ import java.util.List;
 public class VehiculeAttDto {
 
     private StatutVehiculeA statutVehiculeA;
-    private Motif motif;
+    private Motifs motif;
     private String observation;
     private List<VehiculeHistorique> vehiculeHistorique;
     private String vehicule;
+
+
 
 }

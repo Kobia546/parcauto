@@ -32,11 +32,11 @@
     </div>
 
     <div class="card-body">
-        <form th:action="@{/Attribution/attribution/user/commencerVehicule}"  method="post">
+        <form th:action="@{/Attribution/attribution/user/commencerVehicule}" th:object="${attributionDto}" method="post">
 
             <!-- IdEmployeDmdForm Input -->
             <input th:field="${attributionDto.id}" type="hidden"/>
-            <input th:field="${attributionDto.employeDmd}" type="hidden"/>
+            <input th:field="${attributionDto.detailVehiculeA}" type="hidden"/>
             <!--<input th:field="${attributionDto.employe}" type="hidden"/>-->
             <!--<input th:field="${attributionDto.vehicule}" type="hidden"/>-->
             <!--<input th:field="${attributionDto.vehicule}" type="hidden"/>-->
@@ -50,23 +50,33 @@
                 </div>
             </div>
 
-            <div  class="form-group row d-none">
+            <!--<div  class="form-group row d-none">
                 <label th:for="employeDmd" class="col-sm-4 col-form-label text-md-right"><strong>Nom de l'utilisateur</strong></label>
 
                 <div class="col-md-6">
                     <select th:field="${attributionDto.employeDmd}"  name="employeDmd" class="select-type form-control" required >
-                        <option value="">--------- Nom de l'utilisateur --------</option>
+                        <option value="">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Nom de l'utilisateur &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>
                         <option th:each="c:${listEmployee}" th:value="${c.idEmployeDmd}" th:text="${c.employe.toNomComplet}" th:selected="*{employeDmd}"></option>
                     </select>
+                </div>
+            </div>-->
+
+            <div  class="form-group row d-none">
+                <label   class="col-sm-4 col-form-label text-md-right"><strong>Nom de l'utilisateur</strong></label>
+
+                <div class="col-md-6">
+
+                    <input class="form-control"  th:field="${attributionDto.detailVehiculeA}" required >
+
                 </div>
             </div>
 
             <div  class="form-group row d-none">
-                <label   class="col-sm-4 col-form-label text-md-right"><strong>Date d'attribution</strong></label>
+                <label  th:for="dateAttribution" class="col-sm-4 col-form-label text-md-right"><strong>Date d'attribution</strong></label>
 
                 <div class="col-md-6">
 
-                    <input class="form-control"  th:field="${attributionDto.dateAttribution}" required >
+                    <input class="form-control" type="datetime-local"  th:field="${attributionDto.dateAttribution}" required >
 
                 </div>
             </div>
@@ -76,8 +86,9 @@
 
                 <div class="col-md-6">
 
-                    <input class="form-control" type="datetime-local"  th:field="${attributionDto.dateDeDepart}" required >
-
+                    <input class="form-control" type="datetime-local"  th:field="*{dateDeDepart}" required >
+                    <span class="text-danger"  th:if="${#fields.hasErrors('dateDeDepart')}" th:errors="*{dateDeDepart}"></span>
+                    <span id="dateDeDepartWarning" class="text-danger"></span>
                 </div>
             </div>
 
@@ -111,14 +122,14 @@
                 <div class="col-md-6">
                     <select th:field="${attributionDto.typeAttribution}"  name="typeAttribution" class="select-type form-control"   >
                         <option value="">----------- Type de l'attribution ----------</option>
-                        <option th:each="c:${listTypeAttribution}" th:value="${c.name}" th:text="${c.name}" th:selected="*{listTypeAttribution}"></option>
+                        <option th:each="c:${listTypeAttribution}" th:value="${c.name}" th:text="${c.name}" th:field="${attributionDto.typeAttribution}"></option>
                     </select>
                 </div>
             </div>
 
 
 
-            <div  class="form-group row d-none">
+            <!--<div  class="form-group row d-none">
                 <label  th:for="datetime-local" class="col-sm-4 col-form-label text-md-right"><strong>Date d'attribution</strong></label>
 
                 <div class="col-md-6">
@@ -126,7 +137,7 @@
                     <input class="form-control" type="datetime-local" th:field="${attributionDto.dateAttribution}" required >
 
                 </div>
-            </div>
+            </div>-->
 
 
 
@@ -153,6 +164,21 @@
 
 <!-- Include SCRIPT block -->
 <th:block th:include="main/layout/block_script"></th:block>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("btn").addEventListener("click", function (e) {
+            var dateAttribution = new Date(document.querySelector("[name='dateAttribution']").value);
+            var dateDeDepart = new Date(document.querySelector("[name='dateDeDepart']").value);
 
+            if (dateDeDepart < dateAttribution) {
+                e.preventDefault(); // Prevent form submission
+                document.getElementById("dateDeDepartWarning").textContent = "La date de depart doit être ultérieure à la date d'attribution.";
+            } else {
+                // Reset the warning message if the dates are valid
+                document.getElementById("dateDeDepartWarning").textContent = "";
+            }
+        });
+    });
+</script>
 </body>
 </html>

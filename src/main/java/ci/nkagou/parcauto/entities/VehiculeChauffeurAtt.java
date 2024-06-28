@@ -1,8 +1,8 @@
 package ci.nkagou.parcauto.entities;
 
 
-import ci.nkagou.parcauto.enums.Motif;
 import ci.nkagou.parcauto.enums.MotifChauffeur;
+import ci.nkagou.parcauto.enums.Motifs;
 import ci.nkagou.parcauto.enums.StatutChauffeurA;
 import ci.nkagou.parcauto.enums.StatutVehiculeA;
 import lombok.AllArgsConstructor;
@@ -30,7 +30,7 @@ public class VehiculeChauffeurAtt extends Attribution {
     private StatutChauffeurA statutChauffeurA;
 
     @Enumerated(EnumType.ORDINAL)
-    private Motif motif;
+    private Motifs motif;
 
     @Enumerated(EnumType.ORDINAL)
     private MotifChauffeur motifChauffeur;
@@ -51,6 +51,5 @@ public class VehiculeChauffeurAtt extends Attribution {
 
     @OneToMany(mappedBy = "vehiculeChauffeurAtt")
     private List<ChauffeurHistorique> chauffeurHistorique;
-
 
 }

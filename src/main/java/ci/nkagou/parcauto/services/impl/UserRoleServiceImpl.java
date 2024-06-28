@@ -33,7 +33,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public List<UserRole> findByAppRoleIsNot(AppRole role) {
-        return userRoleRepository.findByAppRoleIsNot(role);
+        return userRoleRepository.findByAppRole(role);
     }
 
     @Override

@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Lob;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class AttributionDtoOut {
     private boolean newRow;*/
     private String nomComplet;
     private String dateAttribution;
+    private Integer kilometrageDebut;
+    private Integer kilometrageFin;
     private String dateDeDepart;
     private String dateArrivee;
     private String statutAttrib;
@@ -35,6 +38,7 @@ public class AttributionDtoOut {
     private String motifChauffeur;
     private String observation;
     private String observationChauffeur;
+    private String destination;
     private String vehicule;
     private String chauffeur;
     private String employe;
@@ -42,6 +46,7 @@ public class AttributionDtoOut {
     private String chauffeurHistorique;
     private String recuCarburant;
     private String immatriculationVehicule;
+    private String duration;
     private int montant;
     private int litre;
 

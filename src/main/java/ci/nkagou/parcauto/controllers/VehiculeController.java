@@ -1,20 +1,21 @@
 package ci.nkagou.parcauto.controllers;
 
+import ci.nkagou.parcauto.dtos.chauffeurhistorique.ChauffeurHistoriqueDtoOut;
+import ci.nkagou.parcauto.dtos.dmd.EtatChauffeurDto;
+import ci.nkagou.parcauto.dtos.dmd.EtatVehiculeDto;
 import ci.nkagou.parcauto.dtos.vehicule.VehiculeDto;
 import ci.nkagou.parcauto.dtos.vehicule.VehiculeDtoOut;
 import ci.nkagou.parcauto.dtos.vehicule.VehiculeDtoZ;
 import ci.nkagou.parcauto.dtos.vehiculeIndisponible.VehiculeHistoriqueDtoOut;
 import ci.nkagou.parcauto.entities.*;
-import ci.nkagou.parcauto.enums.Couleur;
-import ci.nkagou.parcauto.enums.StatutVehicule;
-import ci.nkagou.parcauto.services.MarqueService;
-import ci.nkagou.parcauto.services.TypevehiculeService;
-import ci.nkagou.parcauto.services.VehiculeHistoriqueService;
-import ci.nkagou.parcauto.services.VehiculeService;
+import ci.nkagou.parcauto.enums.*;
+import ci.nkagou.parcauto.repositories.VehiculeAttRepository;
+import ci.nkagou.parcauto.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,11 +39,23 @@ public class VehiculeController {
 
     private VehiculeHistoriqueService vehiculeHistoriqueService;
 
-    public VehiculeController(VehiculeService vehiculeService, TypevehiculeService typevehiculeService, MarqueService marqueService, VehiculeHistoriqueService vehiculeHistoriqueService) {
+    private AttributionService attributionService;
+
+    private VehiculeAttRepository vehiculeAttRepository;
+
+    private EmployeService employeService;
+
+    private ChauffeurHistoriqueService chauffeurHistoriqueService;
+
+    public VehiculeController(VehiculeService vehiculeService, TypevehiculeService typevehiculeService, MarqueService marqueService, VehiculeHistoriqueService vehiculeHistoriqueService,AttributionService attributionService,VehiculeAttRepository vehiculeAttRepository,EmployeService employeService,ChauffeurHistoriqueService chauffeurHistoriqueService) {
         this.vehiculeService = vehiculeService;
         this.typevehiculeService = typevehiculeService;
         this.marqueService = marqueService;
         this.vehiculeHistoriqueService = vehiculeHistoriqueService;
+        this.attributionService = attributionService;
+        this.vehiculeAttRepository = vehiculeAttRepository;
+        this.employeService = employeService;
+        this.chauffeurHistoriqueService = chauffeurHistoriqueService;
     }
 
 
@@ -154,16 +167,17 @@ public class VehiculeController {
     }
 
     @RequestMapping(value = "/vehicule/vehicules/delete/{id}", method = RequestMethod.GET)
-    public String deleteVehicule(@PathVariable Long id, RedirectAttributes redirectAttributes){
-
-        Vehicule vehicule4 = vehiculeService.findById(id);
-        vehiculeService.delete(vehicule4);
-
-        redirectAttributes.addFlashAttribute("messagesucces", "Opération de validation éffectuée avec succès");
-
+    public String deleteVehicule(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Vehicule vehicule = vehiculeService.findById(id);
+        if (vehicule != null) {
+            vehiculeService.deleteReferences(id); // Supprime les références avant de supprimer le véhicule
+            vehiculeService.delete(vehicule);
+            redirectAttributes.addFlashAttribute("messagesucces", "Opération de validation effectuée avec succès");
+        } else {
+            redirectAttributes.addFlashAttribute("messageerror", "Véhicule introuvable");
+        }
         return "redirect:/vehicule/vehicules/";
     }
-
     @RequestMapping(value = "/vehicule/vehicules/disponible/{id}", method = RequestMethod.GET)
     public String vehiculeDisponible(@PathVariable Long id, @Valid Vehicule vehicule, Model model, RedirectAttributes redirectAttributes, Principal principal){
 
@@ -180,7 +194,7 @@ public class VehiculeController {
 
     }
 
-    @RequestMapping(value = "/vehicule/vehicules/indisponible/{id}", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/vehicule/vehicules/indisponible/{id}", method = RequestMethod.GET)
     public String vehiculeIndisponible(@PathVariable Long id, @Valid Vehicule vehicule, Model model, RedirectAttributes redirectAttributes, Principal principal){
 
 
@@ -193,6 +207,43 @@ public class VehiculeController {
         redirectAttributes.addFlashAttribute("messagesucces", "Opération de validation éffectuée avec succès");
 
         return "redirect:/vehicule/vehicules";
+
+    }*/
+
+    @RequestMapping(value = "/vehicule/vehicules/indisponible/{id}", method = RequestMethod.GET)
+    public String vehiculeIndisponible(@PathVariable Long id,  Model model, RedirectAttributes redirectAttributes){
+
+
+        Vehicule vehicule = vehiculeService.findById(id);
+
+        VehiculeDtoZ dto = new VehiculeDtoZ();
+
+        dto.setIdVehicule(vehicule.getIdVehicule());
+        dto.setImmatriculation(vehicule.getImmatriculation());
+        dto.setCouleur(vehicule.getCouleur());
+        dto.setCarteGrise(vehicule.getCarteGrise());
+        dto.setNumeroChassis(vehicule.getNumeroChassis());
+        dto.setStatutVehicule(vehicule.getStatutVehicule());
+        dto.setMarque(vehicule.getMarque());
+        dto.setTypeVehicule(vehicule.getTypevehicule());
+        dto.setRaison(vehicule.getRaison());
+        dto.setDateAchat(vehicule.getDateAchat());
+
+        List<Typevehicule> typevehicules = typevehiculeService.all();
+
+        List<Marque> marques = marqueService.all();
+        List<Couleur> couleurs = Arrays.asList(Couleur.values());
+        List<StatutVehicule> statutVehicules = Arrays.asList(StatutVehicule.values());
+        model.addAttribute("listTypevehicules",typevehicules);
+        model.addAttribute("listMarques",marques);
+        model.addAttribute("listCouleurs",couleurs);
+        model.addAttribute("vehiculedto",dto);
+        model.addAttribute("StatutVehicule",statutVehicules);
+        model.addAttribute("title", "Vehicule - Edition");
+
+        redirectAttributes.addFlashAttribute("messagesucces", "Opération de validation éffectuée avec succès");
+
+        return "/vehicule/raison";
 
     }
 
@@ -250,7 +301,7 @@ public class VehiculeController {
     }
 
     @RequestMapping(value = "/vehicule/vehicules/raison", method = RequestMethod.POST)
-    public String update(@Valid VehiculeDto dto, RedirectAttributes redirectAttributes){
+    public String update(@Valid VehiculeDtoZ dto, RedirectAttributes redirectAttributes){
 
 
         //Vehicule vehicule = vehiculeService.dtoToVehicule(dto);
@@ -275,6 +326,130 @@ public class VehiculeController {
 
         return "vehicule/vehiculehistorique";
 
+    }
+
+    @RequestMapping("/EtatVehicule/etatVehicule")
+    public String etatVehicule(Model model, Principal principal, HttpServletRequest request) {
+        EtatVehiculeDto dto = new EtatVehiculeDto();
+
+        List<Vehicule> vehicules = vehiculeService.all();
+        List<Employe> employe = employeService.all();
+
+        //List<EmployeDmd> employeDmds = dmdService.all();
+        List<SelectionEmploye> selections = Arrays.asList(SelectionEmploye.values());
+
+        model.addAttribute("listVehicule", vehicules);
+        model.addAttribute("listEmploye", employe);
+        model.addAttribute("listSelectionChoix", selections);
+        model.addAttribute("dto",dto);
+
+        return "dmd/etatVehicule";
+    }
+
+    @RequestMapping("/FiltreEtatVehicule/filtreEtatVehicule")
+    public String etatEmployeRapport(@Valid @ModelAttribute("dto") EtatVehiculeDto dto, BindingResult bindingResult, Model model, Principal principal, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            System.out.println("error YES");
+
+            //*EtatVehiculeDto dto = new EtatVehiculeDto();*//*
+
+            List<Vehicule> vehicules = vehiculeService.all();
+            List<Employe> employe = employeService.all();
+
+            //List<EmployeDmd> employeDmds = dmdService.all();
+            List<SelectionEmploye> selections = Arrays.asList(SelectionEmploye.values());
+
+            model.addAttribute("listVehicule", vehicules);
+            model.addAttribute("listEmploye", employe);
+            model.addAttribute("listSelectionChoix", selections);
+            //*model.addAttribute("dto",dto);*//*
+
+            return "dmd/etatVehicule";
+
+        }
+        List<VehiculeHistoriqueDtoOut> dtos = new ArrayList<>();
+        List<VehiculeHistorique> vehiculeHistoriques = vehiculeHistoriqueService.listVehiculeHistoriqueByDateBetweenAndVehiculeAttVehicule(dto);
+        dtos = vehiculeHistoriqueService.listVehiculesToDto(vehiculeHistoriques);
+
+        /*if (dto.getSelectionEmploye() == SelectionEmploye.VEHICULE) {
+
+        } else if (dto.getSelectionEmploye() == SelectionEmploye.CONDUCTEUR) {
+            // List<VehiculeHistorique> vehiculeHistoriques = vehiculeHistoriqueService.listVehiculeHistoriqueByDateBetweenAndVehiculeAttEmployeDmdEmploye(dto);
+             //dtos = vehiculeHistoriqueService.listVehiculesToDto(vehiculeHistoriques);
+        }*/
+
+        /*if (dto.getSelectionEmploye() == SelectionEmploye.VEHICULE) {
+            model.addAttribute("statusVehiculeVisible", true);
+        } else if (dto.getSelectionEmploye() == SelectionEmploye.CONDUCTEUR) {
+            model.addAttribute("statusConducteurVisible", true);
+        }*/
+
+        //List<EmployeDmd> employeDmds = dmdService.all();
+        model.addAttribute("listEtatVehicule",dtos);
+        //model.addAttribute("listDmdRapport",employeDmds);
+
+        return "dmd/indexEtatVehicule";
+
+    }
+
+    @RequestMapping("/EtatChauffeur/etatChauffeur")
+    public String etatChauffeur(Model model, Principal principal, HttpServletRequest request) {
+        EtatChauffeurDto dto = new EtatChauffeurDto();
+
+        List<Vehicule> vehicules = vehiculeService.all();
+        List<Employe> employe = employeService.findEmployesByEstChauffeur(true);
+
+        //List<EmployeDmd> employeDmds = dmdService.all();
+        List<SelectionChauffeur> selections = Arrays.asList(SelectionChauffeur.values());
+
+        model.addAttribute("listVehicule", vehicules);
+        model.addAttribute("listEmploye", employe);
+        model.addAttribute("listSelectionChoix", selections);
+        model.addAttribute("dto",dto);
+
+        return "dmd/etatChauffeur";
+    }
+
+    @RequestMapping("/FiltreEtatChauffeur/filtreEtatChauffeur")
+    public String etatChauffeur(@Valid @ModelAttribute("dto") EtatChauffeurDto dto, BindingResult bindingResult, Model model, Principal principal, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            System.out.println("error YES");
+
+            /*EtatChauffeurDto dto = new EtatChauffeurDto();*/
+
+            List<Vehicule> vehicules = vehiculeService.all();
+            List<Employe> employe = employeService.findEmployesByEstChauffeur(true);
+
+            //List<EmployeDmd> employeDmds = dmdService.all();
+            List<SelectionChauffeur> selections = Arrays.asList(SelectionChauffeur.values());
+
+            model.addAttribute("listVehicule", vehicules);
+            model.addAttribute("listEmploye", employe);
+            model.addAttribute("listSelectionChoix", selections);
+            /*model.addAttribute("dto",dto);*/
+
+            return "dmd/etatChauffeur";
+
+        }
+        List<ChauffeurHistoriqueDtoOut> dtos = new ArrayList<>();
+        if (dto.getSelectionChauffeur() == SelectionChauffeur.VEHICULE) {
+            List<ChauffeurHistorique> chauffeurHistoriques = chauffeurHistoriqueService.listChauffeurHistoriqueByDateBetweenAndVehiculeChauffeurAttVehicule(dto);
+            dtos = chauffeurHistoriqueService.listChauffeurHistoriquesToDto(chauffeurHistoriques);
+        } else if (dto.getSelectionChauffeur() == SelectionChauffeur.CHAUFFEUR) {
+            List<ChauffeurHistorique> chauffeurHistoriques = chauffeurHistoriqueService.listChauffeurHistoriqueByDateBetweenAndVehiculeChauffeurAttEmploye(dto);
+            dtos = chauffeurHistoriqueService.listChauffeurHistoriquesToDto(chauffeurHistoriques);
+        }
+
+        if (dto.getSelectionChauffeur() == SelectionChauffeur.VEHICULE) {
+            model.addAttribute("statusVehiculeVisible", true);
+        } else if (dto.getSelectionChauffeur() == SelectionChauffeur.CHAUFFEUR) {
+            model.addAttribute("statusChauffeurVisible", true);
+        }
+        //List<EmployeDmd> employeDmds = dmdService.all();
+        model.addAttribute("listEtatChauffeur",dtos);
+        //model.addAttribute("listDmdRapport",employeDmds);
+
+        return "dmd/indexEtatChauffeur";
     }
 
 

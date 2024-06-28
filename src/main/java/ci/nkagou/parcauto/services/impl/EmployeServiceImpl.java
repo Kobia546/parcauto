@@ -2,10 +2,9 @@ package ci.nkagou.parcauto.services.impl;
 
 import ci.nkagou.parcauto.dtos.chauffeur.EmployeDtoOut;
 import ci.nkagou.parcauto.dtos.dmd.AttributionDtoOut;
-import ci.nkagou.parcauto.entities.AppUser;
-import ci.nkagou.parcauto.entities.Attribution;
-import ci.nkagou.parcauto.entities.Employe;
-import ci.nkagou.parcauto.entities.EmployeDmd;
+import ci.nkagou.parcauto.dtos.rapport.RapportChauffeurDto;
+import ci.nkagou.parcauto.dtos.rapport.RapportEmployeDto;
+import ci.nkagou.parcauto.entities.*;
 import ci.nkagou.parcauto.enums.StatutChauffeur;
 import ci.nkagou.parcauto.exceptions.ResourceNotFoundException;
 import ci.nkagou.parcauto.repositories.EmployeRepository;
@@ -107,6 +106,12 @@ public class EmployeServiceImpl implements EmployeService {
         return user.getEmploye();
     }
 
+   /* @Override
+    public Employe findEmployeByAppUser(AppUser user) {
+        return employeRepository.findEmployeByAppUser(user);
+    }*/
+
+
     @Override
     public void delete(Employe employe) {
         employeRepository.delete(employe);
@@ -156,6 +161,55 @@ public class EmployeServiceImpl implements EmployeService {
     @Override
     public List<Employe> findEmployesEstChauffeurStatutChauffeur(Boolean estChauffeur, StatutChauffeur statutChauffeur) {
         return employeRepository.findEmployesByEstChauffeurAndStatutChauffeur(estChauffeur,statutChauffeur);
+    }
+
+    @Override
+    public Employe findByDirectionEstSuperieurHirarchique(Direction direction, boolean estSuperieurHirarchique) {
+        return employeRepository.findByDirectionAndEstSuperieureHierachique(direction,estSuperieurHirarchique);
+    }
+
+    @Override
+    public RapportChauffeurDto asDto(Employe employe) {
+        RapportChauffeurDto dto = new RapportChauffeurDto();
+
+        dto.setId(employe.getIdEmploye());
+        dto.setNom(employe.toNomComplet());
+
+        return dto;
+    }
+
+    @Override
+    public RapportEmployeDto asDtos(Employe employe) {
+        RapportEmployeDto dto = new RapportEmployeDto();
+
+        dto.setId(employe.getIdEmploye());
+        dto.setNom(employe.toNomComplet());
+
+        return dto;
+    }
+
+    @Override
+    public List<RapportChauffeurDto> listRapportChauffeur(List<Employe> employes) {
+
+        List<RapportChauffeurDto> dtos = new ArrayList<>();
+
+        for(Employe employe : employes){
+            RapportChauffeurDto dto = this.asDto(employe);
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    @Override
+    public List<RapportEmployeDto> listRapportEmploye(List<Employe> employes) {
+
+        List<RapportEmployeDto> dtos = new ArrayList<>();
+
+        for(Employe employe : employes){
+            RapportEmployeDto dto = this.asDtos(employe);
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
     /*@Override

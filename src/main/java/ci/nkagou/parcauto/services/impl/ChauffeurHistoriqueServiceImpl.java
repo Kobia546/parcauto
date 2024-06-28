@@ -2,10 +2,9 @@ package ci.nkagou.parcauto.services.impl;
 
 import ci.nkagou.parcauto.dtos.chauffeurhistorique.ChauffeurHistoriqueDto;
 import ci.nkagou.parcauto.dtos.chauffeurhistorique.ChauffeurHistoriqueDtoOut;
-import ci.nkagou.parcauto.dtos.vehiculeIndisponible.VehiculeHistoriqueDto;
-import ci.nkagou.parcauto.dtos.vehiculeIndisponible.VehiculeHistoriqueDtoOut;
+import ci.nkagou.parcauto.dtos.dmd.EtatChauffeurDto;
 import ci.nkagou.parcauto.entities.ChauffeurHistorique;
-import ci.nkagou.parcauto.entities.VehiculeHistorique;
+import ci.nkagou.parcauto.entities.DetailVehiculeChauffeurA;
 import ci.nkagou.parcauto.repositories.ChauffeurHistoriqueRepository;
 import ci.nkagou.parcauto.services.ChauffeurHistoriqueService;
 import lombok.AllArgsConstructor;
@@ -46,8 +45,29 @@ public class ChauffeurHistoriqueServiceImpl implements ChauffeurHistoriqueServic
 
         dto.setId(chauffeurHistorique.getId());
         dto.setStatutHistorique(chauffeurHistorique.getStatutHistorique().toString());
-        dto.setDateParcours(chauffeurHistorique.getDateParcours().toString());
-        dto.setVehiculeChauffeurAtt(chauffeurHistorique.getVehiculeChauffeurAtt());
+        dto.setDateParcours(chauffeurHistorique.getDateParcours().toString().replace("T", " "));
+
+        dto.setEmploye(chauffeurHistorique.getVehiculeChauffeurAtt().getEmploye().toNomComplet());
+        dto.setVehicule(chauffeurHistorique.getVehiculeChauffeurAtt().getVehicule().getImmatriculation());
+
+        List<DetailVehiculeChauffeurA> detail = chauffeurHistorique.getVehiculeChauffeurAtt().getDetailVehiculeChauffeurA();
+        StringBuilder concatenatedString = new StringBuilder();
+        for (DetailVehiculeChauffeurA element : detail) {
+            String name = element.getEmployeDmd().getEmploye().toNomComplet();
+            concatenatedString.append(name).append(", ");
+        }
+
+        dto.setNomEmploye(concatenatedString);
+
+        List<DetailVehiculeChauffeurA> details = chauffeurHistorique.getVehiculeChauffeurAtt().getDetailVehiculeChauffeurA();
+        StringBuilder concatenatedStrings = new StringBuilder();
+        for (DetailVehiculeChauffeurA element : details) {
+            String destination = element.getEmployeDmd().getDestination().getNomDestination();
+            concatenatedStrings.append(destination).append(", ");
+        }
+
+        dto.setDestination(concatenatedStrings);
+
 
         return dto;
     }
@@ -87,4 +107,16 @@ public class ChauffeurHistoriqueServiceImpl implements ChauffeurHistoriqueServic
     public ChauffeurHistorique update(ChauffeurHistorique chauffeurHistorique) {
         return chauffeurHistoriqueRepository.save(chauffeurHistorique);
     }
+
+    @Override
+    public List<ChauffeurHistorique> listChauffeurHistoriqueByDateBetweenAndVehiculeChauffeurAttVehicule(EtatChauffeurDto dto) {
+        return chauffeurHistoriqueRepository.findByDateParcoursBetweenAndVehiculeChauffeurAttVehicule(dto.getDebut(),dto.getFin(),dto.getVehicule());
+    }
+
+    @Override
+    public List<ChauffeurHistorique> listChauffeurHistoriqueByDateBetweenAndVehiculeChauffeurAttEmploye(EtatChauffeurDto dto) {
+        return chauffeurHistoriqueRepository.findByDateParcoursBetweenAndVehiculeChauffeurAttEmploye(dto.getDebut(),dto.getFin(),dto.getEmploye());
+    }
+
+
 }

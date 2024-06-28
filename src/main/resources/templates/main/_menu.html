@@ -34,58 +34,111 @@
                         </a>
                     </li>
                 </div>
-               <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_USER') or hasRole('ROLE_RESPONSABLE') or hasRole('ROLE_MOYEN-GENERAUX')">
-                    <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_USER') or hasRole('ROLE_RESPONSABLE')" class="nav-item">
+
+                <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
+                    <a th:href="@{/Chauffeur/chauffeur}" class="nav-link">
+                        <i class="ni ni ni-single-02 text-dark"></i> CHAUFFEUR
+                    </a>
+                </li>
+
+               <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_USER') or  hasRole('ROLE_RESPONSABLE') or hasRole('ROLE_MOYEN-GENERAUX')">
+                    <li sec:authorize="hasRole('ROLE_ADMIN') or  hasRole('ROLE_RESPONSABLE') " class="nav-item">
                         <a th:href="@{/dmd/dmds}" class="nav-link">
                             <i class="ni ni-book-bookmark text-yellow"></i> DMD
                         </a>
                     </li>
-                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
-                       <a th:href="@{/dmd/dmdVehicule}" class="nav-link">
-                           <i class="ni ni-ui-04 text-info"></i> DMD VEHICULE
-                       </a>
-                   </li>
-                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
-                       <a th:href="@{/dmd/dmdVehiculeChauffeur}" class="nav-link">
-                           <i class="ni ni- ni-books text-pink"></i> DMD VEHICULE ET CHAUFFEUR
-                       </a>
-                   </li>
-                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MOYEN-GENERAUX')" class="nav-item" >
-                       <a th:href="@{/dmd/dmdCarburant}" class="nav-link">
-                           <i class="ni ni-diamond text-purple"></i> DMD CARBURANT
-                       </a>
-                   </li>
-                    <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_USER') or hasRole('ROLE_MOYEN-GENERAUX')" class="nav-item">
-                        <a th:href="@{/Attribution/attribution}" class="nav-link">
-                           <i class="ni ni ni-curved-next text-brown"></i> ATTRIBUTION
-                        </a>
-                    </li>
-                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_USER') or hasRole('ROLE_MOYEN-GENERAUX')" class="nav-item">
-                       <a th:href="@{/Attribution/attributionTerminée}" class="nav-link">
-                           <i class="ni ni-bullet-list-67 text-success"></i> HISTORIQUE DE L'ATTRIBUTION
+
+                   <li sec:authorize="hasRole('ROLE_USER')" class="nav-item">
+                       <a th:href="@{/dmd/dmdDemande}" class="nav-link">
+                           <i class="ni ni- ni-books text-green"></i> DMD
                        </a>
                    </li>
 
                    <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
+                       <a th:href="@{/dmd/dmdVehiculeChauffeur}" class="nav-link">
+                           <i class="ni ni- ni-books text-pink"></i> DMD
+                       </a>
+                   </li>
+
+                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')" class="nav-item">
+                       <a th:href="@{/Attribution/attribution}" class="nav-link">
+                           <i class="ni ni ni-curved-next text-brown"></i> SUIVI
+                       </a>
+                   </li>
+
+                   <li sec:authorize="hasRole('ROLE_RESPONSABLE')" class="nav-item">
+                       <a th:href="@{/dmd/dmdResponsable}" class="nav-link">
+                           <i class="ni ni-book-bookmark text-yellow"></i> HISTORIQUE DMD
+                       </a>
+                   </li>
+
+                  <!-- <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
+                       <a th:href="@{/dmd/dmdVehicule}" class="nav-link">
+                           <i class="ni ni-ui-04 text-info"></i> DMD VEHICULE
+                       </a>
+                   </li>-->
+
+
+                   <li sec:authorize="hasRole('ROLE_USER')" class="nav-item">
+                       <a th:href="@{/dmd/dmdEmploye}" class="nav-link">
+                           <i class="ni ni- ni-books text-blue"></i> HISTORIQUE DMD
+                       </a>
+                   </li>
+                   <!--<li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MOYEN-GENERAUX')" class="nav-item" >
+                       <a th:href="@{/dmd/dmdCarburant}" class="nav-link">
+                           <i class="ni ni-diamond text-purple"></i> DMD CARBURANT
+                       </a>
+                   </li>-->
+
+                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')" class="nav-item">
+                       <a th:href="@{/Attribution/attributionTerminée}" class="nav-link">
+                           <i class="ni ni-bullet-list-67 text-success"></i> HISTORIQUE SUIVI
+                       </a>
+                   </li>
+
+                   <!-- <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
                        <a th:href="@{/Chauffeur/chauffeur}" class="nav-link">
                            <i class="ni ni ni-single-02 text-dark"></i> CHAUFFEUR
                        </a>
+                   </li>-->
+
+                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
+                       <a th:href="@{/ChauffeurHistorique/chauffeurHistorique}" class="nav-link">
+                           <i class="ni ni-album-2 text-teal"></i> HISTORIQUE DES COURSE
+                       </a>
                    </li>
+
                    <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
                        <a th:href="@{/vehiculeHistorique/vehiculeHistoriques}" class="nav-link">
                            <i class="ni ni-bus-front-12 text-orange"></i> HISTORIQUE DES VEHICULES
                        </a>
                    </li>
+
                    <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
-                       <a th:href="@{/ChauffeurHistorique/chauffeurHistorique}" class="nav-link">
-                           <i class="ni ni-single-copy-04 text-teal"></i> HISTORIQUE DES COURSE
+                       <a th:href="@{/Etat/etat}" class="nav-link">
+                           <i class="ni ni-chart-bar-32 text-dark"></i> RAPPORT
                        </a>
                    </li>
+
+                   <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')">
+                       <!-- <div sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_PARCAUTO')">-->
+                       <hr class="my-3">
+                       <!-- Heading -->
+                       <h6 class="navbar-heading text-center">ENTRETIEN</h6>
+                   </div>
+
                    <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
                        <a th:href="@{/Entretien/entretien}" class="nav-link">
-                           <i class="ni ni-single-copy-04 text-teal"></i> ENTRETIEN HERBDOMADAIRE
+                           <i class="ni ni-compass-04 text-yellow"></i> ENTRETIEN HERBDOMADAIRE
+                       </a>
+
+                   </li>
+                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
+                       <a th:href="@{/Vidange/vidange}" class="nav-link">
+                           <i class="ni ni-support-16 text-gray-dark"></i> VIDANGE
                        </a>
                    </li>
+
 
                </div>
 
@@ -203,6 +256,17 @@
                         <i class="ni ni-settings-gear-65"></i> ROLES
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/Motif/motif}">
+                        <i class="ni ni-circle-08"></i> MOTIF
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/Destination/destination}">
+                        <i class="ni ni-circle-08"></i> DESTINATION
+                    </a>
+                </li>
+
 
                 </div>
 

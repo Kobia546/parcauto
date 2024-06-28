@@ -8,21 +8,24 @@ import ci.nkagou.parcauto.enums.Statut;
 import ci.nkagou.parcauto.enums.StatutChauffeur;
 import ci.nkagou.parcauto.repositories.*;
 import ci.nkagou.parcauto.services.*;
+import ci.nkagou.parcauto.utils.ConfigProperties;
 import ci.nkagou.parcauto.utils.EncrytedPasswordUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @SpringBootApplication
+@EnableAsync
 public class ParcautoApplication {
 
 	public static void main(String[] args) {
@@ -36,15 +39,40 @@ public class ParcautoApplication {
 		MarqueService marqueService = ctx.getBean (MarqueService.class);
         TypevehiculeService typevehiculeService = ctx.getBean(TypevehiculeService.class);
         SiteService siteService = ctx.getBean(SiteService.class);
+		NotificationRepository notificationRepository = ctx.getBean(NotificationRepository.class);
+		ConfigProperties configProperties = ctx.getBean(ConfigProperties.class);
+		UserRepository userRepository = ctx.getBean(UserRepository.class);
 
 
-		Marque marque8 = new Marque();
+		JavaMailSender javaMailSender = ctx.getBean(JavaMailSender.class);
+
+		String from = configProperties.getConfigValue("spring.mail.username");
+
+		/*SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setFrom(from);
+		mailMessage.setTo("goubson93@gmail.com");
+		mailMessage.setSubject("text");
+		mailMessage.setText("text");
+		javaMailSender.send(mailMessage);
+		System.out.println("Mail envoyé avec succès");*/
+
+		/*AppUser user = userRepository.getById(6L);
+
+		Notification notification = new Notification();
+		notification.setDateTime(LocalDateTime.now());
+		notification.setA("goubson93@gmail.com");
+        notification.setMessage("text");
+        notification.setSujet("text");
+		//notification.setUser(user);
+		notificationRepository.save(notification);*/
+
+		/*Marque marque8 = new Marque();
 		marque8.setName("Bugatti");
 
         //marqueService.create(marque8);
 
 		Typevehicule typevehicule3 = new Typevehicule();
-		typevehicule3.setLibelle("Sport");
+		typevehicule3.setLibelle("Sport");*/
 
 		//typevehiculeService.create(typevehicule3);
 
@@ -444,7 +472,6 @@ public class ParcautoApplication {
 
 
 		marqueService.create(new Marque("BMW"));
-		marqueService.create(new Marque("FIAT"));
 		marqueService.create(new Marque("FORD"));
 		marqueService.create(new Marque("GREATWALL"));
 		marqueService.create(new Marque("HYUNDAI"));
@@ -458,17 +485,17 @@ public class ParcautoApplication {
 
 		Marque marqueBmw = marqueService.findByName("BMW");
 		Marque marqueHyundai = marqueService.findByName("HYUNDAI");
-		Marque marqueFiat = marqueService.findByName("FIAT");
+
 		Marque marqueGreatwall = marqueService.findByName("GREATWALL");
 
 		Typevehicule typevehiculeBerline = typevehiculeService.findByLibelle("BERLINE");
 		Typevehicule typevehiculeFourgon = typevehiculeService.findByLibelle("FOURGON");
-		Typevehicule typevehiculeFourgonnette = typevehiculeService.findByLibelle("FOURGONNETTE");
+
 		Typevehicule typevehiculePickup = typevehiculeService.findByLibelle("PICKUP 4x4");
 
 		vehiculeService.create(new Vehicule("1234GT01", Couleur.BEIGE,LocalDate.now(), "123FRSQA", marqueBmw, typevehiculeBerline ));
 		vehiculeService.create(new Vehicule("1234GT02", Couleur.NOIR,LocalDate.now(), "123FRSQB", marqueHyundai, typevehiculeFourgon ));
-		vehiculeService.create(new Vehicule("1234GT03", Couleur.BLEU,LocalDate.now(), "123FRSQC", marqueFiat, typevehiculeFourgonnette ));
+
 		vehiculeService.create(new Vehicule("1234GT04", Couleur.JAUNE,LocalDate.now(), "123FRSQC", marqueGreatwall, typevehiculePickup ));
 		vehiculeService.all().forEach(u -> System.out.println(u.getImmatriculation()));
 		System.out.println("Vehicules ajoutés avec succès");
@@ -480,10 +507,10 @@ public class ParcautoApplication {
 		/*List<Vehicule> vehicules = vehiculeService.all();
 		List<VehiculeDtoOut> dtos = vehiculeService.listVehiculesToDto(vehicules);
 		String c = "test";*/
-		EmployeService employeService = ctx.getBean(EmployeService.class);
+		/*EmployeService employeService = ctx.getBean(EmployeService.class);
 		EmployeRepository employeRepository = ctx.getBean(EmployeRepository.class);
 		RoleRepository roleRepository = ctx.getBean(RoleRepository.class);
-		UserRepository userRepository = ctx.getBean(UserRepository.class);
+		UserRepository userRepository = ctx.getBean(UserRepository.class);*/
 		//UserRoleRepository userRoleRepository = ctx.getBean(UserRoleRepository.class);
 
 
@@ -585,6 +612,7 @@ public class ParcautoApplication {
         employeMamadou.setSite(siteProduction);
         Employe employeNkagou1 = employeService.create(employeMamadou);
 */
+		//String filePath = "C:\\Users\\PC\\Desktop\\parcauto-master-V2\\parcauto-master\\src\\main\\resources\\templates\\newprint.jrxml";
 
     }
 

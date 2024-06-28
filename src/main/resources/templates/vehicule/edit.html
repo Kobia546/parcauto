@@ -104,9 +104,9 @@
                 <label for="typeVehicule" class="col-sm-4 form-control-label text-md-right"><strong>Type Vehicule</strong></label>
 
                 <div class="col-md-6">
-                    <select th:field="${vehiculedto.typevehicule}"  id="typeVehicule" name="typeVehicule" class="select-type form-control" required  >
+                    <select th:field="${vehiculedto.typeVehicule}"  id="typeVehicule" name="typeVehicule" class="select-type form-control" required  >
                         <option value="">------- Type Vehicule ---------</option>
-                        <option th:each="c:${listTypevehicules}" th:value="${c.idTypevehicule}" th:text="${c.libelle}" th:selected="${c.idTypevehicule == vehiculedto.typevehicule}"></option>
+                        <option th:each="c:${listTypevehicules}" th:value="${c.idTypevehicule}" th:text="${c.libelle}" th:field="${vehiculedto.typeVehicule}"></option>
                     </select>
 
                 </div>

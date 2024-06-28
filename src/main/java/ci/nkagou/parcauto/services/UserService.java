@@ -2,6 +2,7 @@ package ci.nkagou.parcauto.services;
 
 
 import ci.nkagou.parcauto.entities.AppUser;
+import ci.nkagou.parcauto.entities.Employe;
 
 import java.util.List;
 
@@ -13,4 +14,8 @@ public interface UserService  {
     List<AppUser> getUserListWithRoleInString(List<AppUser> Users);
     AppUser findByUserName(String userName);
     Boolean existsByUserName(String userName);
+
+    AppUser findByEmploye(Employe employe);
+
+
 }

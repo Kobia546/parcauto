@@ -7,17 +7,17 @@ import ci.nkagou.parcauto.enums.Statut;
 import ci.nkagou.parcauto.exceptions.ResourceNotFoundException;
 import ci.nkagou.parcauto.repositories.DmdRepository;
 import ci.nkagou.parcauto.repositories.EmployeDmdRepository;
+import ci.nkagou.parcauto.services.DestinationService;
 import ci.nkagou.parcauto.services.DmdService;
 import ci.nkagou.parcauto.services.EmployeService;
+import ci.nkagou.parcauto.services.MotifService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +32,8 @@ public class DmdServiceImpl implements DmdService {
     private DmdRepository dmdRepository;
     private EmployeService employeService;
     private EmployeDmdRepository employeDmdRepository;
+    private MotifService motifService;
+    private DestinationService destinationService;
 
 
     @Override
@@ -52,8 +54,67 @@ public class DmdServiceImpl implements DmdService {
 
         }
         return out;
-
     }
+
+
+
+    @Override
+    public List<EmployeDmd> listEmployeDmdByStatutStatutDirection(Statut statut, Statut statuts, Direction directionResponsable) {
+
+        List<EmployeDmd> ep = employeDmdRepository.findEmployeDmdsByStatut(statut);
+
+        List<EmployeDmd> eps = employeDmdRepository.findEmployeDmdsByStatut(statuts);
+
+        List<EmployeDmd> out = new ArrayList<>();
+
+        for (EmployeDmd employeDmd : ep){
+
+            Direction d = employeDmd.getEmploye().getDirection();
+
+            if (directionResponsable.getIdDirection().equals(d.getIdDirection())){
+
+                out.add(employeDmd);
+            }
+
+        }
+
+        for (EmployeDmd employeDmd : eps){
+
+            Direction ds = employeDmd.getEmploye().getDirection();
+
+            if (directionResponsable.getIdDirection().equals(ds.getIdDirection())){
+
+                out.add(employeDmd);
+            }
+
+        }
+        return out;
+    }
+
+    /*@Override
+    public List<EmployeDmd> listEmployeDmdByStatutStatutDirection(Statut statut, Statut statuts, Direction directionResponsable) {
+        List<EmployeDmd> ep = employeDmdRepository.findEmployeDmdsByStatutAndStatut(statut,statuts);
+
+        List<EmployeDmd> out = new ArrayList<>();
+
+        for (EmployeDmd employeDmd : ep){
+
+            Direction d = employeDmd.getEmploye().getDirection();
+
+            if (directionResponsable.getIdDirection().equals(d.getIdDirection())){
+
+                out.add(employeDmd);
+            }
+
+        }
+        return out;
+    }*/
+
+    /*@Override
+    public List<EmployeDmd> listEmployeDmdByEmployeDirection(Direction directionResponsable) {
+
+        return employeDmdRepository.findEmployeDmdsByEmployeAndDirection(directionResponsable);
+    }*/
 
     @Override
     public List<EmployeDmd> listEmployeDmdsByStatut(Statut statut) {
@@ -68,13 +129,13 @@ public class DmdServiceImpl implements DmdService {
         dto.setDatePrevue(dmd.getDmd().getDatePrevue().toString());
         dto.setHeurePrevue(dmd.getDmd().getHeurePrevue().toString());
         dto.setMoyenDemande(dmd.getDmd().getMoyenDemande().name());
-        dto.setMotif(dmd.getMotifDmd());
-        dto.setDestination(dmd.getDestination());
-        dto.setDateOperation(dmd.getDmd().getDateOperation().toString());
+        dto.setMotif(dmd.getMotif().getNomMotif());
+        dto.setDestination(dmd.getDestination().getNomDestination());
+        dto.setDateOperation(dmd.getDmd().getDateOperation().toString().replace("T", " "));
         dto.setStatut(dmd.getStatut().name());
         dto.setNomComplet(dmd.getEmploye().toNomComplet());
         dto.setObservation(dmd.getObservation());
-       
+
 
 
         /*dto.setMatriculeEmploye(dmd.getEmploye().getNumMatEmpl().toString());*/
@@ -142,6 +203,9 @@ public class DmdServiceImpl implements DmdService {
         );
     }
 
+
+
+
     @Override
     public List<EmployeDmd> findEmployeDmdsByEmploye(Employe employe) {
         return employeDmdRepository.findEmployeDmdsByEmploye(employe);
@@ -173,14 +237,12 @@ public class DmdServiceImpl implements DmdService {
 
         //Set Value
         EmployeDmd employeDmd = new EmployeDmd();
-        employeDmd.setMotifDmd(dto.getMotif());
+        employeDmd.setMotif(dto.getMotif());
         employeDmd.setDestination(dto.getDestination());
         employeDmd.setStatut(DEMANDE);
         employeDmd.setResponsable(dto.getEmploye().getIdEmploye());
         employeDmd.setDmd(dmdPersist);
         employeDmd.setEmploye(dto.getEmploye());
-
-
 
         //Create EmployeDmd on Database.
         employeDmdRepository.save(employeDmd);
@@ -198,7 +260,7 @@ public class DmdServiceImpl implements DmdService {
         dmd.setDateOperation(LocalDateTime.now());
         dmd.setMoyenDemande(MoyenDemande.valueOf(dto.getMoyenDemande()));
 
-        employeDmd.setMotifDmd(dto.getMotif());
+        employeDmd.setMotif(dto.getMotif());
         employeDmd.setDestination(dto.getDestination());
         employeDmd.setStatut(REFUS);
         employeDmd.setObservation(dto.getObservation());
@@ -230,12 +292,16 @@ public class DmdServiceImpl implements DmdService {
             String prenom = nomprenoms[0];
 
             Employe employe = employeService.findByNomPrenom(nom, prenom);
+            String motif1 = employeDmdDto.getMotif();
+            Motif motif = motifService.findByNomMotif(motif1);
+            String destination1 = employeDmdDto.getDestination();
+            Destination destination = destinationService.findByNomDestination(destination1);
             employeDmd.setEmploye(employe);
             employeDmd.setDmd(dmdPersist);
             employeDmd.setStatut(VALIDATION);
-            employeDmd.setMotifDmd(employeDmdDto.getMotifDmd());
-            employeDmd.setDestination(employeDmdDto.getDestination());
-            employeDmd.setResponsable(dto.getIdResponsable());
+            employeDmd.setMotif(motif);
+            employeDmd.setDestination(destination);
+            //employeDmd.setResponsable(dto.getIdResponsable());
             /*employeDmd.setResponsable(dto.getEmploye().getIdEmploye());*/
             employeDmdRepository.save(employeDmd);
 
@@ -252,14 +318,33 @@ public class DmdServiceImpl implements DmdService {
         dmd.setHeurePrevue(dto.getHeurePrevue());
         dmd.setDateOperation(LocalDateTime.now());
         dmd.setMoyenDemande(MoyenDemande.valueOf(dto.getMoyenDemande()));
-
-        employeDmd.setMotifDmd(dto.getMotif());
+        employeDmd.setMotif(dto.getMotif());
         employeDmd.setDestination(dto.getDestination());
         employeDmd.setStatut(dto.getStatut());
 
         //employeDmd.setEmploye(employeService.getNomComplet(employeDmd.getEmploye()));
         return employeDmdRepository.save(employeDmd);
     }
+
+   /* @Override
+    public EmployeDmd updateDmdUserTransport(DmdUserDto dto) {
+        EmployeDmd employeDmd = this.findById(dto.getId());
+        Dmd dmd = dmdRepository.getById(employeDmd.getDmd().getIdDmd());
+        dmd.setDatePrevue(dto.getDatePrevue());
+        dmd.setHeurePrevue(dto.getHeurePrevue());
+        dmd.setDateOperation(LocalDateTime.now());
+        dmd.setMoyenDemande(MoyenDemande.TRANSPORT);
+        Dmd dmd1 = dmdRepository.save(dmd);
+
+        employeDmd.setMotif(dto.getMotif());
+        employeDmd.setDestination(dto.getDestination());
+        employeDmd.setStatut(ANNULER);
+        employeDmd.setDmd(dmd1);
+
+        //employeDmd.setEmploye(employeService.getNomComplet(employeDmd.getEmploye()));
+        return employeDmdRepository.save(employeDmd);
+
+    }*/
 
     @Override
     public EmployeDmd updateDmdParc(DmdParcDto dto) {
@@ -284,7 +369,7 @@ public class DmdServiceImpl implements DmdService {
             Dmd dmd1 = dmdRepository.save(dmd);
 
             // Update the EmployeDmd instance with the new properties
-            existingEmployeDmd.setMotifDmd(dmdUserDto.getMotif());
+            existingEmployeDmd.setMotif(dmdUserDto.getMotif());
             existingEmployeDmd.setDestination(dmdUserDto.getDestination());
             existingEmployeDmd.setStatut(dmdUserDto.getStatut());
             existingEmployeDmd.setEmploye(dmdUserDto.getEmploye());
@@ -307,6 +392,33 @@ public class DmdServiceImpl implements DmdService {
     }
 
     @Override
+    public DmdUserDto createDmdUserDto(EmployeDmd dmd) {
+
+        DmdUserDto dto = new DmdUserDto();
+
+        dto.setId(dmd.getIdEmployeDmd());
+        dto.setDatePrevue(dmd.getDmd().getDatePrevue());
+        dto.setHeurePrevue(dmd.getDmd().getHeurePrevue());
+        dto.setMoyenDemande(dmd.getDmd().getMoyenDemande().name());
+        String motif1 = dmd.getMotif().getNomMotif();
+        Motif motif = motifService.findByNomMotif(motif1);
+        dto.setMotif(motif);
+        String destination1 = dmd.getDestination().getNomDestination();
+        Destination destination = destinationService.findByNomDestination(destination1);
+        dto.setDestination(destination);
+        dto.setStatut(dmd.getStatut());
+        dto.setResponsable(dmd.getResponsable());
+        dto.setEmploye(dmd.getEmploye());
+
+        return dto;
+    }
+
+    @Override
+    public EmployeDmd findByEmploye(Employe employe) {
+        return employeDmdRepository.findByEmploye(employe);
+    }
+
+    @Override
     public EmployeDmd validerDmd(Long id, Employe employe) {
 
         EmployeDmd employeDmd = this.findById(id);
@@ -321,6 +433,27 @@ public class DmdServiceImpl implements DmdService {
         EmployeDmd employeDmd2 = this.findById(id);
         employeDmd.setStatut(ANNULER);
         EmployeDmd dmd = employeDmdRepository.save(employeDmd2);
+        return dmd;
+    }
+
+    @Override
+    public EmployeDmd findByid(Long id) {
+        return null;
+    }
+
+
+    @Override
+    public   EmployeDmd findByidEmployeDmdIn(Long idEmployeDmd) {
+        return this.employeDmdRepository.getById(idEmployeDmd);
+    }
+
+
+    @Override
+    public EmployeDmd findByIdStatut(Long id, Statut statut) {
+        EmployeDmd employeDmd = this.findById(id);
+        //employeDmd.setStatut(DEMANDE);
+        //employeDmd.setResponsable(employe.getIdEmploye());
+        EmployeDmd dmd = employeDmdRepository.save(employeDmd);
         return dmd;
     }
 

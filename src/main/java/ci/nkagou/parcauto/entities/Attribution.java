@@ -9,7 +9,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -39,6 +41,7 @@ public abstract class Attribution {
     private LocalDateTime dateAttribution;
 
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dateDeDepart;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -47,11 +50,48 @@ public abstract class Attribution {
     @Enumerated(EnumType.ORDINAL)
     private StatutAttrib statutAttrib;
 
+    @Column(name = "km_debut")
+    private Integer kilometrageDebut;
+    @Column(name="km_fin")
+    private Integer kilometrageFin;
+
     @Enumerated(EnumType.ORDINAL)
     private TypeAttribution typeAttribution;
+
+    @OneToMany(mappedBy = "attribution")
+    private List<DetailVehiculeA> detailVehiculeA;
+
+    @OneToMany(mappedBy = "attribution")
+    private List<DetailVehiculeChauffeurA> detailVehiculeChauffeurA;
+
+    @OneToMany(mappedBy = "attribution")
+    private List<DetailCarburantA> detailCarburantA;
+    @ManyToOne
+    @JoinColumn(name = "vehicule_id")
+    private Vehicule vehiculeId;
+
 
     @ManyToOne
     @JoinColumn(name = "employe_dmd")
     private EmployeDmd employeDmd;
+
+
+     public String calculateDuration() {
+        if (dateDeDepart != null && dateArrivee != null) {
+            Duration duration = Duration.between(dateDeDepart, dateArrivee);
+            long days = duration.toDays();
+            long hours = duration.toHours() % 24;
+            long minutes = duration.toMinutes() % 60;
+
+            // Create the formatted string
+            return String.format("%dJ-%dH-%dM", days, hours, minutes);
+        } else {
+            // Handle the case where one or both LocalDateTime instances are null.
+            // You can throw an exception or return a default value as needed.
+            return null; // Or throw an exception like IllegalArgumentException
+        }
+    }
+
+
 
 }

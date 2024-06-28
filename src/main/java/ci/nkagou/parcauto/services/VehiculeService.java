@@ -1,5 +1,6 @@
 package ci.nkagou.parcauto.services;
 
+import ci.nkagou.parcauto.dtos.rapport.RapportVehiculeDto;
 import ci.nkagou.parcauto.dtos.vehicule.VehiculeDto;
 import ci.nkagou.parcauto.dtos.vehicule.VehiculeDtoOut;
 import ci.nkagou.parcauto.dtos.vehicule.VehiculeDtoZ;
@@ -23,8 +24,7 @@ public interface VehiculeService {
     Vehicule findById(Long id);
     Vehicule create (Vehicule vehicule);
     Vehicule update (Vehicule vehicule);
-    Vehicule raison (VehiculeDto dto);
-
+    Vehicule raison (VehiculeDtoZ dto);
 
     Vehicule disponible(Long id,Vehicule vehicule);
     Vehicule indisponible(Long id,Vehicule vehicule);
@@ -32,15 +32,18 @@ public interface VehiculeService {
 
     void delete(Vehicule vehicule);
 
-
     Vehicule findByImmatriculation(String immatriculation);
     Vehicule findByCarteGrise(String carteGrise);
     List<Vehicule> findVehiculesByTypevehicule(Typevehicule typevehicule);
     List<Vehicule> findVehiculesByMarque(Marque marque);
     List<Vehicule> findVehiculesByCouleur(Couleur couleur);
     List<Vehicule> findVehiculesByStatutVehicule(StatutVehicule statutVehicule);
+
+    void deleteReferences(Long vehiculeId);
+
     List<Vehicule> findVehiculesByDateAchat(LocalDate dateAchat);
 
-
+    RapportVehiculeDto asDto(Vehicule vehicule);
+    List<RapportVehiculeDto> asListDto(List<Vehicule> vehicules);
 
 }

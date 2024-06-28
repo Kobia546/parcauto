@@ -1,11 +1,11 @@
 package ci.nkagou.parcauto.services;
 
 import ci.nkagou.parcauto.dtos.chauffeur.EmployeDtoOut;
+import ci.nkagou.parcauto.dtos.rapport.RapportChauffeurDto;
+import ci.nkagou.parcauto.dtos.rapport.RapportEmployeDto;
+import ci.nkagou.parcauto.dtos.rapport.RapportVehiculeDto;
 import ci.nkagou.parcauto.dtos.vehicule.VehiculeDtoOut;
-import ci.nkagou.parcauto.entities.ChauffeurHistorique;
-import ci.nkagou.parcauto.entities.Employe;
-import ci.nkagou.parcauto.entities.EmployeDmd;
-import ci.nkagou.parcauto.entities.Vehicule;
+import ci.nkagou.parcauto.entities.*;
 import ci.nkagou.parcauto.enums.StatutChauffeur;
 
 import java.util.List;
@@ -22,6 +22,7 @@ public interface EmployeService {
     Employe create (Employe employe);
     Employe update (Employe employe);
     Employe getEmployeByUserName(String username);
+    /*Employe findEmployeByAppUser(AppUser user);*/
     void delete(Employe employe);
     String getNomComplet(Employe employe);
     List<Employe> listEmployesEstSuperieurHierachique(Boolean estResponsable);
@@ -30,11 +31,13 @@ public interface EmployeService {
     Employe disponible(Long id,Employe employe);
     Employe indisponible(Long id,Employe employe);
     List<Employe> findEmployesEstChauffeurStatutChauffeur(Boolean estChauffeur, StatutChauffeur statutChauffeur);
+    Employe findByDirectionEstSuperieurHirarchique(Direction direction,boolean estSuperieurHirarchique);
+    RapportChauffeurDto asDto(Employe employe);
+    RapportEmployeDto asDtos(Employe employe);
+    List<RapportChauffeurDto> listRapportChauffeur(List<Employe> employe);
+    List<RapportEmployeDto> listRapportEmploye(List<Employe> employe);
 
     /*List<Employe> findEmployesByEstChauffeurStatutChauffeur (Boolean estChauffeur, StatutChauffeur statutChauffeur);*/
-
-
-
 
 
 }

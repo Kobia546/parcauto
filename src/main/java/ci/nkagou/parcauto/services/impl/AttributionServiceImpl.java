@@ -6,12 +6,9 @@ import ci.nkagou.parcauto.dtos.dmd.*;
 import ci.nkagou.parcauto.entities.*;
 import ci.nkagou.parcauto.enums.*;
 import ci.nkagou.parcauto.repositories.*;
-import ci.nkagou.parcauto.services.AttributionService;
-import ci.nkagou.parcauto.services.EmployeService;
-import ci.nkagou.parcauto.services.VehiculeHistoriqueService;
-import lombok.AllArgsConstructor;
+import ci.nkagou.parcauto.services.*;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ci.nkagou.parcauto.enums.StatutAttrib.*;
+import static ci.nkagou.parcauto.enums.TypeAttribution.*;
 
 @Service
 @Transactional
@@ -35,16 +33,21 @@ public class AttributionServiceImpl implements AttributionService {
     private  VehiculeHistoriqueService vehiculeHistoriqueService;
     private ChauffeurHistoriqueRepository chauffeurHistoriqueRepository;
     private EmployeRepository employeRepository;
+    private DmdRepository dmdRepository;
     private EmployeDmdRepository employeDmdRepository;
-    private EmployeService employeService;
+    private final EmployeService employeService;
     private VehiculeAttRepository vehiculeAttRepository;
     private final VehiculeChauffeurAttRepository vehiculeChauffeurAttRepository;
+    private VehiculeService vehiculeService;
+    private DetailVehiculeARepository detailVehiculeARepository;
+    private DetailVehiculeChauffeurARepository detailVehiculeChauffeurARepository;
+    private DetailCarburantARepository detailCarburantARepository;
 
     private CarburantAttRepository carburantAttRepository;
 
 
 
-    public AttributionServiceImpl(VehiculeRepository vehiculeRepository, EmployeRepository employeRepository, EmployeDmdRepository employeDmdRepository, AttributionRepository attributionRepository, VehiculeHistoriqueRepository vehiculeHistoriqueRepository, ChauffeurHistoriqueRepository chauffeurHistoriqueRepository, VehiculeChauffeurAttRepository vehiculeChauffeurAttRepository,VehiculeAttRepository vehiculeAttRepository,CarburantAttRepository carburantAttRepository) {
+    public AttributionServiceImpl(VehiculeRepository vehiculeRepository, EmployeRepository employeRepository, EmployeDmdRepository employeDmdRepository, AttributionRepository attributionRepository, VehiculeHistoriqueRepository vehiculeHistoriqueRepository, ChauffeurHistoriqueRepository chauffeurHistoriqueRepository, VehiculeChauffeurAttRepository vehiculeChauffeurAttRepository, VehiculeAttRepository vehiculeAttRepository, CarburantAttRepository carburantAttRepository, DmdRepository dmdRepository, VehiculeService vehiculeService, EmployeService employeService,DetailVehiculeARepository detailVehiculeARepository,DetailVehiculeChauffeurARepository detailVehiculeChauffeurARepository,DetailCarburantARepository detailCarburantARepository) {
         this.vehiculeRepository = vehiculeRepository;
         this.vehiculeHistoriqueRepository = vehiculeHistoriqueRepository;
         this.chauffeurHistoriqueRepository = chauffeurHistoriqueRepository;
@@ -54,6 +57,17 @@ public class AttributionServiceImpl implements AttributionService {
         this.vehiculeChauffeurAttRepository = vehiculeChauffeurAttRepository;
         this.vehiculeAttRepository = vehiculeAttRepository;
         this.carburantAttRepository = carburantAttRepository;
+        this.dmdRepository = dmdRepository;
+        this.vehiculeService = vehiculeService;
+        this.employeService = employeService;
+        this.detailVehiculeARepository = detailVehiculeARepository;
+        this.detailVehiculeChauffeurARepository = detailVehiculeChauffeurARepository;
+        this.detailCarburantARepository = detailCarburantARepository;
+    }
+
+    @Override
+    public Attribution findAttributionByid(Long id) {
+        return attributionRepository.getById(id);
     }
 
     @Override
@@ -106,21 +120,124 @@ public class AttributionServiceImpl implements AttributionService {
         return attributionRepository.getById(id);
     }
 
+    @SneakyThrows
     @Override
     public AttributionDtoOut attributionDto(Attribution attribution) {
         AttributionDtoOut dto = new AttributionDtoOut();
 
         dto.setId(attribution.getIdAttribution());
         dto.setTypeAttribution(attribution.getTypeAttribution().toString());
-        dto.setDateAttribution(attribution.getDateAttribution().toString());
-        dto.setDateDeDepart(attribution.getDateDeDepart() != null ? attribution.getDateDeDepart().toString() : null);
-        dto.setDateArrivee(attribution.getDateArrivee() != null ? attribution.getDateArrivee().toString() : null);
-        dto.setNomComplet(attribution.getEmployeDmd() != null ? attribution.getEmployeDmd().getEmploye().toNomComplet() : null);
+        if (attribution != null) {
+            // Vérifiez si getVehiculeId() n'est pas null
+            if (attribution.getVehiculeId() != null) {
+                dto.setVehicule(attribution.getVehiculeId().getImmatriculation());
+            } else {
+                // Gérer le cas où getVehiculeId() est null
+                // Par exemple, vous pouvez définir un message d'erreur ou une valeur par défaut
+                dto.setVehicule("Vehicule ID is null");
+            }
+        } else {
+            // Gérer le cas où attribution est null
+            // Par exemple, vous pouvez définir un message d'erreur ou lancer une exception personnalisée
+            throw new CustomException("Attribution is null");
+        }
+        if (attribution instanceof VehiculeAtt) {
+            VehiculeAtt vehiculeAtt = (VehiculeAtt) attribution;
+            dto.setMotif(vehiculeAtt.getMotif() != null ? vehiculeAtt.getMotif().toString() : "Motif is null");
+        }
+
+        if (attribution != null) {
+            // Vérifiez si getEmployeDmd() n'est pas null
+            if (attribution.getEmployeDmd() != null) {
+                // Vérifiez si getMotif() n'est pas null
+                if (attribution.getEmployeDmd().getDestination() != null) {
+                    dto.setDestination(String.valueOf(attribution.getEmployeDmd().getDestination()));
+                } else {
+                    // Gérer le cas où getMotif() est null
+                    dto.setDestination("Destination is null");
+                }
+            } else {
+                // Gérer le cas où getEmployeDmd() est null
+                dto.setDestination("Destination is null");
+            }
+        } else {
+            // Gérer le cas où attribution est null
+            throw new CustomException("Destination is null is null");
+        }
+
+
+
+        if (attribution.getKilometrageFin() != null) {
+            dto.setKilometrageFin(attribution.getKilometrageFin());
+        } else {
+            // Assign a default value or handle the null case
+            dto.setKilometrageFin(10000);
+        }
+        dto.setDateAttribution(attribution.getDateAttribution().toString().replace("T", " "));
+        dto.setDateDeDepart(attribution.getDateDeDepart() != null ? attribution.getDateDeDepart().toString().replace("T", " ") : null);
+        dto.setDateArrivee(attribution.getDateArrivee() != null ? attribution.getDateArrivee().toString().replace("T", " ") : null);
+        if (attribution.getKilometrageDebut() != null) {
+            dto.setKilometrageDebut(attribution.getKilometrageDebut());
+        } else {
+            // Assign a default value or handle the null case
+            dto.setKilometrageDebut(10);
+        }
+        //dto.setNomComplet(attribution.getEmployeDmd() != null ? attribution.getEmployeDmd().getEmploye().toNomComplet() : null);
+
         dto.setStatutAttrib(attribution.getStatutAttrib() != null ? attribution.getStatutAttrib().toString() : null);
+        dto.setDuration(attribution.calculateDuration() != null ? attribution.calculateDuration(): null);
+
+
+        List<DetailVehiculeA> details = attribution.getDetailVehiculeA();
+        StringBuilder concatenatedNames = new StringBuilder();
+        if (details != null && !details.isEmpty()) {
+            for (DetailVehiculeA detail : details) {
+                String name = detail.getEmployeDmd().getEmploye().toNomComplet();
+                concatenatedNames.append(name).append(", ");
+            }
+
+            if (concatenatedNames.length() > 0) {
+                // Remove the trailing comma and space before setting the dto's NomComplet
+                String finalNames = concatenatedNames.substring(0, concatenatedNames.length() - 2);
+                dto.setNomComplet(finalNames);
+            }
+        }
+
+        List<DetailVehiculeChauffeurA> detailss = attribution.getDetailVehiculeChauffeurA();
+        StringBuilder concatenatedName = new StringBuilder();
+        if (detailss != null && !detailss.isEmpty()) {
+            for (DetailVehiculeChauffeurA detail : detailss) {
+                String name = detail.getEmployeDmd().getEmploye().toNomComplet();
+                concatenatedName.append(name).append(", ");
+            }
+
+            if (concatenatedName.length() > 0) {
+                // Remove the trailing comma and space before setting the dto's NomComplet
+                String finalNames = concatenatedName.substring(0, concatenatedName.length() - 2);
+                dto.setNomComplet(finalNames);
+            }
+        }
+
+        List<DetailCarburantA> detailz = attribution.getDetailCarburantA();
+        StringBuilder concatenated = new StringBuilder();
+        if (detailz != null && !detailz.isEmpty()) {
+            for (DetailCarburantA detail : detailz) {
+                String name = detail.getEmployeDmd().getEmploye().toNomComplet();
+                concatenated.append(name).append(", ");
+            }
+
+            if (concatenated.length() > 0) {
+                // Remove the trailing comma and space before setting the dto's NomComplet
+                String finalNames = concatenated.substring(0, concatenated.length() - 2);
+                dto.setNomComplet(finalNames);
+            }
+        }
 
         if (attribution instanceof VehiculeAtt) {
             VehiculeAtt vehiculeAtt = (VehiculeAtt) attribution;
             dto.setStatutVehiculeA(vehiculeAtt.getStatutVehiculeA() != null ? vehiculeAtt.getStatutVehiculeA().toString() : null);
+
+            //dto.setNomComplet(attribution.getDetailVehiculeA() != null ? attribution.getEmployeDmd().getEmploye().toNomComplet() : null);
             dto.setMotif(vehiculeAtt.getMotif() != null ? vehiculeAtt.getMotif().toString() : null);
             dto.setObservation(vehiculeAtt.getObservation() != null ? vehiculeAtt.getObservation() : null);
             dto.setVehicule(vehiculeAtt.getVehicule().getImmatriculation() != null ? vehiculeAtt.getVehicule().getImmatriculation() : null);
@@ -129,6 +246,8 @@ public class AttributionServiceImpl implements AttributionService {
 
         if (attribution instanceof VehiculeChauffeurAtt) {
             VehiculeChauffeurAtt vehiculeChauffeurAtt = (VehiculeChauffeurAtt) attribution;
+
+
             dto.setStatutVehiculeA(vehiculeChauffeurAtt.getStatutVehiculeA() != null ? vehiculeChauffeurAtt.getStatutVehiculeA().toString() : null);
             dto.setMotif(vehiculeChauffeurAtt.getMotif() != null ? vehiculeChauffeurAtt.getMotif().toString() : null);
             dto.setObservation(vehiculeChauffeurAtt.getObservation() != null ? vehiculeChauffeurAtt.getObservation() : null);
@@ -165,6 +284,20 @@ public class AttributionServiceImpl implements AttributionService {
         return dtos;
 
     }
+
+    /*@Override
+    public CombineAttributionDtoOut listAttributionToCombineDto(List<Attribution> attributions) {
+        List<AttributionDtoOut> dtos = new ArrayList<>();
+        for (Attribution attribution : attributions)
+        {
+            AttributionDtoOut dto = new AttributionDtoOut();
+
+            dto = this.attributionDto(attribution);
+            dtos.add(dto);
+        }
+        CombineAttributionDtoOut combineDto = new CombineAttributionDtoOut(dtos);
+        return combineDto;
+    }*/
 
     @Override
     public List<AttributionDtoOut> listAttributionToDtoCarburant(List<CarburantAtt> carburantAtts) {
@@ -211,10 +344,106 @@ public class AttributionServiceImpl implements AttributionService {
     }
 
     //FONTION RETOUR ATTRIBUTION RETOUR EMPLOYER DMD ET EMPLOYE
-    @Override
+    /*@Override
     public List<Attribution> findAttributionsByEmployeDmdEmploye(Employe employe) {
         return attributionRepository.findAttributionsByEmployeDmdEmploye(employe);
+    }*/
+
+
+    @Override
+    public List<Attribution> listAttributionByDateBetween(EtatAttributionDto dto) {
+        return attributionRepository.findAllByDateAttributionBetween(dto.getDebut(),dto.getFin());
     }
+
+    @Override
+    public List<Attribution> listAttributionByDateBetweens(EtatAttributionEmployeDto dto) {
+        return attributionRepository.findAllByDateAttributionBetween(dto.getDebut(),dto.getFin());
+    }
+
+    @Override
+    public List<Attribution> listAttributionByDateBetweenAndVehicule(EtatAttributionDto dto) {
+
+
+        List<Attribution> result = new ArrayList<>();
+
+        Vehicule vehicule = vehiculeService.findById(dto.getVehicule());
+
+        List<Attribution> attribution1 = vehiculeAttRepository.findByDateAttributionBetweenAndVehicule(dto.getDebut(), dto.getFin(), vehicule);
+        List<Attribution> attribution2 = vehiculeChauffeurAttRepository.findByDateAttributionBetweenAndVehicule(dto.getDebut(), dto.getFin(),vehicule);
+
+        result.addAll(attribution1);
+        result.addAll(attribution2);
+
+        return result;
+
+    }
+
+    @Override
+    public List<Attribution> listAttributionByDateBetweenAndEmploye(EtatAttributionDto dto) {
+        Employe employe = employeService.findById(dto.getEmploye());
+        return vehiculeChauffeurAttRepository.findByDateAttributionBetweenAndEmploye(dto.getDebut(),dto.getFin(),employe);
+    }
+
+    /*@Override
+    public List<Attribution> listAttributionByDateBetweenAndEmployes(EtatAttributionEmployeDto dto) {
+        List<Attribution> result = new ArrayList<>();
+        Employe employe = employeService.findById(dto.getEmploye());
+        List<Attribution> attribution1 = vehiculeAttRepository.findAttributionsByDateAttributionBetweenAndEmployeDmdEmploye(dto.getDebut(), dto.getFin(), employe);
+        List<Attribution> attribution2 = vehiculeChauffeurAttRepository.findAttributionsByDateAttributionBetweenAndEmployeDmdEmploye(dto.getDebut(), dto.getFin(), employe);
+
+        result.addAll(attribution1);
+        result.addAll(attribution2);
+
+        return result;
+    }*/
+
+    @Override
+    public List<Attribution> listAttributionByDateBetweenAndEmployeAndVehicule(EtatAttributionDto dto) {
+        Employe employe = employeService.findById(dto.getEmploye());
+        Vehicule vehicule = vehiculeService.findById(dto.getVehicule());
+        return vehiculeChauffeurAttRepository.findByDateAttributionBetweenAndEmployeAndVehicule(dto.getDebut(),dto.getFin(),employe,vehicule);
+    }
+
+    @Override
+    public List<Attribution> listEtatAttribution(EtatAttributionDto dto) {
+
+        List<Attribution> attribution = new ArrayList<>();
+
+
+
+        if(dto.getEmploye() == 0L && dto.getVehicule() == 0L){
+              attribution = this.listAttributionByDateBetween(dto);
+        }else if(dto.getEmploye() != 0L && dto.getVehicule() == 0L){
+              attribution = this.listAttributionByDateBetweenAndEmploye(dto);
+        }else if(dto.getEmploye() == 0L && dto.getVehicule() != 0L){
+              attribution = this.listAttributionByDateBetweenAndVehicule(dto);
+        }else if(dto.getEmploye() != 0L && dto.getVehicule() != 0L){
+              attribution = this.listAttributionByDateBetweenAndEmployeAndVehicule(dto);
+        }
+
+        return attribution;
+    }
+
+    /*@Override
+    public List<Attribution> listEtatAttributionEmploye(EtatAttributionEmployeDto dto) {
+
+        List<Attribution> attribution = new ArrayList<>();
+
+        if(dto.getEmploye() == 0L ){
+            attribution = this.listAttributionByDateBetweens(dto);
+        }else if(dto.getEmploye() != 0L ){
+            attribution = this.listAttributionByDateBetweenAndEmployes(dto);
+        }
+
+        return attribution;
+    }*/
+
+
+
+    /*@Override
+    public List<VehiculeAtt> listAttributionByDateBetweenAndVehicule(EtatVehiculeDto dto) {
+        return  vehiculeAttRepository.findByDateAttributionBetweenAndVehicule(dto.getDebut(),dto.getFin(),dto.getVehicule());
+    }*/
 
     /*@Override
     public Attribution commencer(Long id,Attribution attribution) {
@@ -234,7 +463,7 @@ public class AttributionServiceImpl implements AttributionService {
         VehiculeAtt vehiculeAtt = vehiculeAttRepository.getById(attributionDtoZ.getId());
 
         vehiculeAtt.setDateAttribution(attributionDtoZ.getDateAttribution());
-        vehiculeAtt.setEmployeDmd(attributionDtoZ.getEmployeDmd());
+        //vehiculeAtt.setEmployeDmd(attributionDtoZ.getEmployeDmd());
         //vehiculeAtt.setEmploye(attributionDtoZ.getEmploye());
         vehiculeAtt.setVehicule(attributionDtoZ.getVehicule());
         vehiculeAtt.setStatutAttrib(ANNULER);
@@ -243,12 +472,27 @@ public class AttributionServiceImpl implements AttributionService {
         return attributionRepository.save(vehiculeAtt);
     }
 
+
+    @Override
+    public AttributionDtoOut getAttributionDto(Long id, Class<? extends Attribution>... attributionClasses) {
+        Attribution attribution = attributionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No data found for id: " + id));
+
+        for (Class<? extends Attribution> attributionClass : attributionClasses) {
+            if (attributionClass.isInstance(attribution)) {
+                return this.attributionDto(attributionClass.cast(attribution));
+            }
+        }
+
+        throw new IllegalArgumentException("Attribution with id " + id + " is not an instance of any of the provided classes.");
+    }
+
+
     @Override
     public Attribution annulerAttributionVehiculeChauffeur(AttributionDtoZ attributionDtoZ) {
         VehiculeChauffeurAtt vehiculeChauffeurAtt = vehiculeChauffeurAttRepository.getById(attributionDtoZ.getId());
 
         vehiculeChauffeurAtt.setDateAttribution(attributionDtoZ.getDateAttribution());
-        vehiculeChauffeurAtt.setEmployeDmd(attributionDtoZ.getEmployeDmd());
+        //vehiculeChauffeurAtt.setEmployeDmd(attributionDtoZ.getEmployeDmd());
         //vehiculeAtt.setEmploye(attributionDtoZ.getEmploye());
         vehiculeChauffeurAtt.setVehicule(attributionDtoZ.getVehicule());
         vehiculeChauffeurAtt.setStatutAttrib(ANNULER);
@@ -262,7 +506,7 @@ public class AttributionServiceImpl implements AttributionService {
         CarburantAtt carburantAtt = carburantAttRepository.getById(attributionDtoZ.getId());
 
         carburantAtt.setDateAttribution(attributionDtoZ.getDateAttribution());
-        carburantAtt.setEmployeDmd(attributionDtoZ.getEmployeDmd());
+        //carburantAtt.setEmployeDmd(attributionDtoZ.getEmployeDmd());
         //vehiculeAtt.setEmploye(attributionDtoZ.getEmploye());
         //vehiculeChauffeurAtt.setVehicule(attributionDtoZ.getVehicule());
         carburantAtt.setStatutAttrib(ANNULER);
@@ -288,21 +532,39 @@ public class AttributionServiceImpl implements AttributionService {
         //vehicule.setStatutVehicule(StatutVehicule.EN_COURSE);
         //Vehicule vehicule1 = vehiculeRepository.save(vehicule);
         //Employe chauffeur = employeRepository.getById(dto.getEmploye());
+        VehiculeAtt vehiculeAtt = new VehiculeAtt();
 
+        vehiculeAtt.setVehicule(vehicule);
+        vehiculeAtt.setDateAttribution(LocalDateTime.now());
+        vehiculeAtt.setStatutAttrib(EN_ATTENTE);
+        vehiculeAtt.setTypeAttribution(VEHICULE);
+        vehiculeAtt.setKilometrageDebut(dto.getKilometrageDebut());
 
-        List<EmployeDmd> employeDmds = new ArrayList<>();
-        for (Long id : dto.getDmdUserDto()){
-            EmployeDmd employeDmd = employeDmdRepository.getById(id);
-            VehiculeAtt vehiculeAtt = new VehiculeAtt();
+        VehiculeAtt vehiculeAtt1 = attributionRepository.save(vehiculeAtt);
+
+        List<DetailVehiculeADto> dtos = dto.getDetailVehiculeADto();
+        for (DetailVehiculeADto dtoss  : dtos){
+            EmployeDmd employeDmd = employeDmdRepository.getById(dtoss.getIdEmployeDmd());
+            employeDmd.setStatut(Statut.ATTRIBUTION);
+            EmployeDmd employeDmd1 = employeDmdRepository.save(employeDmd);
+
+            DetailVehiculeA detail = new DetailVehiculeA();
+
+            detail.setAttribution(vehiculeAtt1);
+            detail.setEmployeDmd(employeDmd1);
+
+            detailVehiculeARepository.save(detail);
+
+           /* EmployeDmd employeDmd = employeDmdRepository.getById(id);
+            //VehiculeAtt vehiculeAtt = new VehiculeAtt();
             vehiculeAtt.setDateAttribution(LocalDateTime.now());
             vehiculeAtt.setVehicule(vehicule);
-            vehiculeAtt.setStatutAttrib(EN_ATTENTE);
-            vehiculeAtt.setTypeAttribution(TypeAttribution.VEHICULE);
-            vehiculeAtt.setEmployeDmd(employeDmd);
+
+            //vehiculeAtt.setEmployeDmd(employeDmd);
             attributionRepository.save(vehiculeAtt);
             employeDmds.add(employeDmd);
             employeDmd.setStatut(Statut.ATTRIBUTION);
-            employeDmdRepository.save(employeDmd);
+            employeDmdRepository.save(employeDmd);*/
 
         }
         //return attributionRepository.save(attribution);
@@ -310,53 +572,103 @@ public class AttributionServiceImpl implements AttributionService {
 
     @Override
     public void createVehiculeChauffeur(AttributionVehiculeChauffeurAttDto dtos) {
+
         Vehicule vehicule = vehiculeRepository.getById(dtos.getVehicule());
+        vehicule.setStatutVehicule(StatutVehicule.EN_COURSE);
+        Vehicule vehicule1 = vehiculeRepository.save(vehicule);
+        Employe chauffeur = employeRepository.getById(dtos.getEmploye());
+
+        chauffeur.setStatutChauffeur(StatutChauffeur.INDISPONIBLE);
+        Employe chauffeur1 = employeRepository.save(chauffeur);
+        VehiculeChauffeurAtt att = new VehiculeChauffeurAtt();
+
+        att.setVehicule(vehicule1);
+        att.setEmploye(chauffeur1);
+        att.setKilometrageDebut(dtos.getKilometrageDebut());
+        att.setKilometrageFin(dtos.getKilometrageFin());
+
+        att.setDateAttribution(LocalDateTime.now());
+        att.setStatutAttrib(EN_ATTENTE);
+        att.setTypeAttribution(VEHICULE_CHAUFFEUR);
+
+        att = vehiculeChauffeurAttRepository.save(att);
+
+        List<DetailVehiculeChauffeurADto> list = dtos.getDetailVehiculeChauffeurADto();
+
+        for (DetailVehiculeChauffeurADto detail : list) {
+            EmployeDmd employeDmd = employeDmdRepository.getById(detail.getIdEmployeDmd());
+
+            employeDmd.setStatut(Statut.ATTRIBUTION);
+            EmployeDmd employeDmd1 = employeDmdRepository.save(employeDmd);
+
+            DetailVehiculeChauffeurA d = new DetailVehiculeChauffeurA();
+            d.setEmployeDmd(employeDmd1);
+            d.setAttribution(att);
+            detailVehiculeChauffeurARepository.save(d);
+
+        }
+
+
+/*      Vehicule vehicule = vehiculeRepository.getById(dtos.getVehicule());
         //vehicule.setStatutVehicule(StatutVehicule.EN_COURSE);
         //Vehicule vehicule1 = vehiculeRepository.save(vehicule);
         Employe chauffeur = employeRepository.getById(dtos.getEmploye());
 
+        VehiculeChauffeurAtt vehiculeChauffeurAtt = new VehiculeChauffeurAtt();
 
-        List<EmployeDmd> employeDmds = new ArrayList<>();
-        for (Long id : dtos.getDmdUserDto()){
-            EmployeDmd employeDmd = employeDmdRepository.getById(id);
-            VehiculeChauffeurAtt vehiculeChauffeurAtt = new VehiculeChauffeurAtt();
-            vehiculeChauffeurAtt.setDateAttribution(LocalDateTime.now());
-            vehiculeChauffeurAtt.setVehicule(vehicule);
-            vehiculeChauffeurAtt.setEmploye(chauffeur);
-            vehiculeChauffeurAtt.setStatutAttrib(EN_ATTENTE);
-            vehiculeChauffeurAtt.setTypeAttribution(TypeAttribution.VEHICULE_CHAUFFEUR);
-            vehiculeChauffeurAtt.setEmployeDmd(employeDmd);
-            attributionRepository.save(vehiculeChauffeurAtt);
-            employeDmds.add(employeDmd);
-            employeDmd.setStatut(Statut.ATTRIBUTION);
-            employeDmdRepository.save(employeDmd);
+        vehiculeChauffeurAtt.setVehicule(vehicule);
+        vehiculeChauffeurAtt.setEmploye(chauffeur);
+        vehiculeChauffeurAtt.setDateAttribution(LocalDateTime.now());
+        vehiculeChauffeurAtt.setStatutAttrib(EN_ATTENTE);
+        vehiculeChauffeurAtt.setTypeAttribution(VEHICULE);
 
-        }
+        VehiculeChauffeurAtt vehiculeChauffeurAtt1 = attributionRepository.save(vehiculeChauffeurAtt);
+
+
+        List<DetailVehiculeChauffeurADto> dto = dtos.getDetailVehiculeChauffeurADto();
+        for (DetailVehiculeChauffeurADto dtoss : dto){
+            EmployeDmd employeDmd = employeDmdRepository.getById(dtoss.getId());
+            DetailVehiculeChauffeurA detail = new DetailVehiculeChauffeurA();
+            detail.setAttribution(vehiculeChauffeurAtt1);
+            detail.setEmployeDmd(employeDmd);
+
+            detailVehiculeChauffeurARepository.save(detail);*/
+
         //return attributionRepository.save(attribution);
     }
 
     @Override
-    public void createCarburant(AttributionCarburantAttDto dtos) {
+    public Attribution createCarburant(AttributionCarburantAttDto dtos) {
 
+        CarburantAtt carburantAtt = new CarburantAtt();
 
-        List<EmployeDmd> employeDmds = new ArrayList<>();
-        for (Long id : dtos.getDmdUserDto()){
-            EmployeDmd employeDmd = employeDmdRepository.getById(id);
-            CarburantAtt carburantAtt = new CarburantAtt();
-            carburantAtt.setDateAttribution(LocalDateTime.now());
-            carburantAtt.setStatutAttrib(EN_COURSE);
-            carburantAtt.setMontant(dtos.getMontant());
-            carburantAtt.setDateDeDepart(dtos.getDateDeDepart());
-            carburantAtt.setTypeAttribution(TypeAttribution.CARBURANT);
-            carburantAtt.setEmployeDmd(employeDmd);
-            attributionRepository.save(carburantAtt);
-            employeDmds.add(employeDmd);
+        carburantAtt.setDateAttribution(LocalDateTime.now());
+        carburantAtt.setStatutAttrib(EN_ATTENTE);
+        carburantAtt.setTypeAttribution(ORIENTATION_TRANSPORT);
+
+        CarburantAtt carburantAtt1 = attributionRepository.save(carburantAtt);
+        List<DetailCarburantA> d = new ArrayList<>();
+
+        List<DetailCarburantADto> dto = dtos.getDetailCarburantADto();
+        for (DetailCarburantADto dtoss : dto){
+            EmployeDmd employeDmd = employeDmdRepository.getById(dtoss.getIdEmployeDmd());
+
             employeDmd.setStatut(Statut.ATTRIBUTION);
-            employeDmdRepository.save(employeDmd);
+            EmployeDmd employeDmd1 = employeDmdRepository.save(employeDmd);
+
+            DetailCarburantA detail = new DetailCarburantA();
+            detail.setAttribution(carburantAtt1);
+            detail.setEmployeDmd(employeDmd1);
+
+            DetailCarburantA detailCarburantA = detailCarburantARepository.save(detail);
+
+            d.add(detailCarburantA);
 
         }
-        //return attributionRepository.save(attribution);
+        carburantAtt1.setDetailCarburantA(d);
+        return carburantAtt1;
     }
+
 
 
 
@@ -365,6 +677,7 @@ public class AttributionServiceImpl implements AttributionService {
 
         Vehicule vehicule = vehiculeRepository.getById(attributionDtoZ.getVehicule().getIdVehicule());
         vehicule.setImmatriculation(attributionDtoZ.getVehicule().getImmatriculation());
+
         //vehicule.setStatutVehicule(attributionDtoZ.getVehicule().getStatutVehicule());
         //Vehicule vehicule1 = vehiculeRepository.save(vehicule);
 
@@ -384,7 +697,7 @@ public class AttributionServiceImpl implements AttributionService {
 
         vehiculeChauffeurAtt.setDateAttribution(attributionDtoZ.getDateAttribution());
         vehiculeChauffeurAtt.setEmploye(attributionDtoZ.getEmploye());
-        vehiculeChauffeurAtt.setEmployeDmd(attributionDtoZ.getEmployeDmd());
+        //vehiculeChauffeurAtt.setEmployeDmd(attributionDtoZ.getEmployeDmd());
         vehiculeChauffeurAtt.setDateArrivee(attributionDtoZ.getDateArrivee());
 
         if (attributionDtoZ.getStatutVehiculeA().equals(StatutVehiculeA.DISPONIBLE)) {
@@ -405,7 +718,7 @@ public class AttributionServiceImpl implements AttributionService {
         vehiculeChauffeurAtt.setStatutChauffeurA(attributionDtoZ.getStatutChauffeurA());
         vehiculeChauffeurAtt.setVehicule(vehicule1);
         vehiculeChauffeurAtt.setEmploye(employe1);
-        vehiculeChauffeurAtt.setMotif(attributionDtoZ.getMotif());
+        //vehiculeChauffeurAtt.setMotif(attributionDtoZ.getMotif());
         vehiculeChauffeurAtt.setMotifChauffeur(attributionDtoZ.getMotifChauffeur());
         vehiculeChauffeurAtt.setStatutAttrib(TERMINEE);
         vehiculeChauffeurAtt.setObservation(attributionDtoZ.getObservation());
@@ -456,7 +769,8 @@ public class AttributionServiceImpl implements AttributionService {
         vehiculeChauffeurAtt1.setDateAttribution(attributionDtoZ.getDateAttribution());
         vehiculeChauffeurAtt1.setVehicule(vehicule1);
         vehiculeChauffeurAtt1.setEmploye(employe1);
-        vehiculeChauffeurAtt1.setEmployeDmd(attributionDtoZ.getEmployeDmd());
+        //vehiculeChauffeurAtt1.setEmployeDmd(attributionDtoZ.getEmployeDmd());
+        vehiculeChauffeurAtt1.setDetailVehiculeChauffeurA(attributionDtoZ.getDetailVehiculeChauffeurA());
         vehiculeChauffeurAtt1.setDateDeDepart(attributionDtoZ.getDateDeDepart());
         vehiculeChauffeurAtt1.setStatutAttrib(EN_COURSE);
 
@@ -501,7 +815,7 @@ public class AttributionServiceImpl implements AttributionService {
         vehiculeAtt.setDateAttribution(attributionDtoZ.getDateAttribution());
         vehiculeAtt.setVehicule(vehicule1);
         //vehiculeChauffeurAtt1.setEmploye(employe1);
-        vehiculeAtt.setEmployeDmd(attributionDtoZ.getEmployeDmd());
+        //vehiculeAtt.setEmployeDmd(attributionDtoZ.getEmployeDmd());
         vehiculeAtt.setDateDeDepart(attributionDtoZ.getDateDeDepart());
         vehiculeAtt.setStatutAttrib(EN_COURSE);
 
@@ -542,8 +856,9 @@ public class AttributionServiceImpl implements AttributionService {
 
         vehiculeAtt.setDateAttribution(attributionDtoZ.getDateAttribution());
         //vehiculeAtt.setEmploye(attributionDtoZ.getEmploye());
-        vehiculeAtt.setEmployeDmd(attributionDtoZ.getEmployeDmd());
+        //vehiculeAtt.setEmployeDmd(attributionDtoZ.getEmployeDmd());
         vehiculeAtt.setDateArrivee(attributionDtoZ.getDateArrivee());
+        vehiculeAtt.setKilometrageFin(attributionDtoZ.getKilometrageFin());
 
         if (attributionDtoZ.getStatutVehiculeA().equals(StatutVehiculeA.DISPONIBLE)) {
             vehicule.setStatutVehicule(StatutVehicule.DISPONIBLE);
@@ -563,7 +878,7 @@ public class AttributionServiceImpl implements AttributionService {
         //vehiculeAtt.setStatutChauffeurA(attributionDtoZ.getStatutChauffeurA());
         vehiculeAtt.setVehicule(vehicule1);
         //vehiculeChauffeurAtt.setEmploye(employe1);
-        vehiculeAtt.setMotif(attributionDtoZ.getMotif());
+        //vehiculeAtt.setMotif(attributionDtoZ.getMotif());
         //vehiculeAtt.setMotifChauffeur(attributionDtoZ.getMotifChauffeur());
         vehiculeAtt.setStatutAttrib(TERMINEE);
         vehiculeAtt.setObservation(attributionDtoZ.getObservation());
@@ -605,6 +920,11 @@ public class AttributionServiceImpl implements AttributionService {
 
         return attributionRepository.save(carburantAtt);
 
+    }
+
+    @Override
+    public List<VehiculeAtt> listAttributionByDateBetween(EtatChauffeurDto dto) {
+        return vehiculeAttRepository.findAllByDateAttributionBetween(dto.getDebut(), dto.getFin());
     }
 
 

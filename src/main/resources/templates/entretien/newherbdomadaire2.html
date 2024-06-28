@@ -35,7 +35,9 @@
         <div class="row">
 
             <div class="col-md-8">
-                <h5><strong>Nouvelle entretien</strong></h5>
+                <h5>
+                    <strong id="dateEntretien" th:text = "${entretienHerbDto.dateEntretien}" class="col-md-4" ></strong>
+                </h5>
             </div>
 
 
@@ -50,18 +52,12 @@
                     <div class="col-md-6">
                         <select id="Vehicule" name="Vehicule" class="select-type form-control" required>
                             <option value="">------- Vehicule ---------</option>
-                            <!--<option th:each="c:${listTypevehicules}" th:value="${c.idTypevehicule}" th:text="${c.libelle}" th:field="*{typeVehicule}"></option>-->
+                            <option th:each="c:${listVehicule}" th:value="${c.idVehicule}" th:text="${c.immatriculation}"></option>
                         </select>
                     </div>
                 </div>
 
-                <div class="form-group row">
-                    <label for="name" class="col-sm-4 col-form-label text-md-right"><strong>Litre</strong></label>
-                    <div class="col-md-6">
-                        <input id="name" type="text" class="form-control" required autofocus>
-                        <!--<span th:if="${#fields.hasErrors('immatriculation')}" th:errors="*{immatriculation}" th:class="help-block"></span>-->
-                    </div>
-                </div>
+
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label text-md-right"><strong>Choix de l'entretien</strong></label>
                     <div class="col-md-6">
@@ -69,23 +65,37 @@
                             <div class="form-row">
                                 <div class="col-auto">
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input custom-check-input" id="lavage">
-                                        <label class="form-check-label custom-check-label" for="lavage">Lavage</label>
+                                        <input type="checkbox" class="form-check-input custom-check-input" id="Lavage">
+                                        <label class="form-check-label custom-check-label" for="Lavage">Lavage</label>
                                     </div>
                                 </div>
                                 <div class="col-auto ml-3">
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input custom-check-input"  id="carburant">
-                                        <label class="form-check-label custom-check-label" for="carburant" >Carburant</label>
+                                        <input type="checkbox" class="form-check-input custom-check-input"  id="Carburant" onchange="toggleAdditionalFields()">
+                                        <label class="form-check-label custom-check-label" for="Carburant" >Carburant</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group row additional-fields" id="additional-fields" style="display: none;">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <label for="Litre" class="col-sm-4 col-form-label text-md-right"><strong>Litre</strong></label>
+                            <div class="col-md-6">
+                                <input id="Litre" type="text" class="form-control"   >
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group row">
-                    <div class="col-md-6 offset-sm-4">
-                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                    <label for="button" class="col-sm-4 col-form-label text-md-left"><strong></strong></label>
+
+                    <div class="col-md-6">
+                        <!--<button id="btn" type="submit" value = "btn" class="btn btn-primary" >Ajouter</button>-->
+                        <button class="btn btn-primary" type="submit" value = "btn" onclick="AddData(event)"> Ajouter </button>
                     </div>
                 </div>
             </form>
@@ -100,13 +110,14 @@
         <div class="card-body">
             <div >
                 <div class="table-responsive-sm">
-                    <table class="table"  style="width:100%" id="index-dmd">
+                    <table class="table"  style="width:100%" id="index-herbdomadaire">
                         <thead class="table-light" >
                         <tr>
                             <th>Vehicule</th>
                             <th>Lavage</th>
                             <th>Carburant</th>
                             <th>Litre</th>
+
 
                         </tr>
                         </thead>
@@ -115,9 +126,97 @@
                         </tbody>
                     </table>
 
+
+
+                    <script type="text/javascript" src=https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js></script>
+
+                    <script>
+                        // Function Add Data on table
+                        function AddData(e) {
+                            e.preventDefault();
+                            var rows = "";
+                            var vehicule = document.getElementById("Vehicule").value;
+                            var lavage = document.getElementById("Lavage").checked;
+                            var carburant = document.getElementById("Carburant").checked;
+                            var litre = document.getElementById("Litre").value;
+
+                            rows += "<tr><td>" + vehicule + "</td><td>" + lavage + "</td><td>" + carburant + "</td><td>" + litre + "</td></tr>";
+                            $(rows).appendTo("#index-herbdomadaire tbody");
+
+                            resetForm();
+                        }
+
+                        // Function for reset Form
+                        function resetForm() {
+                            document.getElementById("Vehicule").value = "";
+                            document.getElementById("Lavage").checked = false;
+                            document.getElementById("Carburant").checked = false;
+                            document.getElementById("Litre").value = "";
+                        }
+                    </script>
+
                     <div class="d-grid gap-2 d-md-flex justify-content-md-center"  style="margin: 40px; padding: 10px" >
                         <button class="btn btn-success" type="submit" value="submit" id="button">valider</button>
                     </div>
+
+                    <script type="text/javascript">
+
+                        // Get Data
+                            $('#button').on('click', function () {
+
+                                 var date =  document.getElementById("dateEntretien").innerText;
+
+                                 let details = [];
+
+                                 $("#index-herbdomadaire TBODY TR").each(function () {
+                                     let row = $(this);
+                                     let detail = {};
+                                     detail.vehicule = row.find("TD").eq(0).html();
+                                     detail.estLavage = row.find("TD").eq(1).html();
+                                     detail.estCarburant = row.find("TD").eq(2).html();
+                                     detail.litre = row.find("TD").eq(3).html();
+
+                                     details.push(detail);
+
+                                 });
+
+                                 var entretienHerbDto = {
+                                    dateEntretien : date,
+                                    detailHerbdomadaireDto : details
+                                 }
+
+                                 //var s = JSON.stringify(entretienHerbDto);
+                                 //alert(s);
+
+
+                                //Send the JSON array to Controller using AJAX.
+                                $.ajax({
+                                    type : "POST",
+                                    contentType: 'application/json',
+                                    url: '/createEntretienHerbdomadaire',
+                                    dataType : 'json',
+                                    timeout : 100000,
+                                    data: JSON.stringify(entretienHerbDto),
+
+                                });
+
+                                    (function(details) {
+
+                                       alert("Operation effectuée avec success");
+                                       let tableBody = document.querySelector('#index-herbdomadaire tbody');
+                                       tableBody.innerHTML = '';
+                                       //$('#index-herbdomadaire').DataTable().clear().draw();
+
+                                    })
+                                    (function() {
+                                        // handle fail
+                                    });
+
+
+
+                            });
+
+                    </script>
 
                 </div>
 
@@ -149,6 +248,25 @@
 
 <!-- Include SCRIPT block -->
 <th:block th:include="main/layout/block_script"></th:block>
+<script>
+
+    function toggleAdditionalFields() {
+        var carburantCheckbox = document.getElementById('Carburant');
+        var additionalFieldsDiv = document.getElementById('additional-fields');
+
+        if (carburantCheckbox.checked) {
+            additionalFieldsDiv.style.display = 'block';
+
+
+
+        } else {
+            additionalFieldsDiv.style.display = 'none';
+
+
+
+        }
+    }
+</script>
 
 </body>
 </html>

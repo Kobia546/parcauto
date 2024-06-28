@@ -1,6 +1,6 @@
 package ci.nkagou.parcauto.services.impl;
 
-import ci.nkagou.parcauto.dtos.vehicule.VehiculeDto;
+import ci.nkagou.parcauto.dtos.rapport.RapportVehiculeDto;
 import ci.nkagou.parcauto.dtos.vehicule.VehiculeDtoOut;
 import ci.nkagou.parcauto.dtos.vehicule.VehiculeDtoZ;
 import ci.nkagou.parcauto.entities.Marque;
@@ -9,6 +9,7 @@ import ci.nkagou.parcauto.entities.Vehicule;
 import ci.nkagou.parcauto.enums.Couleur;
 import ci.nkagou.parcauto.enums.StatutVehicule;
 import ci.nkagou.parcauto.exceptions.ResourceNotFoundException;
+import ci.nkagou.parcauto.repositories.AttributionRepository;
 import ci.nkagou.parcauto.repositories.VehiculeHistoriqueRepository;
 import ci.nkagou.parcauto.repositories.VehiculeRepository;
 import ci.nkagou.parcauto.services.MarqueService;
@@ -30,9 +31,10 @@ import java.util.List;
 public class VehiculeServiceImpl implements VehiculeService {
 
     private VehiculeRepository vehiculeRepository;
-    private VehiculeHistoriqueRepository vehiculeIndisponibleRepository;
+    private VehiculeHistoriqueRepository vehiculeHistoriqueRepository;
     private TypevehiculeService typevehiculeService;
     private MarqueService marqueService;
+     private AttributionRepository attributionRepository;
 
     @Override
     public Vehicule dtoToVehicule(VehiculeDtoZ dto) {
@@ -59,8 +61,6 @@ public class VehiculeServiceImpl implements VehiculeService {
 
     @Override
     public Vehicule dtoToVehiculeUpdate(VehiculeDtoZ dto) {
-
-
         //Typevehicule typevehicule = typevehiculeService.findById(dto.getTypevehicule());
         //Marque marque = marqueService.findById(dto.getMarque());
         //Couleur couleur = Couleur.valueOf(dto.getCouleur());
@@ -94,6 +94,7 @@ public class VehiculeServiceImpl implements VehiculeService {
         dto.setRaison(vehicule.getRaison());
         dto.setTypeVehicule(vehicule.getTypevehicule().getLibelle());
         dto.setMarque(vehicule.getMarque().getName());
+        //dto.setCountdownTimer(vehicule.getCountdownTimer());
 
         return dto;
     }
@@ -137,31 +138,42 @@ public class VehiculeServiceImpl implements VehiculeService {
     }
 
     @Override
-    public Vehicule raison(VehiculeDto dto) {
+    public Vehicule raison(VehiculeDtoZ dto) {
 
-        Vehicule vehicule1 = vehiculeRepository.getById(dto.getId());
-        Marque marque = marqueService.findById(dto.getMarque());
-        Typevehicule typevehicule = typevehiculeService.findById(dto.getTypeVehicule());
 
-        vehicule1.setIdVehicule(dto.getId());
-        vehicule1.setImmatriculation(dto.getImmatriculation());
-        vehicule1.setCouleur(Couleur.valueOf(dto.getCouleur()));
-        vehicule1.setCarteGrise(dto.getCarteGrise());
-        vehicule1.setStatutVehicule(StatutVehicule.INDISPONIBLE);
-        vehicule1.setDateAchat(dto.getDateAchat());
-        vehicule1.setMarque(marque);
-        vehicule1.setTypevehicule(typevehicule);
-        vehicule1.setRaison(dto.getRaison());
 
-        return vehiculeRepository.save(vehicule1);
+        Vehicule vehicule = vehiculeRepository.getById(dto.getIdVehicule());
+
+        vehicule.setIdVehicule(dto.getIdVehicule());
+        vehicule.setImmatriculation(dto.getImmatriculation());
+        vehicule.setCouleur(dto.getCouleur());
+        vehicule.setStatutVehicule(StatutVehicule.INDISPONIBLE);
+        vehicule.setDateAchat(dto.getDateAchat());
+        vehicule.setNumeroChassis(dto.getNumeroChassis());
+        vehicule.setCarteGrise(dto.getCarteGrise());
+        vehicule.setRaison(dto.getRaison());
+        //vehicule.setCountdownTimer(dto.getCountdownTimer());
+        vehicule.setMarque(dto.getMarque());
+        vehicule.setTypevehicule(dto.getTypeVehicule());
+        //vehicule.updateCountdownTimer();
+        //vehicule.formatDuration(dto.getCountdownTimer());
+
+        return vehiculeRepository.save(vehicule);
     }
 
     @Override
     public Vehicule disponible(Long id, Vehicule vehicule) {
-        Vehicule vehicule2 = this.findById(id);
+        return null;
+    }
 
-        vehicule2.setStatutVehicule(StatutVehicule.DISPONIBLE);
-        return vehiculeRepository.save(vehicule2);
+    @Transactional
+    public void disponible(Long id) {
+        Vehicule vehicule = findById(id);
+        if (vehicule != null) {
+            // Logique pour rendre le véhicule disponible
+
+            vehiculeRepository.save(vehicule);
+        }
     }
 
     @Override
@@ -209,12 +221,40 @@ public class VehiculeServiceImpl implements VehiculeService {
     public List<Vehicule> findVehiculesByCouleur(Couleur couleur) {
         return vehiculeRepository.findVehiculesByCouleur(couleur) ;
     }
+    @Override
+    public void deleteReferences(Long vehiculeId) {
+
+        attributionRepository.deleteByVehiculeId(vehiculeId);
+    }
 
     @Override
     public List<Vehicule> findVehiculesByDateAchat(LocalDate dateAchat) {
         return vehiculeRepository.findVehiculesByDateAchat(dateAchat);
     }
 
+
+
+    @Override
+    public RapportVehiculeDto asDto(Vehicule vehicule) {
+
+        RapportVehiculeDto dto = new RapportVehiculeDto();
+        dto.setId(vehicule.getIdVehicule());
+        dto.setImmatriculation(vehicule.getImmatriculation());
+        return dto;
+    }
+
+    @Override
+    public List<RapportVehiculeDto> asListDto(List<Vehicule> vehicules) {
+
+        List<RapportVehiculeDto> dtos = new ArrayList<>();
+
+        for (Vehicule vehicule : vehicules){
+            RapportVehiculeDto dto = this.asDto(vehicule);
+            dtos.add(dto);
+        }
+
+        return dtos;
+    }
 
 
     @Override  //AFFICHER QUE LES VEHICULES DISPONIBLE

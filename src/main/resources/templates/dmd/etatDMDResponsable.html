@@ -1,10 +1,172 @@
-<!DOCTYPE html>
-<html lang="en">
+!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+
 </head>
 <body>
-$END$
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+
+<div class="card mx-auto" style="width: 50rem">
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-8">
+                <h5><strong>Etat responsable</strong></h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <form th:action="@{/FiltreEtatResponsable/filtreEtatResponsable}" th:object = "${dto}" method="post" >
+
+            <!-- IdEmployeDmdForm Input -->
+            <!--<input th:field="${dmdUserDto.id}" type="hidden"/>-->
+
+
+            <!-- Nom Client Form Input -->
+            <div  class="form-group row">
+                <label  th:for="Date" class="col-sm-4 col-form-label text-md-right"><strong>Date de debut</strong></label>
+
+                <div class="col-md-6">
+
+                    <input class="form-control" type="date" th:field="${dto.debut}" required>
+
+                </div>
+            </div>
+
+            <div  class="form-group row">
+                <label  th:for="Date" class="col-sm-4 col-form-label text-md-right"><strong>Date de fin</strong></label>
+
+                <div class="col-md-6">
+                    <input class="form-control" type="date" th:field="*{fin}" required>
+                    <span class="text-danger" th:if="${#fields.hasErrors('fin')}" th:errors="*{fin}"></span>
+                    <span id="dateFinWarning" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label th:for="Selection" class="col-sm-4 col-form-label text-md-right"><strong>Direction</strong></label>
+
+                <div class="col-md-6">
+                    <select id="selection" th:field="${dto.selection}"  name="selection" class="select-type form-control" required>
+                        <option value="">------- Selection ---------</option>
+                        <option th:each="c:${listSelection}" th:value="${c.name}" th:text="${c.name}"></option>
+                    </select>
+                </div>
+                <div class="col-md-4" id="direction-champ" style="display: none; margin: 17px; margin-left: 260px; margin-top:25px" >
+                    <select th:field="${dto.direction}" name="direction" class="select-type form-control" >
+                        <option value="">------- Direction ---------</option>
+                        <option th:each="c:${listDirection}" th:value="${c.idDirection}" th:text="${c.libelle}" th:field="${dto.direction}" ></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="btn" class="col-sm-4 col-form-label text-md-right"><strong></strong></label>
+
+                <div class="col-md-6">
+                    <button id="btn" type="submit" class="btn btn-primary">OK</button>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+<!-- page content -->
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<br/><br/>
+
+<!-- Include SCRIPT block -->
+<th:block th:include="main/layout/block_script"></th:block>
+
+<script>
+    document.getElementById("selection").addEventListener("change", function () {
+        var employeField = document.getElementById("direction-champ");
+        if (this.value === "CHACUN") {
+            employeField.style.display = "block";
+        } else {
+            employeField.style.display = "none";
+        }
+    });
+</script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("btn").addEventListener("click", function (e) {
+            var debut = new Date(document.querySelector("[name='debut']").value);
+            var fin = new Date(document.querySelector("[name='fin']").value);
+
+            if (fin < debut) {
+                e.preventDefault(); // Prevent form submission
+                document.getElementById("dateFinWarning").textContent = "La date de fin doit être ultérieure à la date de debut.";
+            } else {
+                // Reset the warning message if the dates are valid
+                document.getElementById("dateFinWarning").textContent = "";
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var table;
+        table = $('#index-dmd').DataTable({
+            order: [ 0, "desc" ],
+            pageLength: 5,
+            language: {
+                /*url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/French.json'*/
+                sProcessing: "Traitement en cours...",
+                sSearch: "Rechercher&nbsp;:",
+                sLengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                sInfo: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                sInfoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+                sInfoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                sInfoPostFix: "",
+                sLoadingRecords: "Chargement en cours...",
+                sZeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                sEmptyTable: "Aucune donn&eacute;e disponible dans le tableau",
+                oPaginate: {
+                    sFirst: "Premier",
+                    sPrevious: "Pr&eacute;c&eacute;dent",
+                    sNext: "Suivant",
+                    sLast: "Dernier"
+                },
+                oAria: {
+                    sSortAscending: ": activer pour trier la colonne par ordre croissant",
+                    sSortDescending: ": activer pour trier la colonne par ordre d&eacute;croissant"
+                },
+
+            },
+        });
+    });
+
+</script>
+
 </body>
 </html>

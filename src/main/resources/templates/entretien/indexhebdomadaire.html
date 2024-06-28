@@ -13,6 +13,20 @@
     <th:block th:include="main/layout/block_css"></th:block>
 
 </head>
+<style>
+    .check-icon {
+        font-size: 18px;
+        color: green; /* For the check mark */
+        /* color: red; for the round icon */
+        /* Add additional styling as needed */
+    }
+    .check-icon2 {
+        font-size: 18px;
+        color: red; /* For the check mark */
+        /* color: red; for the round icon */
+        /* Add additional styling as needed */
+    }
+</style>
 <body>
 
 <!-- Include MENU block -->
@@ -53,20 +67,32 @@
                     <thead>
                     <tr>
                         <th class="text-center">Id</th>
+                        <th class="text-center">Date</th>
                         <th class="text-center">Immatriculation</th>
                         <th class="text-center">Lavage</th>
                         <th class="text-center">Carburant</th>
                         <th class="text-center">Litre</th>
-                        <th class="text-center">Date</th>
-                        <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')">Editer</th>
-                        <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')">Supprimer</th>
+                        <!--<th class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')">Editer</th>
+                        <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')">Supprimer</th>-->
 
 
 
                     </tr>
                     </thead>
-                    <tbody>
-                       <tr>
+                    <tbody id="table-body">
+                       <tr th:each="c:${listEntretienH}">
+                           <td  id = "id" th:text = "${c.id}" class="text-center"></td>
+                           <td  id = "date" th:text = "${c.entretien.dateEntretien}" class="text-center"></td>
+                           <td  id = "vehicule" th:text = "${c.vehicule}" class="text-center"></td>
+                           <td class="text-center">
+                               <span class="check-icon" th:if="${c.estLavage}">&#10003;</span>
+                               <span class="check-icon2" th:unless="${c.estLavage}">&#x2716;</span>
+                           </td>
+                           <td class="text-center">
+                               <span class="check-icon" th:if="${c.estCarburant}">&#10003;</span>
+                               <span class="check-icon2" th:unless="${c.estCarburant}">&#x2716;</span>
+                           </td>
+                           <td  id = "litre" th:text = "${c.Litre}" class="text-center"></td>
 
                        </tr>
                     </tbody>

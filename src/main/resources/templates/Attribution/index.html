@@ -64,10 +64,11 @@
                         <tr>
                             <th class="text-center">Id</th>
                             <th class="text-center">Type de l'attribution</th>
-                            <th class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_ADMIN') or hasRole('ROLE_MOYEN-GENERAUX')">Nom utilisateur</th>
+                            <th class="text-center" >Nom utilisateur</th>
                             <th class="text-center">Date de l'attribution</th>
                             <th class="text-center">Date de depart</th>
                             <th class="text-center">Date d'arrivée</th>
+                            <th class="text-center">Kilométrage de départ</th>
                             <th class="text-center">Statut</th>
                             <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX') ">Vehicule</th>
                             <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')">Statut du vehicule</th>
@@ -75,10 +76,11 @@
                             <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')">Statut du chauffeur</th>
                             <th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Photo du recu</th>
                             <th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Montant</th>
-                            <th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Litre</th>
-                            <!--<th class="text-center">Immatriculation</th>-->
-                            <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')">Signaler</th>
-                            <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')">Annuler</th>
+                            <!--<th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Litre</th>-->
+                            <th class="text-center">durée du parcours</th>
+                            <th class="text-center">Mes Actions</th>
+<!--                            <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')">Annuler</th>-->
+<!--                             -->
                             <!--<th class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')">Validation</th>
                             <th class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')">Annulation</th>-->
 
@@ -98,14 +100,17 @@
                             <td id = "typeAttribution" th:switch="${c.typeAttribution}" >
                                 <span class="badge badge-pill badge-danger" th:case="'VEHICULE'" >VEHICULE</span>
                                 <span class="badge badge-pill badge-success" th:case="'VEHICULE_CHAUFFEUR'">VEHICULE ET CHAUFFEUR</span>
-                                <span class="badge badge-pill badge-primary" th:case="'CARBURANT'">CARBURANT</span>
+                                <span class="badge badge-pill badge-primary" th:case="'TRANSPORT'">TRANSPORT</span>
                             </td>
-                            <td  sec:authorize="hasRole('ROLE_RESPONSABLE') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_ADMIN') or hasRole('ROLE_MOYEN-GENERAUX')" id = "nom" th:text = "${c.nomComplet}" class="text-center" ></td>
+                            <td  id="nom" class="text-center">
+                                <span  th:each="nom : ${c.nomComplet}" th:text="${nom}"></span>
+                            </td>
                             <td  id = "dateAttribution" th:text = "${c.dateAttribution}" class="text-center"></td>
                             <td  id = "dateDeDepart" th:text = "${c.dateDeDepart}" class="text-center"></td>
                             <td  id = "dateArrivee" th:text = "${c.dateArrivee}" class="text-center"></td>
+                            <td class="text-center" id="Debutkilometrage" th:text="${c.kilometrageDebut}"></td>
 
-                            <td id = "statut" th:switch="${c.statutAttrib}" >
+                            <td id = "statut" th:switch="${c.statutAttrib}">
                                 <span class="badge badge-pill badge-danger" th:case="'EN_ATTENTE'" >EN ATTENTE</span>
                                 <span class="badge badge-pill badge-success" th:case="'EN_COURSE'">EN COURSE</span>
                                 <span class="badge badge-pill badge-warning" th:case="'TERMINEE'">TERMINEE</span>
@@ -132,7 +137,8 @@
 
                             <td  id = "montant" th:text = "${c.montant}" class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')"></td>
 
-                            <td  id = "litre" th:text = "${c.litre}" class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')" ></td>
+                            <!--<td  id = "litre" th:text = "${c.litre}" class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')" ></td>-->
+                            <td  id = "duree" th:text = "${c.duration}" class="text-center"  ></td>
 
                             <!--<td  id = "immatriculationVehicule" th:text = "${c.immatriculationVehicule}" class="text-center"></td>-->
 
@@ -159,18 +165,18 @@
                                 <a th:if="${c.statutAttrib == 'EN_COURSE' and c.typeAttribution == 'VEHICULE'}" th:href="'/Attribution/attribution/user/editVE2/' + ${c.id}" class="btn btn-danger btn-sm">
                                     <i class="material-icons">edit</i>Terminée la course
                                 </a>
-                                <a th:if="${c.statutAttrib == 'EN_COURSE' and c.typeAttribution == 'CARBURANT'}" th:href="'/Attribution/attribution/user/editCC/' + ${c.id}" class="btn btn-primary btn-sm">
+                                <a th:if="${c.statutAttrib == 'EN_ATTENTE' and c.typeAttribution == 'TRANSPORT'}" th:href="'/Attribution/attribution/user/editCC/' + ${c.id}" class="btn btn-primary btn-sm">
                                     <i class="material-icons">edit</i>Terminée la course
                                 </a>
                             </td>
-                            <td class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')">
-                                <a th:if="${c.statutAttrib == 'EN_ATTENTE' and c.typeAttribution == 'VEHICULE'}" th:href="'/Attribution/attribution/annulerVehicule/' + ${c.id}" class="btn btn-danger btn-sm">
-                                    <i class="fa fa-window-close"></i>Annuler
-                                </a>
-                                <a th:if="${c.statutAttrib == 'EN_ATTENTE' and c.typeAttribution == 'VEHICULE_CHAUFFEUR'}" th:href="'/Attribution/attribution/annulerVehiculeChauffeur/' + ${c.id}" class="btn btn-success btn-sm">
-                                    <i class="fa fa-window-close"></i>Annuler
-                                </a>
-                            </td>
+<!--                            <td class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')">-->
+<!--                                <a th:if="${c.statutAttrib == 'EN_ATTENTE' and c.typeAttribution == 'VEHICULE'}" th:href="'/Attribution/attribution/annulerVehicule/' + ${c.id}" class="btn btn-danger btn-sm">-->
+<!--                                    <i class="fa fa-window-close"></i>Annuler-->
+<!--                                </a>-->
+<!--                                <a th:if="${c.statutAttrib == 'EN_ATTENTE' and c.typeAttribution == 'VEHICULE_CHAUFFEUR'}" th:href="'/Attribution/attribution/annulerVehiculeChauffeur/' + ${c.id}" class="btn btn-success btn-sm">-->
+<!--                                    <i class="fa fa-window-close"></i>Annuler-->
+<!--                                </a>-->
+<!--                            </td>-->
 
                             <!--<td th:if="${c.statut} == 'DEMANDE'" class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')"><a th:href="'/dmd/dmds/user/valider/' + ${c.id}" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i>Valider</a></td>
                             <td th:if="${c.statut} == 'DEMANDE'" class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')"><a th:href="'/dmd/dmds/user/refuser/' + ${c.id}" class="btn btn-danger btn-sm"><i class="fa fa-window-close"></i>Refuser</a></td>-->
@@ -269,9 +275,15 @@
 
             },
         });
+        $('#targetTable tbody tr:visible').each(function() {
+            var id = $(this).find('td:first').text().trim();
+            if (id !== "") {
+                $("#kilometrage-" + id).text(kilometrageDebut); // Mettez à jour la cellule avec l'identifiant unique "kilometrage-" + id
+            }
 
 
-    });
+
+    })})
 </script>
 
 

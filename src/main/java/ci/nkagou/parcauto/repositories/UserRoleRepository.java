@@ -11,4 +11,6 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 
     List<UserRole> findByAppUser(AppUser user);
     List<UserRole> findByAppRoleIsNot(AppRole role);
+
+    List<UserRole> findByAppRole(AppRole role);
 }

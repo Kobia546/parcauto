@@ -22,7 +22,7 @@ public class DmdParcDtoW {
     private LocalTime heurePrevue;
     private String moyenDemande;
 
-    private Long idResponsable;
+    //private Long idResponsable;
     //private Employe employe;
     private List<EmployeDmdDto> employeDmdDto;
 }

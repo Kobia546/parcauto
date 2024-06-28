@@ -1,10 +1,208 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Parc Auto Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+
 </head>
 <body>
-$END$
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+<!-- Message pour succes de l operation -->
+<p class="alert alert-success text-center h6"   role="alert" th:text="${messagesucces}" th:if="${messagesucces}"></p>
+
+<!-- Message pour echec de l operation -->
+<p class="alert alert-danger text-center h6"   role="alert" th:text="${messagedanger}" th:if="${messagedanger}"></p>
+
+
+<div class="card mx-auto" style="width: 70rem;">
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-8">
+                <h2>
+                    l'historique du vehicule <span th:text="${dto.vehicule.immatriculation}"></span> dans la periode du <span th:text="${#strings.replace(#temporals.format(dto.debut, 'dd/MM/yyyy HH:mm'), 'T', ' ')}"></span> au <span th:text="${#strings.replace(#temporals.format(dto.fin, 'dd/MM/yyyy HH:mm'), 'T', ' ')}"></span>
+                </h2>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="card-body">
+        <div>
+            <div class="table-responsive">
+                <table class="display nowrap" id="index-dmd" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Id</th>
+                        <th class="text-center">Utilisateur</th>
+                        <th class="text-center">Immatriculation</th>
+                        <th class="text-center">Destination</th>
+                        <th class="text-center">Date du parcours</th>
+                        <th class="text-center">Statut</th>
+                        <!-- <th class="text-center">Disponibilité</th>
+                        <th class="text-center">Date d'achat</th>-->
+                        <!--<th class="text-center" sec:authorize="hasRole('ROLE_ADMIN' )">Editer</th>
+                        <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN' )">Supprimer</th>
+                        <th class="text-center">Changer statut</th>
+                        <th class="text-center">Raison</th>-->
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each = "c:${listEtatVehicule}">
+                        <td th:text = "${c.id}" class="text-center"></td>
+                        <td th:text = "${c.nomEmploye}" class="text-center"></td>
+                        <td th:text = "${c.vehicule}" class="text-center"></td>
+                        <td th:text = "${c.destination}" class="text-center"></td>
+                        <td th:text = "${c.dateParcours}" class="text-center"></td>
+
+
+                        <td id = "statut" th:switch="${c.statutHistorique}" >
+
+                            <span class="badge badge-pill badge-success" th:case="'EN_COURSE'">EN COURSE</span>
+                            <span class="badge badge-pill badge-danger" th:case="'TERMINEE'">TERMINEE</span>
+
+                        </td>
+                        <!--<td th:text = "${c.dateAchat}" class="text-center"></td>
+                        <td sec:authorize="hasRole('ROLE_ADMIN' )" class="text-center"><a th:href="@{/vehicule/vehicules/edit/} + ${c.id}" class="btn btn-primary btn-sm" ><i class="material-icons">edit</i>Editer</a></td>
+                        <td sec:authorize="hasRole('ROLE_ADMIN' )" class="text-center"><a onclick="return confirm('Êtes vous sûre !!!')"  th:href="@{/vehicule/vehicules/delete/} + ${c.id}" class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Supprimer</a></td>
+                        <td class="text-center">
+                            <div class="btn-group">
+                                <a th:if="${c.statutVehicule} == 'INDISPONIBLE'" sec:authorize="hasRole('ROLE_ADMIN' ) or hasRole('ROLE_PARCAUTO')" th:href="@{/vehicule/vehicules/disponible/} + ${c.id}" class="btn btn-outline-success btn-sm" ><i class="fas fa-check-circle"></i>Disponible</a>
+                                <a th:if="${c.statutVehicule} == 'DISPONIBLE'" th:href="@{/vehicule/vehicules/indisponible/} + ${c.id}" class="btn btn-outline-danger btn-sm" ><i class="fas fa-ban"></i> Indisponible</a>
+                                <a sec:authorize="hasRole('ROLE_ADMIN' )" th:href="@{/vehicule/vehicules/reparation/} + ${c.id}" class="btn btn-outline-light btn-sm" ><i class="fas fa-wrench"></i> Reparation</a>
+                            </div>
+                        </td>
+                        <td class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')">
+                                <span th:if="${c.statutVehicule == 'INDISPONIBLE'}">
+                                    <a th:href="'/vehicule/vehicules/raison/' + ${c.id}" class="btn btn-primary btn-sm">
+                                        <i class="material-icons">edit</i>Raison
+                                    </a>
+                                </span>
+                        </td>-->
+
+                    </tr>
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- page content -->
+
+
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<br/><br/>
+
+
+
+<!-- Include SCRIPT block -->
+<th:block th:include="main/layout/block_script"></th:block>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<!--<script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>-->
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var table;
+        table = $('#index-dmd').DataTable({
+            order: [0, "desc"],
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: 'Excel',
+                    customize: function (xlsx, title) {
+                        var title = $('h2').text();
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        $(sheet).find('c[r="A1"] t').text(title); // Set the h2 content as the title in Excel
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: 'PDF',
+                    orientation: 'landscape', // Set orientation to landscape
+                    customize: function(doc) {
+                        // Customize the exported PDF document here
+                        // For example, you can modify the header or footer
+                        doc.defaultStyle.fontSize = 20; // Set font size
+                        doc.pageOrientation = 'landscape';
+                        // Get the content of the h2 and strong elements separately
+                        var h2Text = $('h2').text().trim();
+                        var strongText = $('span').text().trim();
+
+                        // Find the index where the repetition starts
+                        var index = h2Text.indexOf(strongText);
+
+                        // If the strong text is found within the h2 text, extract the substring
+                        var titleText = (index !== -1) ? h2Text.substring(0, index + strongText.length) : h2Text;
+
+                        // Set the title of the PDF document
+                        doc.content[0].text = titleText;
+                    }
+                }
+            ],
+            pageLength: 5,
+            language: {
+                sProcessing: "Traitement en cours...",
+                sSearch: "Rechercher&nbsp;:",
+                sLengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                sInfo: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                sInfoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+                sInfoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                sInfoPostFix: "",
+                sLoadingRecords: "Chargement en cours...",
+                sZeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                sEmptyTable: "Aucune donn&eacute;e disponible dans le tableau",
+                oPaginate: {
+                    sFirst: "Premier",
+                    sPrevious: "Pr&eacute;c&eacute;dent",
+                    sNext: "Suivant",
+                    sLast: "Dernier"
+                },
+                oAria: {
+                    sSortAscending: ": activer pour trier la colonne par ordre croissant",
+                    sSortDescending: ": activer pour trier la colonne par ordre d&eacute;croissant"
+                },
+            },
+        });
+    });
+</script>
 </body>
 </html>

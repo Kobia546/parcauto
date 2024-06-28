@@ -1,10 +1,282 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+    <link rel="stylesheet" type="text/css" herf="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
+    <link type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link type="text/css" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+
 </head>
+
 <body>
-$END$
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+<!-- Message pour succes de l operation -->
+<p class="alert alert-success text-center h6"   role="alert" th:text="${messagesucces}" th:if="${messagesucces}"></p>
+<div class="card mx-auto" style="width: 75rem">
+
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-8">
+                <h1 style="font-size: 3em">
+                      Demande de moyen de deplacement(DMD): <span th:text = "${dmdUserDto.id}"></span>
+                </h1>
+                <h1>
+                    Date prevue: <span th:text = "${dmdUserDto.datePrevue}"></span>
+                </h1>
+                <h1>
+                    Moyen demande: <span th:text = "${dmdUserDto.moyenDemande}"></span>
+                </h1>
+                <h1>
+                    Heure prevue: <span th:text = "${dmdUserDto.heurePrevue}"></span>
+                </h1>
+
+            </div>
+
+            <div class="col-md-12 page-action text-right">
+                <div>
+                    <!--<a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" th:href="@{/dmd/dmds/user}" class="btn btn-sm btn-success pull-right"> <i class="material-icons">open_in_new</i><b>NOUVELLE DMD UTILISATEUR</b></a>
+                    <a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')"  th:href="@{/dmd/dmds/parc}" class="btn btn-sm btn-success pull-right"> <i class="material-icons">open_in_new</i><b>NOUVELLE DMD PARC AUTO</b></a>-->
+                    <!--<a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" th:href="@{/dmd/dmds/attribution}"  id="attribution" class="btn btn-sm btn-primary pull-right"> <i class="material-icons">open_in_new</i><b>ATTRIBUTION</b></a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div>
+
+            <form id="frm-table" action= "attributionVehicule.html" >
+
+                <div class="table-responsive">
+                    <table class="display nowrap" id="index-dmd" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th class="text-center">Nom utilisateur</th>
+                            <!--<th class="text-center">Date de RDV</th>-->
+                            <!--<th class="text-center">Heure de RDV</th>-->
+                            <!--<th class="text-center">Moyen de déplacement</th>-->
+                            <th class="text-center">Motif</th>
+                            <th class="text-center">Destination</th>
+                            <th class="text-center">Statut</th>
+                            <th class="text-center">Date opération</th>
+                            <!--<th class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">Editer</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')">Validation</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')">Annulation</th>
+                            <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')">Annuler</th>-->
+                            <!-- <th class="text-center">Annuler</th>-->
+                            <!--<div sec:authorize="hasRole('ROLE_ADMIN')">
+                                <th  class="text-center">Supprimer</th>
+                            </div>-->
+                        </tr>
+
+                        </thead>
+                        <tbody id="table-body">
+
+                        <tr  th:each="c:${dmdUserDto}">
+                            <td  id = "id" th:text = "${c.id}" class="text-center"></td>
+                            <td  id = "nom" th:text = "${c.employe.toNomComplet}" class="text-center" ></td>
+                            <!--<td  id = "datepreuve" th:text = "${c.datePrevue}" class="text-center"></td>-->
+                            <!--<td  id = "heureprevue" th:text = "${c.heurePrevue}" class="text-center"></td>-->
+                            <!--<td  id = "moyen" th:switch = "${c.moyenDemande}">
+                                <span class="badge badge-pill badge-success" th:case="'VEHICULE_CHAUFFEUR'" >VEHICULE ET CHAUFFEUR</span>
+                                <span class="badge badge-pill badge-danger" th:case="'VEHICULES'" >VEHICULE</span>
+                                <span class="badge badge-pill badge-primary" th:case="'TRANSPORT'" >TRANSPORT</span>
+                            </td>-->
+                            <td  id = "motif" th:text = "${c.motif}" class="text-center"></td>
+                            <td  id = "destination" th:text = "${c.destination}" class="text-center"></td>
+                            <!--<td th:text = "${c.statut}" class="text-center"></td>-->
+
+                            <td id = "statut" th:text="${c.statut}" >
+                                <span class="badge badge-pill badge-primary" th:case="'DEMANDE'" >EN COURS DE VALIDATION</span>
+                                <span class="badge badge-pill badge-success" th:case="'VALIDATION'" >VALIDER</span>
+                                <span class="badge badge-pill badge-danger" th:case="'REFUS'" th:title="${c.observation}" data-toggle="tooltip" data-placement="right">REFUSER</span>
+                                <span class="badge badge-pill badge-light" th:case="'ATTRIBUTION'" >ATTRIBUER</span>
+                                <span class="badge badge-pill badge-light" th:case="'ANNULER'" >ANNULER</span>
+                            </td>
+
+
+                            <td id="dateoperation" th:text="${#strings.replace(c.dateOperation, 'T', ' ')}" class="text-center"></td>
+
+                            <!--  <td class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">
+                                      <span th:if="${c.statut == 'DEMANDE'}">
+                                          <a th:href="'/dmd/dmds/user/edit/' + ${c.id}" class="btn btn-primary btn-sm">
+                                              <i class="material-icons">edit</i>Editer
+                                          </a>
+                                      </span>
+                              </td>
+                              <td th:if="${c.statut} == 'DEMANDE'" class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')"><a th:href="'/dmd/dmds/user/valider/' + ${c.id}" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i>Valider</a></td>
+                              <td th:if="${c.statut} == 'DEMANDE'" class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE')"><a th:href="'/dmd/dmds/annulers/' + ${c.id}" class="btn btn-danger btn-sm"><i class="fa fa-window-close"></i>Refuser</a></td>
+                              <td class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')"><a th:href="'/dmd/dmds/user/annuler/' + ${c.id}" class="btn btn-danger btn-sm"><i class="fa fa-times"></i>Annuler</a></td>
+                              <td class="text-center"><a onclick="return confirm('Êtes vous sûre d'annuler !!!')" th:href="@{/user/dmds/delete/} + ${dmds.idDmd}"  class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Annuler</a></td>
+                              <td class="text-center"><a onclick="return confirm('Êtes vous sûre !!!')" th:href="@{/admin/dmds/delete/} + ${dmds.idDmd}"  class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Supprimer</a></td>
+      -->
+                        </tr>
+
+
+                        <!--<td class="text-center"><a th:href="@{/acces/dmds/edit/} + ${c.userId}" class="btn btn-primary btn-sm" ><i class="material-icons">edit</i>Editer</a></td>-->
+                        <!--<div sec:authorize="hasRole('ROLE_ADMIN')" >
+                            <td class="text-center"><a onclick="return confirm('Êtes vous sûre !!!')" th:href="@{/admin/dmds/delete/} + ${c.userId}"  class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Supprimer</a></td>
+                        </div>-->
+
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+
+                    <!--<button  class="btn btn-primary"  id="save" sec:authorize="hasRole('ROLE_PARCAUTO')" style="margin-left: 50%">Attribuer</button>-->
+
+                    <!--<p><b>Selected rows data:</b></p>
+                    <pre id="example-console-rows"></pre>-->
+
+
+                </div>
+
+
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- page content -->
+
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<!--<br/><br/>-->
+<th:block th:include="main/layout/block_script"></th:block>
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<!--<script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>-->
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
+<!--<script>
+    var statusNotAll = document.getElementById("statusNotAll");
+    var statusAll = document.getElementById("statusAll");
+
+    if ("${dto.rapportStatut}" == 'TOUS') {
+
+        statusNotAll.style.display = "none";
+        statusAll.style.display = "block";
+    } else {
+        statusNotAll.style.display = "block";
+        statusAll.style.display = "none";
+    }
+</script>-->
+
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var table;
+        table = $('#index-dmd').DataTable({
+            order: [0, "desc"],
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: 'Excel',
+                    customize: function (xlsx, title) {
+                        var title = $('h2').text();
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        $(sheet).find('c[r="A1"] t').text(title); // Set the h2 content as the title in Excel
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: 'PDF',
+                    orientation: 'landscape', // Set orientation to landscape
+                    customize: function(doc) {
+                        // Customize the exported PDF document here
+                        // For example, you can modify the header or footer
+                        doc.defaultStyle.fontSize = 15; // Set font size
+                        doc.pageOrientation = 'landscape';
+
+                        doc.content[1].margin = [40, 40, 30, 40];
+
+                        // Get the content of the h2 and strong elements separately
+                        var h2Text = $('h1').text().trim();
+                        var strongText = $('span').text().trim();
+
+                        // Find the index where the repetition starts
+                        var index = h2Text.indexOf(strongText);
+
+                        // If the strong text is found within the h2 text, extract the substring
+                        var titleText = (index !== -1) ? h2Text.substring(0, index + strongText.length) : h2Text;
+
+                        // Set the title of the PDF document
+                        doc.content[0].text = [{text: titleText, bold: true,decoration: 'underline'}];
+                        doc.content[0].margin = [10, 10, 10, 10];
+
+                        doc.content[0].fontSize = 20;
+
+                        var newParagraph = {
+                            text: 'Visa Hiérarchie',
+                            margin: [40, 10, 30, 30],
+                            alignment: 'right',
+                            decoration: 'underline'
+                        };
+                        doc.content.push(newParagraph);
+
+                    }
+                }
+            ],
+            pageLength: 5,
+            language: {
+                sProcessing: "Traitement en cours...",
+                sSearch: "Rechercher&nbsp;:",
+                sLengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                sInfo: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                sInfoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+                sInfoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                sInfoPostFix: "",
+                sLoadingRecords: "Chargement en cours...",
+                sZeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                sEmptyTable: "Aucune donn&eacute;e disponible dans le tableau",
+                oPaginate: {
+                    sFirst: "Premier",
+                    sPrevious: "Pr&eacute;c&eacute;dent",
+                    sNext: "Suivant",
+                    sLast: "Dernier"
+                },
+                oAria: {
+                    sSortAscending: ": activer pour trier la colonne par ordre croissant",
+                    sSortDescending: ": activer pour trier la colonne par ordre d&eacute;croissant"
+                },
+            },
+        });
+    });
+</script>
+
 </body>
 </html>
