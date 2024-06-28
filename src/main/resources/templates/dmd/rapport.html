@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+    <link rel="stylesheet" type="text/css" herf="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
+    <link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+
+</head>
+
+<body>
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+<!-- Message pour succes de l operation -->
+<p class="alert alert-success text-center h6"   role="alert" th:text="${messagesucces}" th:if="${messagesucces}"></p>
+<div class="card mx-auto" style="width: 75rem; padding: 30px">
+
+    <div >
+        <div class="row">
+
+           <!-- <div class="col-md-8">
+                <h5><strong>Liste des DMD.</strong></h5>
+            </div>-->
+
+            <div class="col-md-12 page-action text-left">
+                <!--<div>
+                    &lt;!&ndash;<a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" th:href="@{/dmd/dmds/user}" class="btn btn-sm btn-success pull-right"> <i class="material-icons">open_in_new</i><b>NOUVELLE DMD UTILISATEUR</b></a>&ndash;&gt;
+                    <a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')"  th:href="@{/dmd/dmds/parc}" class="btn btn-sm btn-warning pull-right"> <i class="material-icons">open_in_new</i><b>ETAT HEBDOMADAIRE ET MENSUEL DES DMDS EMIS PAR CHAQUE EMPLOYE</b></a>
+                    &lt;!&ndash;<a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" th:href="@{/dmd/dmds/attribution}"  id="attribution" class="btn btn-sm btn-primary pull-right"> <i class="material-icons">open_in_new</i><b>ATTRIBUTION</b></a>&ndash;&gt;
+                </div>-->
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Rapport de demande de deplacement</h5>
+                                <p class="card-text">Etat hebdomadaire et mensuel des DMD émis par statut</p>
+                                <a th:href="@{/EtatEmploye/etatEmploye}" class="btn btn-sm btn-warning pull-right">Rapport</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Rapport de demande de deplacement </h5>
+                                <p class="card-text">Etat hebdomadaire et mensuel des DMD émis par Employe</p>
+                                <a th:href="@{/EtatEmployee/etatEmployee}" class="btn btn-sm btn-primary pull-right">Rapport</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Rapport de demande de deplacement </h5>
+                                <p class="card-text">Etat des DMD autorisées par les supérieurs hiérarchiques par Date</p>
+                                <a th:href="@{/EtatResponsable/etatResponsable}" class="btn btn-sm btn-success pull-right">Rapport</a>
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Rapport sur les vehicules et chauffeurs</h5>
+                                <p class="card-text">Etat des courses de chaque vehicule par date,hebdomadaire</p>
+                                <a th:href="@{/EtatVehicule/etatVehicule}" class="btn btn-sm btn-secondary pull-right">Rapport</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 30px">
+
+
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Rapport sur les vehicules et chauffeurs</h5>
+                                <p class="card-text">Etat des courses de chaque chauffeur par date,hebdomadaire</p>
+                                <a th:href="@{/EtatChauffeur/etatChauffeur}" class="btn btn-sm btn-dark pull-right">Rapport</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Rapport sur les attributions</h5>
+                                <p class="card-text" style="font-size: 0.90779em">Etat de tous les véhicules et chauffeur attribués par le Parc auto/hebdomadaire et mensuel </p>
+                                <a th:href="@{/EtatAttribution/etatAttribution}" class="btn btn-sm btn-success pull-right">Rapport</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Rapport sur les attributions</h5>
+                                <p class="card-text">Etat des vehicules et chauffeurs attribué a un Employé,hebdomadaire</p>
+                                <a th:href="@{/EtatAttributionEmploye/etatAttributionEmploye}" class="btn btn-sm btn-info pull-right">Rapport</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="row" style="margin-top: 30px">
+
+                </div>-->
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<!-- page content -->
+
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<!--<br/><br/>-->
+<th:block th:include="main/layout/block_script"></th:block>
+<!--<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var table;
+        table = $('#index-dmd').DataTable({
+            order: [ 0, "desc" ],
+            pageLength: 5,
+            language: {
+                /*url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/French.json'*/
+                sProcessing: "Traitement en cours...",
+                sSearch: "Rechercher&nbsp;:",
+                sLengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                sInfo: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                sInfoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+                sInfoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                sInfoPostFix: "",
+                sLoadingRecords: "Chargement en cours...",
+                sZeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                sEmptyTable: "Aucune donn&eacute;e disponible dans le tableau",
+                oPaginate: {
+                    sFirst: "Premier",
+                    sPrevious: "Pr&eacute;c&eacute;dent",
+                    sNext: "Suivant",
+                    sLast: "Dernier"
+                },
+                oAria: {
+                    sSortAscending: ": activer pour trier la colonne par ordre croissant",
+                    sSortDescending: ": activer pour trier la colonne par ordre d&eacute;croissant"
+                },
+
+            },
+        });
+    });
+
+</script>-->
+
+
+</body>
+</html>
