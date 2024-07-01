@@ -3,12 +3,8 @@ package ci.nkagou.parcauto.services;
 
 
 import ci.nkagou.parcauto.dtos.dmd.*;
-import ci.nkagou.parcauto.dtos.rapport.RapportChauffeurDto;
-import ci.nkagou.parcauto.dtos.rapport.RapportVehiculeDto;
 import ci.nkagou.parcauto.entities.*;
-import ci.nkagou.parcauto.enums.StatutAttrib;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface AttributionService {

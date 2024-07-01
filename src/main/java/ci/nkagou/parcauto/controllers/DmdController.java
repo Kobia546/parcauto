@@ -1326,6 +1326,12 @@ public class DmdController {
                             .reversed())
                     .collect(Collectors.toList());
             dtoss = attributionService.listAttributionToDtoVehiculeChauffeur(vehiculeAtts,vehiculeChauffeurAtts);
+            List<CarburantAtt> carburantAtts = attributionService.allAttribution()
+                    .stream()
+                    .filter(att -> att.getStatutAttrib() == TERMINEE || att.getStatutAttrib() == StatutAttrib.ANNULER)
+                    .sorted(Comparator.comparing(Attribution::getStatutAttrib).reversed())
+                    .collect(Collectors.toList());
+            dtoss.addAll(attributionService.listAttributionToDtoCarburant(carburantAtts));
 
         } else if (request.isUserInRole(roleAdmin)) { // Afficher tout les attributions dans la partie administrateur
 

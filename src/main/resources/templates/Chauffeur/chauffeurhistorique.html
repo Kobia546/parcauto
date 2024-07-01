@@ -61,7 +61,7 @@
                         <th class="text-center">Destination</th>
                         <th class="text-center">Date du parcours</th>
                         <th class="text-center">Statut</th>
-                        <th class="text-center">Imprimer</th>
+<!--                        <th class="text-center">Imprimer</th>-->
                         
                         <!--<th class="text-center" sec:authorize="hasRole('ROLE_ADMIN' )">Editer</th>
                         <th class="text-center" sec:authorize="hasRole('ROLE_ADMIN' )">Supprimer</th>
@@ -85,18 +85,18 @@
                             <span class="badge badge-pill badge-danger" th:case="'TERMINEE'">TERMINEE</span>
 
                         </td>
-                        <td class="text-center">
-                            <div th:if="${c.statutHistorique.equals('TERMINEE')}">
-<!--                                <button type="button" class="btn btn-danger btn-sm" onclick="printHistorique(${c.id})">-->
-<!--                                    <i class="material-icons">print</i> Imprimer-->
-<!--                                </button>-->
-                                <span>
-                                    <a th:href="'/Dmd/print1/' + ${c.id}" class="btn btn-danger btn-sm">
-                                        <i class="material-icons">edit</i>Imprimer
-                                    </a>
-                                </span>
-                            </div>
-                        </td>
+<!--                        <td class="text-center">-->
+<!--                            <div th:if="${c.statutHistorique.equals('TERMINEE')}">-->
+<!--&lt;!&ndash;                                <button type="button" class="btn btn-danger btn-sm" onclick="printHistorique(${c.id})">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <i class="material-icons">print</i> Imprimer&ndash;&gt;-->
+<!--&lt;!&ndash;                                </button>&ndash;&gt;-->
+<!--                                <span>-->
+<!--                                    <a th:href="'/Dmd/print1/' + ${c.id}" class="btn btn-danger btn-sm">-->
+<!--                                        <i class="material-icons">edit</i>Imprimer-->
+<!--                                    </a>-->
+<!--                                </span>-->
+<!--                            </div>-->
+<!--                        </td>-->
                         <!--<td th:text = "${c.dateAchat}" class="text-center"></td>
                         <td sec:authorize="hasRole('ROLE_ADMIN' )" class="text-center"><a th:href="@{/vehicule/vehicules/edit/} + ${c.id}" class="btn btn-primary btn-sm" ><i class="material-icons">edit</i>Editer</a></td>
                         <td sec:authorize="hasRole('ROLE_ADMIN' )" class="text-center"><a onclick="return confirm('Êtes vous sûre !!!')"  th:href="@{/vehicule/vehicules/delete/} + ${c.id}" class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Supprimer</a></td>

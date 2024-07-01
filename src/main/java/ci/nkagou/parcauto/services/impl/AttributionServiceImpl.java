@@ -636,7 +636,6 @@ public class AttributionServiceImpl implements AttributionService {
 
         //return attributionRepository.save(attribution);
     }
-
     @Override
     public Attribution createCarburant(AttributionCarburantAttDto dtos) {
 
@@ -699,6 +698,7 @@ public class AttributionServiceImpl implements AttributionService {
         vehiculeChauffeurAtt.setEmploye(attributionDtoZ.getEmploye());
         //vehiculeChauffeurAtt.setEmployeDmd(attributionDtoZ.getEmployeDmd());
         vehiculeChauffeurAtt.setDateArrivee(attributionDtoZ.getDateArrivee());
+        vehiculeChauffeurAtt.setKilometrageFin(attributionDtoZ.getKilometrageFin());
 
         if (attributionDtoZ.getStatutVehiculeA().equals(StatutVehiculeA.DISPONIBLE)) {
             vehicule.setStatutVehicule(StatutVehicule.DISPONIBLE);

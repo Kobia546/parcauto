@@ -231,10 +231,10 @@
                     $(".vehicule-section").show();
                     $(".chauffeur-section").hide(); // Hide chauffeur section
                     $('#targetTable tbody tr').not(':has(td:eq(4):contains("VEHICULES"))').hide();
-                }else if (selectedValue === "TRANSPORT") {
+                }else if (selectedValue === "ORIENTATION_TRANSPORT") {
                     $(".vehicule-section").hide();
                     $(".chauffeur-section").hide();
-                    $('#targetTable tbody tr').not(':has(td:eq(4):contains("TRANSPORT"))').show();
+                    $('#targetTable tbody tr').not(':has(td:eq(4):contains("ORIENTATION_TRANSPORT"))').show();
                     $('#targetTable tbody tr').not(':has(td:eq(4):contains("VEHICULES"))').show();
                     $('#targetTable tbody tr').not(':has(td:eq(4):contains("VEHICULE_CHAUFFEUR"))').show();
                 }
@@ -347,6 +347,7 @@
                     success: function(data) {
                         if (data.success) {
                             $("#alertMessage").text("Operation réussie").removeClass("alert-danger").addClass("alert-success").show();
+                             console.log(data);
 
 
 

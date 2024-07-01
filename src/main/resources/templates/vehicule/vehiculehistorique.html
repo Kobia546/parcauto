@@ -60,13 +60,7 @@
                             <span class="badge badge-pill badge-success" th:case="'EN_COURSE'">EN COURSE</span>
                             <span class="badge badge-pill badge-danger" th:case="'TERMINEE'">TERMINEE</span>
                         </td>
-                        <td class="text-center">
-                            <div th:if="${c.statutHistorique.equals('TERMINEE')}">
-                                <button type="button" class="btn btn-danger btn-sm" onclick="printHistorique(${c.id})">
-                                    <i class="material-icons">print</i> Imprimer
-                                </button>
-                            </div>
-                        </td>
+
                     </tr>
                     </tbody>
                     <tfoot>
