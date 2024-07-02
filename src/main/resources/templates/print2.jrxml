@@ -144,7 +144,7 @@ Version : 1.00]]></text>
                 <textElement textAlignment="Left">
                     <font size="14" isBold="true" isItalic="true" isUnderline="true"/>
                 </textElement>
-                <text><![CDATA[SERVIE DES MOYENS GENERAUX]]></text>
+                <text><![CDATA[SERVICE DES MOYENS GENERAUX]]></text>
             </staticText>
             <staticText>
                 <reportElement x="1" y="7" width="164" height="24" uuid="2ea50315-faf6-43c3-aebc-0cf8d0012de7"/>
@@ -172,7 +172,7 @@ Version : 1.00]]></text>
                 <textElement>
                     <font size="15" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA["Immatriculation"+ $P{immatriculation}]]></textFieldExpression>
+                <textFieldExpression><![CDATA["Immatriculation : "+ $P{immatriculation}]]></textFieldExpression>
             </textField>
         </band>
     </pageHeader>
@@ -274,7 +274,7 @@ Version : 1.00]]></text>
                 <textElement>
                     <font size="14" isBold="true" isItalic="false" isUnderline="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA["Visa Hierachie"]]></textFieldExpression>
+                <textFieldExpression><![CDATA["Visa Hierarchie"]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="367" y="42" width="192" height="30" uuid="6b9a47b1-d009-4b2f-ad55-2e7232ed157a"/>

@@ -16,6 +16,7 @@ import ci.nkagou.parcauto.services.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -55,6 +56,7 @@ public class DmdController {
     private final DmdService dmdService;
     private  DmdRepository dmdRepository;
 
+    private final Environment env;
     private final EmployeService employeService;
     public static Principal principal;
     private final DirectionService directionService;
@@ -65,7 +67,7 @@ public class DmdController {
     private ChauffeurHistoriqueService chauffeurHistoriqueService;
     private CarburantAttRepository carburantAttRepository;
     private AttributionRepository attributionRepository;
-    private NotificationService notificationService;
+    private EmailNotificationService emailNotificationService;
     private UserRoleService userRoleService;
     private ArticleService articleService;
     private RoleService roleService;
@@ -87,9 +89,10 @@ public class DmdController {
 
    // private static String UPLOADED_FOLDER = "C://temp//";
 
-    public DmdController(DmdService dmdService, EmployeService employeService, UserService userService, DirectionService directionService, VehiculeService vehiculeService, AttributionService attributionService, EmployeDmdService employeDmdService, ChauffeurHistoriqueService chauffeurHistoriqueService, CarburantAttRepository carburantAttRepository, AttributionRepository attributionRepository, ArticleService articleService, ServletContext context, NotificationService notificationService, UserRoleService userRoleService, RoleService roleService, DmdRepository dmdRepository, MotifService motifService, DestinationService destinationService, DetailVehiculeChauffeurAService detailVehiculeChauffeurAService, DetailVehiculeAService detailVehiculeAService, DetailCarburantAService detailCarburantAService, EtatService etatService) {
+    public DmdController(DmdService dmdService, EmployeService employeService, UserService userService, Environment env, DirectionService directionService, VehiculeService vehiculeService, AttributionService attributionService, EmployeDmdService employeDmdService, ChauffeurHistoriqueService chauffeurHistoriqueService, CarburantAttRepository carburantAttRepository, AttributionRepository attributionRepository, ArticleService articleService, ServletContext context, EmailNotificationService emailNotificationService, UserRoleService userRoleService, RoleService roleService, DmdRepository dmdRepository, MotifService motifService, DestinationService destinationService, DetailVehiculeChauffeurAService detailVehiculeChauffeurAService, DetailVehiculeAService detailVehiculeAService, DetailCarburantAService detailCarburantAService, EtatService etatService) {
         this.dmdService = dmdService;
         this.employeService = employeService;
+        this.env = env;
         //this.userService = userService;
         this.directionService = directionService;
         //this.vehiculeService = vehiculeService;
@@ -100,7 +103,7 @@ public class DmdController {
         this.attributionRepository = attributionRepository;
         this.carburantAttRepository = carburantAttRepository;
         this.articleService = articleService;
-        this.notificationService = notificationService;
+        this.emailNotificationService = emailNotificationService;
         this.userRoleService = userRoleService;
         this.roleService = roleService;
         this.dmdRepository = dmdRepository;
@@ -152,6 +155,7 @@ public class DmdController {
             Direction direction = directionService.findById(1L);
             List<EmployeDmd> dmd = dmdService.listEmployeDmdByStatutDirection(Statut.DEMANDE, direction);
             //Direction directions = directionService.findById(1L);
+
             dtos = dmdService.listDmdsToDto(dmd);
         } else if (request.isUserInRole(roleAdmin)) {
 
@@ -383,8 +387,9 @@ public class DmdController {
 
         Direction direction = directionService.findById(1L);
         Employe employe1 = employeService.findByDirectionEstSuperieurHirarchique(direction,true);
-        String from = employe.getEmail();
-        //String to = employe1.getEmail();
+        //String from = employe.getEmail();
+        String from = env.getProperty("spring.mail.username");
+        //String to = employe1.getEmail()
         List<String> to = Arrays.asList(employe1.getEmail());
 
         //EmployeDmd dmd = dmdService.findById(id);
@@ -423,7 +428,7 @@ public class DmdController {
 
 
         try {
-            notificationService.sendHtmlEmail(sujet, message,from,to);
+            emailNotificationService.sendHtmlEmail(sujet, message,/*from,*/to);
             redirectAttributes.addFlashAttribute("messagesucces", "Opération de création effectuée avec succès");
         } catch (Exception e) {
             e.printStackTrace(); // Print the full exception stack trace for debugging
@@ -437,7 +442,7 @@ public class DmdController {
     }
 
     @RequestMapping(value = "/dmd/dmds/users/valider/{id}", method = RequestMethod.POST)
-    public String validerDmdUsers(@PathVariable Long id, RedirectAttributes redirectAttributes, Principal principal){
+    public String validerDmdUsers(@PathVariable Long id , RedirectAttributes redirectAttributes, Principal principal) {
 
         //EmployeDmd employeDmd = dmdService.findById(id);
 
@@ -460,9 +465,9 @@ public class DmdController {
         LocalDate date = employeDmd.getDmd().getDatePrevue();
         String heure = employeDmd.getDmd().getHeurePrevue().toString();
 
-        String i = ":" + Id ;
+        String i = ":" + Id;
         String n = "Nom :" + nom + "<br>";
-        String m1 = "Moyen :" + moyen.replace("_"," + ") + "<br>";
+        String m1 = "Moyen :" + moyen.replace("_", " + ") + "<br>";
         String m2 = "Motif :" + motif + "<br>";
         String d = "Destination :" + destination + "<br>";
         DateTimeFormatter date1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -470,24 +475,25 @@ public class DmdController {
         String d1 = "Date du rendez-vous :" + date2 + "<br>";
         String h = "Heure :" + heure + "<br><br>";
 
-        //employeDmd.setResponsable(employe.getIdEmploye());
+        employeDmd.setResponsable(employe.getIdEmploye());
         employeDmdService.update(employeDmd);
 
-        //Direction direction = directionService.findById(1L);
-        //Employe employe1 = employeService.findByDirectionEstSuperieurHirarchique(direction,false);
-        String from = employe.getEmail();
-        String email = employeDmd.getEmploye().getEmail();
-        AppRole appRole = roleService.getById(5L);
-        List<UserRole> userRole =userRoleService.findByAppRoleIsNot(appRole);
-        List<String> to = new ArrayList<>();
 
-        to.add(email);
+        Direction direction = directionService.findById(3L);
+        Employe employe1 = employeService.findByDirectionEstSuperieurHirarchique(direction,true);
+        String from = employe.getEmail();
+        //String email = employeDmd.getEmploye().getEmail();
+         AppRole appRole = roleService.getById(3L);
+        List<UserRole> userRole =userRoleService.findByAppRoleIsNot(appRole);
+        List<String> to = Arrays.asList(employe1.getEmail());
+
+
 
         for (UserRole role : userRole) {
             to.add(role.getAppUser().getEmploye().getEmail());
         }
 
-        String baseUrl = "http://localhost:8089/dmd/dmds";
+        String baseUrl = "http://localhost:8089/dmd/dmdVehiculeChauffeur";
         String sujet = "Reception de la validation d'une Demande de deplacement";
 
         String linkText = "Cliquez-ici";
@@ -495,7 +501,7 @@ public class DmdController {
         //String message1 = "Votre demande a ete valider";
 
         try {
-            notificationService.sendHtmlEmail(sujet, message, from, to);
+            emailNotificationService.sendHtmlEmail(sujet, message, /*from,*/ to);
             redirectAttributes.addFlashAttribute("messagesucces", "Opération de création effectuée avec succès");
 
         } catch (Exception e) {
@@ -505,7 +511,7 @@ public class DmdController {
 
         redirectAttributes.addFlashAttribute("messagesucces", "Opération de validation éffectuée avec succès");
 
-        return "redirect:/dmd/dmds";
+        return "redirect:dmd/dmdVehiculeChauffeur/";
         /*return "dmd/indexResponsable";*/
     }
 
@@ -1417,6 +1423,7 @@ public class DmdController {
         EmployeDmd employeDmd = dmdService.validerDmd(id, employe);
         //employeDmd.setResponsable(employe.getIdEmploye());
         employeDmdService.update(employeDmd);
+
 
         redirectAttributes.addFlashAttribute("messagesucces", "Opération de validation éffectuée avec succès");
 

@@ -27,9 +27,12 @@ public class Notification {
 
     private String a;
     private String sujet;
+
+    /*@Lob*/
+    @Column(columnDefinition = "TEXT")
     private String message;
 
-   /* @ManyToOne
+  /*  @ManyToOne
     @JoinColumn(name = "userId")
     private AppUser user;*/
 

@@ -14,7 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class EtatServiceImpl implements EtatService {
+public class
+
+
+
+
+
+
+
+
+EtatServiceImpl implements EtatService {
     private final AttributionService attributionService;
     private final VehiculeChauffeurAttRepository vehiculeChauffeurAttRepository;
     private final VehiculeAttRepository vehiculeAttRepository;

@@ -1,12 +1,10 @@
 package ci.nkagou.parcauto.controllers.webservice;
 
 import ci.nkagou.parcauto.dtos.dmd.*;
-import ci.nkagou.parcauto.dtos.entretien.DetailHerbdomadaireDto;
 import ci.nkagou.parcauto.dtos.entretien.DetailVidangeDto;
 import ci.nkagou.parcauto.dtos.entretien.EntretienHerbdomadaireDto;
 import ci.nkagou.parcauto.dtos.entretien.EntretienVidangeDto;
 import ci.nkagou.parcauto.entities.*;
-import ci.nkagou.parcauto.enums.MoyenDemande;
 import ci.nkagou.parcauto.repositories.*;
 import ci.nkagou.parcauto.services.*;
 import org.springframework.http.HttpStatus;
@@ -16,13 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -48,11 +40,11 @@ public class DmdWebServiceController {
     private DetailVidangeRepository detailVidangeRepository;
     private RoleService roleService;
     private UserRoleService userRoleService;
-    private NotificationService notificationService;
+    private EmailNotificationService emailNotificationService;
     private DetailCarburantAService detailCarburantAService;
 
 
-    public DmdWebServiceController(MarqueService marqueService,DmdService dmdService,EmployeDmdService employeDmdService, EmployeRepository employeRepository,EmployeDmdRepository employeDmdRepository,AttributionService attributionService,EmployeService employeService,EntretienService entretienService,VehiculeService vehiculeService,EntretienVidangeRepository entretienVidangeRepository,DetailVidangeRepository detailVidangeRepository,RoleService roleService,UserRoleService userRoleService,NotificationService notificationService,DetailCarburantAService detailCarburantAService ) {
+    public DmdWebServiceController(MarqueService marqueService, DmdService dmdService, EmployeDmdService employeDmdService, EmployeRepository employeRepository, EmployeDmdRepository employeDmdRepository, AttributionService attributionService, EmployeService employeService, EntretienService entretienService, VehiculeService vehiculeService, EntretienVidangeRepository entretienVidangeRepository, DetailVidangeRepository detailVidangeRepository, RoleService roleService, UserRoleService userRoleService, EmailNotificationService emailNotificationService, DetailCarburantAService detailCarburantAService ) {
         this.marqueService = marqueService;
         this.dmdService = dmdService;
         this.employeService = employeService;
@@ -65,7 +57,7 @@ public class DmdWebServiceController {
         this.detailVidangeRepository = detailVidangeRepository;
         this.roleService = roleService;
         this.userRoleService = userRoleService;
-        this.notificationService = notificationService;
+        this.emailNotificationService = emailNotificationService;
         this.detailCarburantAService = detailCarburantAService;
     }
 
@@ -223,7 +215,7 @@ public class DmdWebServiceController {
               //String message1 = "Votre demande a ete valider";
 
               try {
-                  notificationService.sendHtmlEmail(sujet, message, from, to);
+                  emailNotificationService.sendHtmlEmail(sujet, message, /*from,*/ to);
                   redirectAttributes.addFlashAttribute("messagesucces", "Opération de création effectuée avec succès");
 
               } catch (Exception e) {
