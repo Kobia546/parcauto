@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Parc_auto" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0b873793-79a2-4cdc-a965-1adf4382ee91">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
     <style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
         <box>
             <pen lineWidth="0.5" lineColor="#000000"/>
@@ -55,18 +56,18 @@
         <band splitType="Stretch"/>
     </background>
     <title>
-        <band height="172" splitType="Stretch">
+        <band height="134" splitType="Stretch">
             <frame>
-                <reportElement x="1" y="61" width="558" height="89" uuid="224278f1-61eb-4f2e-898c-b789cc47a9a4"/>
+                <reportElement x="1" y="31" width="558" height="89" uuid="224278f1-61eb-4f2e-898c-b789cc47a9a4"/>
                 <box>
-                    <pen lineWidth="2.0"/>
+                    <pen lineWidth="2.0" lineStyle="Solid"/>
                     <topPen lineWidth="1.0" lineStyle="Solid"/>
                     <leftPen lineWidth="1.0" lineStyle="Solid"/>
                     <bottomPen lineWidth="1.0" lineStyle="Solid"/>
                     <rightPen lineWidth="1.0" lineStyle="Solid"/>
                 </box>
                 <staticText>
-                    <reportElement key="" mode="Opaque" x="90" y="1" width="380" height="46" backcolor="#33CCFF" uuid="b035f114-acde-466d-8ae9-df5d4c53362d"/>
+                    <reportElement key="" mode="Opaque" x="80" y="1" width="380" height="48" backcolor="#FFFFFF" uuid="b035f114-acde-466d-8ae9-df5d4c53362d"/>
                     <box>
                         <pen lineWidth="1.25" lineStyle="Solid"/>
                     </box>
@@ -76,14 +77,7 @@
                     <text><![CDATA[S'APPROVISIONNER EN MATIERES PREMIERES]]></text>
                 </staticText>
                 <staticText>
-                    <reportElement x="-2" y="2" width="90" height="89" uuid="e9141295-4814-46a9-8e45-5be6d7c7370d"/>
-                    <box>
-                        <pen lineWidth="1.0"/>
-                    </box>
-                    <text><![CDATA[]]></text>
-                </staticText>
-                <staticText>
-                    <reportElement mode="Opaque" x="90" y="48" width="380" height="40" backcolor="#00CCFF" uuid="559710f5-0c43-4f4f-b28c-750051858951"/>
+                    <reportElement mode="Opaque" x="80" y="49" width="380" height="40" backcolor="#FFFFFF" uuid="559710f5-0c43-4f4f-b28c-750051858951"/>
                     <box>
                         <pen lineWidth="1.25" lineStyle="Solid"/>
                     </box>
@@ -93,7 +87,7 @@
                     <text><![CDATA[DEMANDE DE MOYEN DE DEPLACEMENT (DMD)]]></text>
                 </staticText>
                 <staticText>
-                    <reportElement mode="Opaque" x="471" y="1" width="86" height="87" backcolor="#00CCFF" uuid="8aa217e5-42e5-458f-9001-2b345f9797c9"/>
+                    <reportElement mode="Opaque" x="460" y="1" width="98" height="87" backcolor="#FFFFFF" uuid="8aa217e5-42e5-458f-9001-2b345f9797c9"/>
                     <box>
                         <pen lineWidth="0.25" lineStyle="Solid"/>
                         <topPen lineWidth="1.0" lineStyle="Solid"/>
@@ -103,13 +97,16 @@
                     <textElement textAlignment="Left" verticalAlignment="Middle">
                         <font size="10" isBold="true"/>
                     </textElement>
-                    <text><![CDATA[Ref : Log-eng-pr2
-Date : 16/08/2022
-Version : 1.00]]></text>
+                    <text><![CDATA[  Ref : Log-eng-pr2
+  Date : 16/08/2022
+  Version : 1.00]]></text>
                 </staticText>
                 <image>
-                    <reportElement x="3" y="18" width="80" height="49" uuid="2ee5a7a6-b8e3-40fe-b5c0-e7420e62fd74">
-                        <property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+                    <reportElement x="2" y="20" width="74" height="58" uuid="82ecacfd-bd3b-4ffa-86f3-ff5d7b5ef25a">
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
                     </reportElement>
                     <imageExpression><![CDATA["src/main/resources/templates/logo.png"]]></imageExpression>
                 </image>
@@ -117,30 +114,30 @@ Version : 1.00]]></text>
         </band>
     </title>
     <pageHeader>
-        <band height="250" splitType="Stretch">
+        <band height="231" splitType="Stretch">
             <textField>
-                <reportElement x="-3" y="70" width="333" height="24" uuid="21f56140-c230-4b33-992b-6ac0d1c33f07"/>
+                <reportElement x="4" y="70" width="253" height="24" uuid="21f56140-c230-4b33-992b-6ac0d1c33f07"/>
                 <textElement verticalAlignment="Middle">
                     <font size="14" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA["DatePrevue :  " + $P{dateDeDepart}]]></textFieldExpression>
+                <textFieldExpression><![CDATA["Date Prévue :  " + $P{dateDeDepart}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="291" y="68" width="269" height="24" uuid="45e9fb76-7460-4a0a-8829-6c89560e2d56"/>
+                <reportElement x="266" y="71" width="241" height="24" uuid="45e9fb76-7460-4a0a-8829-6c89560e2d56"/>
                 <textElement verticalAlignment="Middle">
                     <font size="14" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA["DateArrivée :   " + $P{dateArrivee}]]></textFieldExpression>
+                <textFieldExpression><![CDATA["Date Arrivée :   " + $P{dateArrivee}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="-11" y="110" width="355" height="27" uuid="f1c0718b-b310-44c1-b672-4ce8e9e016a7"/>
+                <reportElement x="3" y="110" width="300" height="27" uuid="f1c0718b-b310-44c1-b672-4ce8e9e016a7"/>
                 <textElement verticalAlignment="Middle">
                     <font size="14" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA["MoyenDemande : " + $P{typeattribution}]]></textFieldExpression>
+                <textFieldExpression><![CDATA["Moyen Demandé : " + $P{typeattribution}]]></textFieldExpression>
             </textField>
             <staticText>
-                <reportElement x="-2" y="37" width="282" height="20" uuid="e8b7f022-f58f-4dec-9783-f3c940731773"/>
+                <reportElement x="1" y="37" width="282" height="20" uuid="e8b7f022-f58f-4dec-9783-f3c940731773"/>
                 <textElement textAlignment="Left">
                     <font size="14" isBold="true" isItalic="true" isUnderline="true"/>
                 </textElement>
@@ -154,21 +151,21 @@ Version : 1.00]]></text>
                 <text><![CDATA[DIRECTION TECHNIQUE]]></text>
             </staticText>
             <textField>
-                <reportElement x="2" y="149" width="278" height="30" uuid="200a7880-1ab9-4c48-909e-0658f06cb1d1"/>
+                <reportElement x="3" y="154" width="277" height="30" uuid="200a7880-1ab9-4c48-909e-0658f06cb1d1"/>
                 <textElement>
                     <font size="14" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA["km Depart : "+$P{kilometrageDebut}]]></textFieldExpression>
+                <textFieldExpression><![CDATA["Km Depart : "+$P{kilometrageDebut}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="295" y="149" width="276" height="30" uuid="760049fe-a816-4533-b597-575bbd09f500"/>
+                <reportElement x="263" y="154" width="277" height="30" uuid="760049fe-a816-4533-b597-575bbd09f500"/>
                 <textElement>
                     <font size="14" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA["Km Arrivee : "  + $P{kilometrageFin}]]></textFieldExpression>
+                <textFieldExpression><![CDATA["Km Arrivée : "  + $P{kilometrageFin}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="-1" y="210" width="321" height="30" uuid="0419f0e1-557c-485c-96f3-c0164cf21db3"/>
+                <reportElement x="5" y="189" width="325" height="30" uuid="0419f0e1-557c-485c-96f3-c0164cf21db3"/>
                 <textElement>
                     <font size="15" isBold="true"/>
                 </textElement>
@@ -177,20 +174,20 @@ Version : 1.00]]></text>
         </band>
     </pageHeader>
     <columnHeader>
-        <band height="39">
+        <band height="23">
             <textField>
-                <reportElement x="270" y="0" width="310" height="30" uuid="8ac49d49-e6bb-4ff7-8a2d-9dd12d08d6fb"/>
+                <reportElement x="264" y="-42" width="294" height="30" uuid="8ac49d49-e6bb-4ff7-8a2d-9dd12d08d6fb"/>
                 <textElement>
                     <font size="15" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA["nomChauffeur:  "+ $P{nomChauffeur}]]></textFieldExpression>
+                <textFieldExpression><![CDATA["Nom Chauffeur:  "+ $P{nomChauffeur}]]></textFieldExpression>
             </textField>
         </band>
     </columnHeader>
     <detail>
         <band height="170" splitType="Stretch">
             <componentElement>
-                <reportElement x="1" y="-2" width="600" height="100" uuid="6a67eb95-3961-493b-ab1e-8b3296935d4a">
+                <reportElement x="1" y="7" width="550" height="110" uuid="6a67eb95-3961-493b-ab1e-8b3296935d4a">
                     <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
                     <property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
                     <property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -208,7 +205,7 @@ Version : 1.00]]></text>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font size="12"/>
                                 </textElement>
-                                <text><![CDATA[Nom]]></text>
+                                <text><![CDATA[Demandeur]]></text>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
@@ -268,22 +265,7 @@ Version : 1.00]]></text>
         </band>
     </detail>
     <columnFooter>
-        <band height="72" splitType="Stretch">
-            <textField>
-                <reportElement x="-11" y="42" width="118" height="30" uuid="f9a52bde-5366-4fb5-8f43-42f9f7cfc00f"/>
-                <textElement>
-                    <font size="14" isBold="true" isItalic="false" isUnderline="true"/>
-                </textElement>
-                <textFieldExpression><![CDATA["Visa Hierarchie"]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="367" y="42" width="192" height="30" uuid="6b9a47b1-d009-4b2f-ad55-2e7232ed157a"/>
-                <textElement>
-                    <font size="14" isBold="true" isUnderline="true"/>
-                </textElement>
-                <textFieldExpression><![CDATA["Visa Direction Concernée"]]></textFieldExpression>
-            </textField>
-        </band>
+        <band height="72" splitType="Stretch"/>
     </columnFooter>
     <pageFooter>
         <band height="54" splitType="Stretch"/>

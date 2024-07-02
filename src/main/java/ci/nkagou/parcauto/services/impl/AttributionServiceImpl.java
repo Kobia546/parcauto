@@ -14,7 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static ci.nkagou.parcauto.enums.StatutAttrib.*;
 import static ci.nkagou.parcauto.enums.TypeAttribution.*;
@@ -204,18 +207,19 @@ public class AttributionServiceImpl implements AttributionService {
         }
 
         List<DetailVehiculeChauffeurA> detailss = attribution.getDetailVehiculeChauffeurA();
-        StringBuilder concatenatedName = new StringBuilder();
-        if (detailss != null && !detailss.isEmpty()) {
-            for (DetailVehiculeChauffeurA detail : detailss) {
-                String name = detail.getEmployeDmd().getEmploye().toNomComplet();
-                concatenatedName.append(name).append(", ");
-            }
+        Set<String> uniqueNames = detailss.stream()
+                .map(detail -> detail.getEmployeDmd().getEmploye().toNomComplet())
+                .collect(Collectors.toSet());
 
-            if (concatenatedName.length() > 0) {
-                // Remove the trailing comma and space before setting the dto's NomComplet
-                String finalNames = concatenatedName.substring(0, concatenatedName.length() - 2);
-                dto.setNomComplet(finalNames);
-            }
+        StringBuilder concatenatedName = new StringBuilder();
+        for (String name : uniqueNames) {
+            concatenatedName.append(name).append(", ");
+        }
+
+        if (concatenatedName.length() > 0) {
+            // Remove the trailing comma and space before setting the dto's NomComplet
+            String finalNames = concatenatedName.substring(0, concatenatedName.length() - 2);
+            dto.setNomComplet(finalNames);
         }
 
         List<DetailCarburantA> detailz = attribution.getDetailCarburantA();

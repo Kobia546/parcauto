@@ -2260,7 +2260,7 @@ public class DmdController {
         // Fetch attribution data by ID
 //        AttributionDtoOut dto = attributionService.getAttributionDto(id, VehiculeAtt.class, VehiculeChauffeurAtt.class, CarburantAtt.class);
         DmdPapierResponse papierResponse=etatService.PAPIER_RESPONSE(id);
-        String ff = "";
+
 
         // Load JRXML template
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("templates/print2.jrxml");
