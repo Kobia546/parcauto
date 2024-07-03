@@ -10,6 +10,7 @@ import ci.nkagou.parcauto.exceptions.ResourceNotFoundException;
 import ci.nkagou.parcauto.repositories.EmployeRepository;
 import ci.nkagou.parcauto.repositories.UserRepository;
 import ci.nkagou.parcauto.services.EmployeService;
+import ci.nkagou.parcauto.services.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class EmployeServiceImpl implements EmployeService {
 
     private EmployeRepository employeRepository;
     private UserRepository userRepository;
+    private UserService userService;
 
     @Override
     public List<Employe> all() {
@@ -245,8 +247,34 @@ public class EmployeServiceImpl implements EmployeService {
     @Override
     public List<Employe> listParcAuto() {
 
+        AppRole role = userService.getRoleByName("ROLE_PARCAUTO");
+        List<AppUser> users = userService.listUserByRole(role);
+        List<Employe> employes = new ArrayList<>();
+        for (AppUser user : users){
+            employes.add(user.getEmploye());
+        }
+        return employes;
+    }
 
-        return null;
+    @Override
+    public List<Employe> listMoyenGeneraux() {
+        AppRole role = userService.getRoleByName("ROLE_MOYEN-GENERAUX");
+        List<AppUser> users = userService.listUserByRole(role);
+        List<Employe> employes = new ArrayList<>();
+        for (AppUser user : users){
+            employes.add(user.getEmploye());
+        }
+        return employes;
+    }
+
+    @Override
+    public List<String> listEmailByListEmploye(List<Employe> employes) {
+
+        List<String> emails = new ArrayList<>();
+        for (Employe employe : employes){
+            emails.add(employe.getEmail());
+        }
+        return emails;
     }
 
     /*@Override

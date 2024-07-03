@@ -47,6 +47,10 @@ public interface EmployeService {
     //List des employes ayant le role de responsable Parc auto
     List<Employe> listParcAuto ();
 
+    List<Employe> listMoyenGeneraux();
+
+    List<String> listEmailByListEmploye(List<Employe> employes);
+
     /*List<Employe> findEmployesByEstChauffeurStatutChauffeur (Boolean estChauffeur, StatutChauffeur statutChauffeur);*/
 
 

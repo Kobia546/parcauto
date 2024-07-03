@@ -3,7 +3,10 @@ package ci.nkagou.parcauto.services.impl;
 import ci.nkagou.parcauto.entities.AppRole;
 import ci.nkagou.parcauto.entities.AppUser;
 import ci.nkagou.parcauto.entities.Employe;
+import ci.nkagou.parcauto.entities.UserRole;
+import ci.nkagou.parcauto.repositories.RoleRepository;
 import ci.nkagou.parcauto.repositories.UserRepository;
+import ci.nkagou.parcauto.repositories.UserRoleRepository;
 import ci.nkagou.parcauto.services.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +26,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+    private UserRoleRepository userRoleRepository;
+    private RoleRepository roleRepository;
 
 
     @Override
@@ -83,6 +88,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public AppUser findByEmploye(Employe employe) {
         return userRepository.findByEmploye(employe);
+    }
+
+    @Override
+    public List<AppUser> listUserByRole(AppRole role) {
+        List<UserRole> userRoles = userRoleRepository.findByAppRole(role);
+        List<AppUser> users = new ArrayList<>();
+        for (UserRole userRole : userRoles){
+            AppUser user = userRole.getAppUser();
+            users.add(user);
+        }
+        return users;
+    }
+
+    @Override
+    public AppRole getRoleByName(String roleName) {
+        return roleRepository.findByRoleName(roleName);
     }
 
 }

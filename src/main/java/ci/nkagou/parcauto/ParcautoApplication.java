@@ -18,6 +18,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.util.HtmlUtils;
 
+import javax.management.relation.Role;
 import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,7 +33,19 @@ public class ParcautoApplication {
 
 		ApplicationContext ctx = SpringApplication.run(ParcautoApplication.class, args);
 
-		DmdService dmdService = ctx.getBean(DmdService.class);
+		UserService userService = ctx.getBean(UserService.class);
+		EmployeService employeService = ctx.getBean(EmployeService.class);
+		RoleRepository roleRepository = ctx.getBean(RoleRepository.class);
+
+		AppRole role = roleRepository.findByRoleId(5L);
+
+		List<AppUser> users = userService.listUserByRole(role);
+		List<Employe> parcAutoEmploye = employeService.listParcAuto();
+		List<Employe> MoyenGenerauxEmploye = employeService.listMoyenGeneraux();
+		String ss = "";
+
+
+		/*DmdService dmdService = ctx.getBean(DmdService.class);
 		DirectionService directionService = ctx.getBean(DirectionService.class);
         EmployeDmdRepository employeDmdRepository = ctx.getBean(EmployeDmdRepository.class);
 		AttributionRepository attributionRepository = ctx.getBean(AttributionRepository.class);
@@ -41,12 +54,12 @@ public class ParcautoApplication {
         SiteService siteService = ctx.getBean(SiteService.class);
 		NotificationRepository notificationRepository = ctx.getBean(NotificationRepository.class);
 		ConfigProperties configProperties = ctx.getBean(ConfigProperties.class);
-		UserRepository userRepository = ctx.getBean(UserRepository.class);
+		UserRepository userRepository = ctx.getBean(UserRepository.class);*/
 
 
-		JavaMailSender javaMailSender = ctx.getBean(JavaMailSender.class);
+	/*	JavaMailSender javaMailSender = ctx.getBean(JavaMailSender.class);
 
-		String from = configProperties.getConfigValue("spring.mail.username");
+		String from = configProperties.getConfigValue("spring.mail.username");*/
 
 		/*SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setFrom(from);
@@ -514,9 +527,9 @@ public class ParcautoApplication {
 		//UserRoleRepository userRoleRepository = ctx.getBean(UserRoleRepository.class);
 
 
-		Direction directionDSI = directionService.findById(2L);
+		/*Direction directionDSI = directionService.findById(2L);
 		Site siteProduction = siteService.findById(2L);
-
+*/
 		/*Employe employeAjoumani = new Employe();
 		//employeKoudioRosine.setNumMatEmpl(19L);
 		employeAjoumani.setNom("ADJOUMANI".toUpperCase());
@@ -576,12 +589,11 @@ public class ParcautoApplication {
 
 
 		System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&FIN DE LA TRANSACTION&&&&&&&&&&&&&&&&&&&");*/
-		/*UserRole userRole = userRoleRepository.getById(22L);
-		userRoleRepository.delete(userRole);*/
 
 
 
-		String server ="Server start on http://localhost:8089";
+
+		String server ="Server start on http://localhost:9090";
 		System.out.println(server);
 
         /*EmployeService employeService = ctx.getBean(EmployeService.class);

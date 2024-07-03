@@ -480,51 +480,153 @@ public class DmdController {
         LocalDate date = employeDmd.getDmd().getDatePrevue();
         String heure = employeDmd.getDmd().getHeurePrevue().toString();
 
-        String i = ":" + Id;
-        String n = "Nom :" + nom + "<br>";
-        String m1 = "Moyen :" + moyen.replace("_", " + ") + "<br>";
-        String m2 = "Motif :" + motif + "<br>";
-        String d = "Destination :" + destination + "<br>";
-        DateTimeFormatter date1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String date2 = date1.format(date);
-        String d1 = "Date du rendez-vous :" + date2 + "<br>";
-        String h = "Heure :" + heure + "<br><br>";
+        //List email emetteur;
+
+        //List<String> emailEmetteur = Arrays.asList(employeDmd.getEmploye().getEmail());
+        List<String> emailEmetteur = new ArrayList<>();
+        emailEmetteur.add(employeDmd.getEmploye().getEmail());
+
+        //List email Moyen Generaux
+
+        List<String > emailMgs = employeService.listEmailByListEmploye(employeService.listMoyenGeneraux());
+
+        //Liste Email Parc Auto
+
+        List<String> emailPcs = employeService.listEmailByListEmploye(employeService.listParcAuto());
+        String from = env.getProperty("spring.mail.username");
+        //String to = employe1.getEmail()
+        //List<String> to = Arrays.asList(employe1.getEmail());
+        // List<String> to = emailSuperieurs;
+
+        //EmployeDmd dmd = dmdService.findById(id);
+
+
+        String ip = env.getProperty("email.ip");
+        String port = env.getProperty("server.port");
+
+        if (employeDmd.getDmd().getMoyenDemande().name().equals(MoyenDemande.ORIENTATION_TRANSPORT.name())){
+            //envoi email Moyen Generaux
+
+            // 2 messages
+            //1 message pour l'emetteur
+
+            String sujet1 = "Retour sur Demande de deplacement";
+            String messageEmetteurMg = "Bonjour M" + nom + "<br><br>Votre demande de Dmd a été approuvée";
+            String sujet = "Demande de la validation d'une Demande de deplacement";
+//            String baseUrl = "http://" + ip + ":" + port + "/dmd/dmdVehiculeChauffeur";
+//            String linkText = "Cliquez-ici pour la validation";
+
+
+
+
+
+
+
+
+
+            //1 message pour moyen generaux
+            String baseUrl = "http://" + ip + ":" + port + "/dmd/dmdVehiculeChauffeur";
+            String linkText = "Cliquez-ici pour la validation";
+            String p = "Nom :" + nom + "<br>";
+            String m1 = "Moyen :" + moyen.replace("_", " + ") + "<br>";
+            String m2 = "Motif :" + motif + "<br>";
+            String d = "Destination :" + destination + "<br>";
+            DateTimeFormatter date1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String date2 = date1.format(date);
+            String d2 = "Date du rendez-vous: " + date2 + "<br>";
+            String h = "Heure :" + heure + "<br><br>";
+
+            String messageMg = "Une Dmd a été créée  <br><br>" + p + m1 + m2 + d + d2 + h + "<a href='" + baseUrl + "'>" + linkText + "</a>";
+
+            try {
+                emailNotificationService.sendHtmlEmail(sujet1, messageEmetteurMg ,/*from,*/emailEmetteur);
+                emailNotificationService.sendHtmlEmail(sujet, messageMg ,/*from,*/emailMgs);
+                redirectAttributes.addFlashAttribute("messagesucces", "Opération de création effectuée avec succès");
+            } catch (Exception e) {
+                e.printStackTrace(); // Print the full exception stack trace for debugging
+                redirectAttributes.addFlashAttribute("messageerror", "Erreur lors de l'envoi de l'email.");
+            }
+
+        }
+        else {
+            //envoi email ParcAuto
+
+            // 2 messages
+            //1 message pour l'emetteur
+            String sujet = "Retour sur Demande de deplacement";
+//            String messageEmetteurMg = "Bonjour M" + nom + "<br><br>Votre demande de Dmd a été approuvée";
+            String messageEmetteurPc ="Bonjour M" + nom + "<br><br>" +"Votre demande de Dmd a été Approuvée";
+
+
+            //1 message pour parc auto
+            String baseUrl = "http://" + ip + ":" + port + "/dmd/dmdVehiculeChauffeur";
+            String sujet1 = "Demande de la validation d'une Demande de deplacement";
+            String linkText = "Cliquez-ici pour la validation";
+            String p = "Nom :" + nom + "<br>";
+            String m1 = "Moyen :" + moyen.replace("_", " + ") + "<br>";
+            String m2 = "Motif :" + motif + "<br>";
+            String d = "Destination :" + destination + "<br>";
+            DateTimeFormatter date1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String date2 = date1.format(date);
+            String d2 = "Date du rendez-vous: " + date2 + "<br>";
+            String h = "Heure :" + heure + "<br><br>";
+
+            String messagePc = "Une Dmd a été créée  <br><br>" + p + m1 + m2 + d + d2 + h + "<a href='" + baseUrl + "'>" + linkText + "</a>";
+            try {
+                emailNotificationService.sendHtmlEmail(sujet, messageEmetteurPc ,/*from,*/emailEmetteur);
+                emailNotificationService.sendHtmlEmail(sujet1, messagePc ,/*from,*/emailPcs);
+                redirectAttributes.addFlashAttribute("messagesucces", "Opération de création effectuée avec succès");
+            } catch (Exception e) {
+                e.printStackTrace(); // Print the full exception stack trace for debugging
+                redirectAttributes.addFlashAttribute("messageerror", "Erreur lors de l'envoi de l'email.");
+            }
+        }
+
+//        String i = ":" + Id;
+//        String n = "Nom :" + nom + "<br>";
+//        String m1 = "Moyen :" + moyen.replace("_", " + ") + "<br>";
+//        String m2 = "Motif :" + motif + "<br>";
+//        String d = "Destination :" + destination + "<br>";
+//        DateTimeFormatter date1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//        String date2 = date1.format(date);
+//        String d1 = "Date du rendez-vous :" + date2 + "<br>";
+//        String h = "Heure :" + heure + "<br><br>";
 
         employeDmd.setResponsable(employe.getIdEmploye());
         employeDmdService.update(employeDmd);
 
 
-        Direction direction = directionService.findById(3L);
-        Employe employe1 = employeService.findByDirectionEstSuperieurHirarchique(direction,true);
-        String from = employe.getEmail();
-        //String email = employeDmd.getEmploye().getEmail();
-         AppRole appRole = roleService.getById(3L);
-        List<UserRole> userRole =userRoleService.findByAppRoleIsNot(appRole);
-        List<String> to = Arrays.asList(employe1.getEmail());
+//        Direction direction = directionService.findById(3L);
+//        Employe employe1 = employeService.findByDirectionEstSuperieurHirarchique(direction,true);
+//        String from = employe.getEmail();
+//        //String email = employeDmd.getEmploye().getEmail();
+//         AppRole appRole = roleService.getById(3L);
+//        List<UserRole> userRole =userRoleService.findByAppRoleIsNot(appRole);
+//        List<String> to = Arrays.asList(employe1.getEmail());
+//
+//
+//
+//        for (UserRole role : userRole) {
+//            to.add(role.getAppUser().getEmploye().getEmail());
+//        }
+//
+//        String baseUrl = "http://localhost:8089/dmd/dmdVehiculeChauffeur";
+//        String sujet = "Reception de la validation d'une Demande de deplacement";
+//
+//        String linkText = "Cliquez-ici";
+//        String message = "La DMD " + i + " a été validée  <br><br>" + n + m1 + m2 + d + d1 + h + "Voir resultat - <a href='" + baseUrl + "'>" + linkText + "</a>";
+//        //String message1 = "Votre demande a ete valider";
 
+//        try {
+//            emailNotificationService.sendHtmlEmail(sujet, message, /*from,*/ to);
+//            redirectAttributes.addFlashAttribute("messagesucces", "Opération de création effectuée avec succès");
+//
+//        } catch (Exception e) {
+//            e.printStackTrace(); // Print the full exception stack trace for debugging
+//            redirectAttributes.addFlashAttribute("messageerror", "Erreur lors de l'envoi de l'email.");
+//        }
 
-
-        for (UserRole role : userRole) {
-            to.add(role.getAppUser().getEmploye().getEmail());
-        }
-
-        String baseUrl = "http://localhost:8089/dmd/dmdVehiculeChauffeur";
-        String sujet = "Reception de la validation d'une Demande de deplacement";
-
-        String linkText = "Cliquez-ici";
-        String message = "La DMD " + i + " a été validée  <br><br>" + n + m1 + m2 + d + d1 + h + "Voir resultat - <a href='" + baseUrl + "'>" + linkText + "</a>";
-        //String message1 = "Votre demande a ete valider";
-
-        try {
-            emailNotificationService.sendHtmlEmail(sujet, message, /*from,*/ to);
-            redirectAttributes.addFlashAttribute("messagesucces", "Opération de création effectuée avec succès");
-
-        } catch (Exception e) {
-            e.printStackTrace(); // Print the full exception stack trace for debugging
-            redirectAttributes.addFlashAttribute("messageerror", "Erreur lors de l'envoi de l'email.");
-        }
-
-        redirectAttributes.addFlashAttribute("messagesucces", "Opération de validation éffectuée avec succès");
+//        redirectAttributes.addFlashAttribute("messagesucces", "Opération de validation éffectuée avec succès");
 
         return "redirect:dmd/dmdVehiculeChauffeur/";
         /*return "dmd/indexResponsable";*/
@@ -1429,6 +1531,16 @@ public class DmdController {
 
     @RequestMapping(value = "/dmd/dmds/user/valider/{id}", method = RequestMethod.GET)
     public String validerDmdUser(@PathVariable Long id, RedirectAttributes redirectAttributes, Principal principal){
+//        String nom = employeDmd.getEmploye().toNomComplet();
+//        String moyen = employeDmd.getDmd().getMoyenDemande().toString();
+        /*String[] moyen2 = moyen.split("_");
+        StringBuilder MoyenD = new StringBuilder();
+
+
+        for (String part : moyen2) {
+            MoyenD.append(part).append(" + ");
+        }*/
+
 
         //EmployeDmd employeDmd = dmdService.findById(id);
 
@@ -1438,6 +1550,115 @@ public class DmdController {
         Employe employe = employeService.getEmployeByUserName(principal.getName());
         EmployeDmd employeDmd = dmdService.validerDmd(id, employe);
         //employeDmd.setResponsable(employe.getIdEmploye());
+        String nom = employeDmd.getEmploye().toNomComplet();
+        String moyen = employeDmd.getDmd().getMoyenDemande().toString();
+        String motif = employeDmd.getMotif().getNomMotif();
+        String destination = employeDmd.getDestination().getNomDestination();
+        LocalDate date = employeDmd.getDmd().getDatePrevue();
+        String heure = employeDmd.getDmd().getHeurePrevue().toString();
+
+        //List email emetteur;
+
+        //List<String> emailEmetteur = Arrays.asList(employeDmd.getEmploye().getEmail());
+        List<String> emailEmetteur = new ArrayList<>();
+        emailEmetteur.add(employeDmd.getEmploye().getEmail());
+
+        //List email Moyen Generaux
+
+        List<String > emailMgs = employeService.listEmailByListEmploye(employeService.listMoyenGeneraux());
+
+        //Liste Email Parc Auto
+
+        List<String> emailPcs = employeService.listEmailByListEmploye(employeService.listParcAuto());
+        String from = env.getProperty("spring.mail.username");
+        //String to = employe1.getEmail()
+        //List<String> to = Arrays.asList(employe1.getEmail());
+        // List<String> to = emailSuperieurs;
+
+        //EmployeDmd dmd = dmdService.findById(id);
+
+
+        String ip = env.getProperty("email.ip");
+        String port = env.getProperty("server.port");
+
+        if (employeDmd.getDmd().getMoyenDemande().name().equals(MoyenDemande.ORIENTATION_TRANSPORT.name())){
+            //envoi email Moyen Generaux
+
+            // 2 messages
+            //1 message pour l'emetteur
+
+            String sujet1 = "Retour sur Demande de deplacement";
+            String messageEmetteurMg = "Bonjour M" + nom + "<br><br>Votre demande de Dmd a été approuvée";
+            String sujet = "Demande de la validation d'une Demande de deplacement";
+//            String baseUrl = "http://" + ip + ":" + port + "/dmd/dmdVehiculeChauffeur";
+//            String linkText = "Cliquez-ici pour la validation";
+
+
+
+
+
+
+
+
+
+            //1 message pour moyen generaux
+            String baseUrl = "http://" + ip + ":" + port + "/dmd/dmdVehiculeChauffeur";
+            String linkText = "Cliquez-ici pour la validation";
+            String p = "Nom :" + nom + "<br>";
+            String m1 = "Moyen :" + moyen.replace("_", " + ") + "<br>";
+            String m2 = "Motif :" + motif + "<br>";
+            String d = "Destination :" + destination + "<br>";
+            DateTimeFormatter date1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String date2 = date1.format(date);
+            String d2 = "Date du rendez-vous: " + date2 + "<br>";
+            String h = "Heure :" + heure + "<br><br>";
+
+            String messageMg = "Une Dmd a été créée  <br><br>" + p + m1 + m2 + d + d2 + h + "<a href='" + baseUrl + "'>" + linkText + "</a>";
+
+            try {
+                emailNotificationService.sendHtmlEmail(sujet1, messageEmetteurMg ,/*from,*/emailEmetteur);
+                emailNotificationService.sendHtmlEmail(sujet, messageMg ,/*from,*/emailMgs);
+                redirectAttributes.addFlashAttribute("messagesucces", "Opération de création effectuée avec succès");
+            } catch (Exception e) {
+                e.printStackTrace(); // Print the full exception stack trace for debugging
+                redirectAttributes.addFlashAttribute("messageerror", "Erreur lors de l'envoi de l'email.");
+            }
+
+        }
+        else {
+            //envoi email ParcAuto
+
+            // 2 messages
+            //1 message pour l'emetteur
+            String sujet = "Retour sur Demande de deplacement";
+//            String messageEmetteurMg = "Bonjour M" + nom + "<br><br>Votre demande de Dmd a été approuvée";
+            String messageEmetteurPc ="Bonjour M" + nom + "<br><br>" +"Votre demande de Dmd a été Approuvée";
+
+
+            //1 message pour parc auto
+            String baseUrl = "http://" + ip + ":" + port + "/dmd/dmdVehiculeChauffeur";
+            String sujet1 = "Demande de la validation d'une Demande de deplacement";
+            String linkText = "Cliquez-ici pour la validation";
+            String p = "Nom :" + nom + "<br>";
+            String m1 = "Moyen :" + moyen.replace("_", " + ") + "<br>";
+            String m2 = "Motif :" + motif + "<br>";
+            String d = "Destination :" + destination + "<br>";
+            DateTimeFormatter date1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String date2 = date1.format(date);
+            String d2 = "Date du rendez-vous: " + date2 + "<br>";
+            String h = "Heure :" + heure + "<br><br>";
+
+            String messagePc = "Une Dmd a été créée  <br><br>" + p + m1 + m2 + d + d2 + h + "<a href='" + baseUrl + "'>" + linkText + "</a>";
+            try {
+                emailNotificationService.sendHtmlEmail(sujet, messageEmetteurPc ,/*from,*/emailEmetteur);
+                emailNotificationService.sendHtmlEmail(sujet1, messagePc ,/*from,*/emailPcs);
+                redirectAttributes.addFlashAttribute("messagesucces", "Opération de création effectuée avec succès");
+            } catch (Exception e) {
+                e.printStackTrace(); // Print the full exception stack trace for debugging
+                redirectAttributes.addFlashAttribute("messageerror", "Erreur lors de l'envoi de l'email.");
+            }
+        }
+
         employeDmdService.update(employeDmd);
 
 
