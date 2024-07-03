@@ -385,17 +385,32 @@ public class DmdController {
 
         Long id = dmd1.getIdEmployeDmd();
 
-        Direction direction = directionService.findById(1L);
-        Employe employe1 = employeService.findByDirectionEstSuperieurHirarchique(direction,true);
+        //Direction direction = directionService.findById(1L);
+
+        List<String> emailSuperieurs = employeService.listEmailsSuperieur(employe);
+        /*List<Employe> superieurs = employeService.listSuperieurByEmploye(employe);
+        List<String> emailSuperieurs = new ArrayList<>();
+        for (Employe e : superieurs){
+            emailSuperieurs.add(e.getEmail());
+        }*/
+
+        //String emails = String.join(", ", emailSuperieurs);
+
+        //Employe employe1 = employeService.findByDirectionEstSuperieurHirarchique(direction,true);
         //String from = employe.getEmail();
         String from = env.getProperty("spring.mail.username");
         //String to = employe1.getEmail()
-        List<String> to = Arrays.asList(employe1.getEmail());
+        //List<String> to = Arrays.asList(employe1.getEmail());
+       // List<String> to = emailSuperieurs;
 
         //EmployeDmd dmd = dmdService.findById(id);
 
 
-        String baseUrl = "http://localhost:8089/dmd/dmds/" + id;
+        String ip = env.getProperty("email.ip");
+        String port = env.getProperty("server.port");
+
+        //String baseUrl = "http://localhost:8089/dmd/dmds/" + id;
+        String baseUrl = "http://" + ip + ":" +port+ "/dmd/dmds/" + id;
         String sujet = "Demande de la validation d'une Demande de deplacement";
         //String Url = "/dmd/dmds"; // The relative URL you want to link to
 
@@ -428,7 +443,7 @@ public class DmdController {
 
 
         try {
-            emailNotificationService.sendHtmlEmail(sujet, message,/*from,*/to);
+            emailNotificationService.sendHtmlEmail(sujet, message,/*from,*/emailSuperieurs);
             redirectAttributes.addFlashAttribute("messagesucces", "Opération de création effectuée avec succès");
         } catch (Exception e) {
             e.printStackTrace(); // Print the full exception stack trace for debugging
@@ -1419,6 +1434,7 @@ public class DmdController {
 
         /* employeDmd.setStatut(VALIDATION);*/
         //Get Employe by user connected
+        //Responsable
         Employe employe = employeService.getEmployeByUserName(principal.getName());
         EmployeDmd employeDmd = dmdService.validerDmd(id, employe);
         //employeDmd.setResponsable(employe.getIdEmploye());

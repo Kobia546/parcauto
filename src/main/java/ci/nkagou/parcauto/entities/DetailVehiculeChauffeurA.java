@@ -13,7 +13,10 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "detail_chauffeur")
+@Table(name = "detail_chauffeur",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"employe_dmd", "id_attribution"})
+        })
 public class DetailVehiculeChauffeurA {
 
     @Id
@@ -21,10 +24,12 @@ public class DetailVehiculeChauffeurA {
     private Long idDetailChauffeur;
 
     @ManyToOne
+
     @JoinColumn(name = "employe_dmd")
     private EmployeDmd employeDmd;
 
     @ManyToOne
+
     @JoinColumn(name = "id_attribution")
     private Attribution attribution;
 

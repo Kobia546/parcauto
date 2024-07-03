@@ -50,17 +50,22 @@ public class EmailNotificationService {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
-        String to = String.join(", ", toList);
+        String to = String.join("; ", toList);
 
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            helper.setFrom(env.getProperty("spring.mail.username"));
-            helper.setTo(to);
-            //helper.setTo(toList.toArray(new String[0]));
-            helper.setSubject(subject);
-            helper.setText(message, true); // Set the second argument to true for HTML content
 
-            javaMailSender.send(mimeMessage);
+            for (String tos : toList){
+                helper.setFrom(env.getProperty("spring.mail.username"));
+                helper.setTo(tos);
+                //helper.setTo(toList.toArray(new String[0]));
+                helper.setSubject(subject);
+                helper.setText(message, true); // Set the second argument to true for HTML content
+
+                javaMailSender.send(mimeMessage);
+            }
+
+
             System.out.println("HTML Mail envoyé avec succès à : " + to /*Arrays.toString(toList.toArray(new String[0]))*/ + " depuis "  + env.getProperty("spring.mail.username"));
 
             //for (String to : toList) {

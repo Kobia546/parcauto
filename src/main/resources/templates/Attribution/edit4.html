@@ -138,6 +138,7 @@
                 <div class="col-md-6">
 
                     <input class="form-control" id="kilometragefin" type="text" th:field="*{kilometrageFin}">
+                    <span id="KilometrageDepartWarning" class="text-danger"></span>
                     <!-- <span th:if="${#fields.hasErrors('datePrevue')}" th:errors="*{datePrevue}"  th:class="help-block"></span>-->
 
                 </div>
@@ -285,21 +286,21 @@
         document.getElementById("btnEnregistrer").addEventListener("click", function (e) {
             var dateDeDepart = new Date(document.querySelector("[name='dateDeDepart']").value);
             var dateArrivee = new Date(document.querySelector("[name='dateArrivee']").value);
-            var kilometrageFin = document.querySelector("[name='kilometragefin']").value;
+            var KilometrageDepart = document.querySelector("[name='KilometrageDepart']").value;
+            var KilometrageFin = document.querySelector("[name='KilometrageFin']").value;
 
-            if (dateArrivee < dateDeDepart) {
+            if (dateDeDepart < dateArrivee) {
                 e.preventDefault(); // Prevent form submission
-                document.getElementById("dateArriveeWarning").textContent = "La date d'arrivée doit être ultérieure à la date de départ.";
+                document.getElementById("dateDeDepartWarning").textContent = "La date de départ doit être ultérieure à la date d'attribution.";
+            } else if (KilometrageDepart > KilometrageFin) {
+                e.preventDefault(); // Prevent form submission
+                document.getElementById("KilometreDepartWarning").textContent = "Le kilométrage de départ ne doit pas être supérieur à celui de fin.";
             } else {
-                // Reset the warning message if the dates are valid
-                document.getElementById("dateArriveeWarning").textContent = "";
+                // Reset the warning messages if the dates and kilometers are valid
+                document.getElementById("dateDeDepartWarning").textContent = "";
+                document.getElementById("KilometreDepartWarning").textContent = "";
             }
-            if (kilometrageFin <kilometrage) {
-                e.preventDefault(); // Prevent form submission
-                alert("Veuillez entrer le kilométrage d'arrivée.");
-            }
-        });
-    });
+    });});
 </script>
 
 </body>

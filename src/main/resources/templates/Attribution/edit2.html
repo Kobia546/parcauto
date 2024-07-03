@@ -92,7 +92,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label  th:for="Kilometrage" class="col-sm-4 col-form-label text-md-right"><strong>Kilometrage Debut</strong></label>
+                <label  th:for="KilometrageDepart" class="col-sm-4 col-form-label text-md-right"><strong>Kilometrage Debut</strong></label>
 
                 <div class="col-md-6">
 
@@ -179,7 +179,7 @@
         document.getElementById("btn").addEventListener("click", function (e) {
             var dateAttribution = new Date(document.querySelector("[name='dateAttribution']").value);
             var dateDeDepart = new Date(document.querySelector("[name='dateDeDepart']").value);
-
+            var KilometrageDepart=document.querySelector("[name='KilometrageDepart']").value;
             if (dateDeDepart < dateAttribution) {
                 e.preventDefault(); // Prevent form submission
                 document.getElementById("dateDeDepartWarning").textContent = "La date de depart doit être ultérieure à la date d'attribution.";

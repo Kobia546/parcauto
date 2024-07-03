@@ -26,9 +26,15 @@ public class ChauffeurHistoriqueServiceImpl implements ChauffeurHistoriqueServic
     @Override
     public ChauffeurHistorique dtoToChauffeurHistorique(ChauffeurHistoriqueDto dto) {
 
-        ChauffeurHistorique chauffeurHistorique = new ChauffeurHistorique();
+        ChauffeurHistorique chauffeurHistorique;
 
-        chauffeurHistorique.setId(dto.getId());
+        if (dto.getId() != null) {
+            // Récupérer l'objet existant à partir de la base de données
+            chauffeurHistorique = chauffeurHistoriqueRepository.findById(dto.getId()).orElseThrow(() -> new RuntimeException("ID not found"));
+        } else {
+            // Créer un nouvel objet
+            chauffeurHistorique = new ChauffeurHistorique();
+        }
         chauffeurHistorique.setStatutHistorique(dto.getStatutHistorique());
         chauffeurHistorique.setDateParcours(dto.getDateParcours());
         chauffeurHistorique.setVehiculeChauffeurAtt(dto.getVehiculeChauffeurAtt());

@@ -14,6 +14,7 @@ public interface EmployeRepository  extends JpaRepository <Employe, Long> {
 
     
     Employe findByDirectionAndEstSuperieureHierachique(Direction direction, boolean estSuperieurHirachique);
+
     Employe findByNumMatEmpl (Long matricule);
     Employe findByEmail(String email);
     List<Employe> findEmployesByEstUtilisateur (Boolean estUtilisateur);
@@ -22,6 +23,8 @@ public interface EmployeRepository  extends JpaRepository <Employe, Long> {
     Employe findByNomAndPrenom(String nom, String prenom);
     List<Employe> findEmployesByEstChauffeur (Boolean estChauffeur);
     List<Employe> findEmployesByEstChauffeurAndStatutChauffeur(Boolean estChauffeur, StatutChauffeur statutChauffeur);
+
+    List<Employe> findAllByDirection(Direction direction);
 
     /*Employe findEmployeByAppUser(AppUser user);*/
 

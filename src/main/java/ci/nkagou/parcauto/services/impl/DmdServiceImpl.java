@@ -5,6 +5,8 @@ import ci.nkagou.parcauto.entities.*;
 import ci.nkagou.parcauto.enums.MoyenDemande;
 import ci.nkagou.parcauto.enums.Statut;
 import ci.nkagou.parcauto.exceptions.ResourceNotFoundException;
+import ci.nkagou.parcauto.repositories.AttributionRepository;
+import ci.nkagou.parcauto.repositories.DetailCarburantARepository;
 import ci.nkagou.parcauto.repositories.DmdRepository;
 import ci.nkagou.parcauto.repositories.EmployeDmdRepository;
 import ci.nkagou.parcauto.services.DestinationService;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ci.nkagou.parcauto.enums.Statut.*;
+import static ci.nkagou.parcauto.enums.StatutAttrib.EN_ATTENTE;
+import static ci.nkagou.parcauto.enums.TypeAttribution.ORIENTATION_TRANSPORT;
 
 @Service
 @Transactional
@@ -34,6 +38,8 @@ public class DmdServiceImpl implements DmdService {
     private EmployeDmdRepository employeDmdRepository;
     private MotifService motifService;
     private DestinationService destinationService;
+    private AttributionRepository attributionRepository;
+    private DetailCarburantARepository detailCarburantARepository;
 
 
     @Override
@@ -422,10 +428,43 @@ public class DmdServiceImpl implements DmdService {
     public EmployeDmd validerDmd(Long id, Employe employe) {
 
         EmployeDmd employeDmd = this.findById(id);
-        employeDmd.setStatut(VALIDATION);
-        employeDmd.setResponsable(employe.getIdEmploye());
-        EmployeDmd dmd = employeDmdRepository.save(employeDmd);
-        return dmd;
+
+        if (employeDmd.getDmd().getMoyenDemande().name().equals(MoyenDemande.ORIENTATION_TRANSPORT.name())){
+
+            //implementation de transport
+            //AttributionCarburantAttDto dto = new AttributionCarburantAttDto();
+
+            //Creation de Attribution Carburant
+            CarburantAtt carburantAtt = new CarburantAtt();
+            carburantAtt.setDateAttribution(LocalDateTime.now());
+            carburantAtt.setStatutAttrib(EN_ATTENTE);
+            carburantAtt.setTypeAttribution(ORIENTATION_TRANSPORT);
+            CarburantAtt carburantAtt1 = attributionRepository.save(carburantAtt);
+
+            //Mise a jour de EmployeDmd
+            employeDmd.setStatut(Statut.ATTRIBUTION);
+            EmployeDmd employeDmd1 = employeDmdRepository.save(employeDmd);
+
+            //Creation de detailCarburantAttribution
+            DetailCarburantA detail = new DetailCarburantA();
+            detail.setAttribution(carburantAtt1);
+            detail.setEmployeDmd(employeDmd1);
+            DetailCarburantA detailCarburantA = detailCarburantARepository.save(detail);
+
+
+            return employeDmd1;
+        }else {
+
+            //implementation de vehicule et vehicule + chauffeur
+            employeDmd.setStatut(VALIDATION);
+            employeDmd.setResponsable(employe.getIdEmploye());
+            EmployeDmd dmd = employeDmdRepository.save(employeDmd);
+            return dmd;
+
+        }
+
+
+
     }
 
     @Override

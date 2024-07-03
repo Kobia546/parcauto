@@ -212,6 +212,43 @@ public class EmployeServiceImpl implements EmployeService {
         return dtos;
     }
 
+    @Override
+    public List<Employe> listSuperieurByEmploye(Employe employe) {
+        Direction direction = employe.getDirection();
+
+        List<Employe> employes = employeRepository.findAllByDirection(direction);
+
+        //List des employe appartenant a une direction et est superieur hierachique
+        List<Employe> eps = new ArrayList<>();
+
+        for (Employe e : employes){
+
+            if (e.isEstSuperieureHierachique()){
+                eps.add(e);
+            }
+        }
+
+        return eps;
+    }
+
+    @Override
+    public List<String> listEmailsSuperieur(Employe employe) {
+
+        List<Employe> superieurs = this.listSuperieurByEmploye(employe);
+        List<String> emailSuperieurs = new ArrayList<>();
+        for (Employe e : superieurs){
+            emailSuperieurs.add(e.getEmail());
+        }
+        return emailSuperieurs;
+    }
+
+    @Override
+    public List<Employe> listParcAuto() {
+
+
+        return null;
+    }
+
     /*@Override
     public List<Employe> findEmployesByEstChauffeurStatutChauffeur(Boolean estChauffeur, StatutChauffeur statutChauffeur) {
         return employeRepository.findEmployesByEstChauffeurStatutChauffeur(estChauffeur, statutChauffeur);

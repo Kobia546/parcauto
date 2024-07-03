@@ -28,7 +28,9 @@ public interface EmployeService {
     List<Employe> listEmployesEstSuperieurHierachique(Boolean estResponsable);
     Employe findByNomPrenom(String nom, String prenom);
     List<Employe> findEmployesByEstChauffeur (Boolean estChauffeur);
+    //Chauffeur
     Employe disponible(Long id,Employe employe);
+    //Chauffeur
     Employe indisponible(Long id,Employe employe);
     List<Employe> findEmployesEstChauffeurStatutChauffeur(Boolean estChauffeur, StatutChauffeur statutChauffeur);
     Employe findByDirectionEstSuperieurHirarchique(Direction direction,boolean estSuperieurHirarchique);
@@ -36,6 +38,14 @@ public interface EmployeService {
     RapportEmployeDto asDtos(Employe employe);
     List<RapportChauffeurDto> listRapportChauffeur(List<Employe> employe);
     List<RapportEmployeDto> listRapportEmploye(List<Employe> employe);
+
+    //List des employes (Superieur Hierachique) appartenant a une direction et est superieur hierachique en fonction d'un employé
+    List<Employe> listSuperieurByEmploye(Employe employe);
+
+    List<String> listEmailsSuperieur(Employe employe);
+
+    //List des employes ayant le role de responsable Parc auto
+    List<Employe> listParcAuto ();
 
     /*List<Employe> findEmployesByEstChauffeurStatutChauffeur (Boolean estChauffeur, StatutChauffeur statutChauffeur);*/
 

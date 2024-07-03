@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -126,15 +127,12 @@ public class DetailVehiculeChauffeurAServiceImpl implements DetailVehiculeChauff
     @Override
     public List<DetailVehiculeChauffeurA> getListDetailVehiculeChauffeurAByListAttributionEmploye(List<Attribution> attribution, Employe employe) {
         List<DetailVehiculeChauffeurA> details = this.getListDetailVehiculeChauffeurAByListAttribution(attribution);
-        List<DetailVehiculeChauffeurA> detail1 = new ArrayList<>();
-
-        for(DetailVehiculeChauffeurA d: details){
-            if(d.getEmployeDmd().getEmploye().equals(employe)) {
-               detail1.add(d);
-            }
-        }
+        List<DetailVehiculeChauffeurA> detail1 = details.stream()
+                .filter(d -> d.getEmployeDmd().getEmploye().equals(employe))
+                .collect(Collectors.toList());
         return detail1;
     }
+
 
     @Override
     public List<DetailVehiculeChauffeurA> listDetailVehiculeChauffeurAByDateBetween(EtatAttributionEmployeDto dto) {
