@@ -131,9 +131,9 @@
                                 <span class="badge badge-pill badge-danger " th:case="'INDISPONIBLE'" data-toggle="tooltip" data-placement="right" th:title="${c.motifChauffeur + ' : ' + c.observationChauffeur}">INDISPONIBLE</span>
                             </td>
 
-                            <td id="recuCarburant" class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">
-                                <img th:if="${c.typeAttribution == 'CARBURANT'}" id="pop" th:src="'../../../temp/' + ${c.recuCarburant}" class="md-avatar" onclick="openImageViewer(this)">
-                            </td>
+<!--                            <td id="recuCarburant" class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">-->
+<!--                                <img th:if="${c.typeAttribution == 'CARBURANT'}" id="pop" th:src="'../../../temp/' + ${c.recuCarburant}" class="md-avatar" onclick="openImageViewer(this)">-->
+<!--                            </td>-->
 
                             <td  id = "montant" th:text = "${c.montant}" class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')"></td>
 

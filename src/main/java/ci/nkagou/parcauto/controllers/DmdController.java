@@ -40,6 +40,7 @@ import java.security.Principal;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -1115,8 +1116,8 @@ public class DmdController {
         //dto.setEmployeDmd(carburantAtt.getEmployeDmd());
         dto.setDetailCarburantA(carburantAtt.getDetailCarburantA());
         //dto.setVehicule(carburantAtt.getVehicule());
-        dto.setDateDeDepart(carburantAtt.getDateDeDepart());
-        //dto.setDateArrivee(carburantAtt.getDateArrivee());
+        dto.setDateDeDepart(LocalDateTime.now());
+        dto.setDateArrivee(LocalDateTime.of(LocalDate.now(), LocalTime.of(18, 0)));
         //dto.setStatutChauffeurA(vehiculeAtt.getStatutChauffeurA());
         //dto.setMotif(carburantAtt.getMotif());
         //dto.setObservation(carburantAtt.getObservation());
@@ -1140,7 +1141,7 @@ public class DmdController {
     }
 
     @RequestMapping(value = "/Attribution/attribution/user/termineeCarburant", method = RequestMethod.POST)
-    public String saveAttributionUserCC(@Valid @ModelAttribute("attributionDto") AttributionDtoZ attributionDtoZ, BindingResult bindingResult, @RequestParam("recuCarburant") MultipartFile file,
+    public String saveAttributionUserCC(@Valid @ModelAttribute("attributionDto") AttributionDtoZ attributionDtoZ, BindingResult bindingResult,
                                          RedirectAttributes redirectAttributes, Model model) {
         /*if (bindingResult.hasErrors()) {
             System.out.println("error YES");
@@ -1164,9 +1165,9 @@ public class DmdController {
         }*/
 
 
-        String UPLOADED_FOLDER1 = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\temp\\";
+//        String UPLOADED_FOLDER1 = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\temp\\";
         //String UPLOADED_FOLDER = "C:\\Users\\PC\\Desktop\\parcauto-master\\src\\main\\resources\\static\\temp\\";
-        String UPLOADED_FOLDER = UPLOADED_FOLDER1.replace("\\", "\\\\");
+//        String UPLOADED_FOLDER = UPLOADED_FOLDER1.replace("\\", "\\\\");
         //String up = "src/resources/static/temp";
         CarburantAtt carburantAtt = carburantAttRepository.getById(attributionDtoZ.getId());
 
@@ -1176,37 +1177,37 @@ public class DmdController {
         carburantAtt.setDateArrivee(attributionDtoZ.getDateArrivee());
         carburantAtt.setStatutAttrib(TERMINEE);
 
-        String a = "";
+//        String a = "";
 
-        LocalDateTime dateTime = LocalDateTime.now();
-        String dateString = dateTime.toString();
-        String fileName = dateString + file.getOriginalFilename();
-        String originalFilename = file.getOriginalFilename();
-        String sanitizedFilename = dateString.replace(":", "") + originalFilename;
-        try {
-
-            // Get the file and save it somewhere
-
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER + sanitizedFilename);
-            //Path path = Paths.get(up + sanitizedFilename);
-            //Path path = Paths.get(this.getClass().getResource("/static/temp").getPath() + sanitizedFilename);
-            Files.write(path, bytes);
-            String s = "";
-
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //carburantAtt.setRecuCarburant(sanitizedFilename);
-
-        carburantAtt.setRecuCarburant(sanitizedFilename + "?t=" + System.currentTimeMillis());
-       //attributionDtoZ.setRecuCarburant(fileName);
+//        LocalDateTime dateTime = LocalDateTime.now();
+//        String dateString = dateTime.toString();
+//        String fileName = dateString + file.getOriginalFilename();
+//        String originalFilename = file.getOriginalFilename();
+//        String sanitizedFilename = dateString.replace(":", "") + originalFilename;
+//        try {
+//
+//            // Get the file and save it somewhere
+//
+//            byte[] bytes = file.getBytes();
+//            Path path = Paths.get(UPLOADED_FOLDER + sanitizedFilename);
+//            //Path path = Paths.get(up + sanitizedFilename);
+//            //Path path = Paths.get(this.getClass().getResource("/static/temp").getPath() + sanitizedFilename);
+//            Files.write(path, bytes);
+//            String s = "";
+//
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        //carburantAtt.setRecuCarburant(sanitizedFilename);
+//
+////        carburantAtt.setRecuCarburant(sanitizedFilename + "?t=" + System.currentTimeMillis());
+//       //attributionDtoZ.setRecuCarburant(fileName);
 
 
         carburantAtt.setImmatriculationVehicule(attributionDtoZ.getImmatriculationVehicule());
-        carburantAtt.setLitre(attributionDtoZ.getLitre());
+//        carburantAtt.setLitre(attributionDtoZ.getLitre());
         carburantAtt.setMontant(attributionDtoZ.getMontant());
 
 
@@ -1462,13 +1463,37 @@ public class DmdController {
             dtoss = attributionService.listAttributionToDto(attribution);
 
         } else if (request.isUserInRole(roleMoyenGeneraux)) {
-            List<CarburantAtt> carburantAtts = attributionService.allAttribution()
-                    .stream()
-                    .filter(CarburantAtt -> CarburantAtt.getStatutAttrib() == TERMINEE || CarburantAtt.getStatutAttrib() == StatutAttrib.ANNULER)
-                    .sorted(Comparator.comparing(Attribution::getStatutAttrib)
-                            .reversed())
-                    .collect(Collectors.toList());
-            dtoss = attributionService.listAttributionToDtoCarburant(carburantAtts);
+            List<Attribution> attribution = attributionService.all();
+            dtoss = attributionService.listAttributionToDto(attribution);
+//            List<VehiculeAtt> vehiculeAtts = attributionService.allAttributionVehicule()
+//                    .stream()
+//                    .filter(VehiculeAtt -> VehiculeAtt.getStatutAttrib() == TERMINEE || VehiculeAtt.getStatutAttrib() == StatutAttrib.ANNULER)
+//                    .sorted(Comparator.comparing(Attribution::getStatutAttrib)
+//                            .reversed())
+//                    .collect(Collectors.toList());
+//            dtoss = attributionService.listAttributionToDtoVehicule(vehiculeAtts);
+//
+//            List<VehiculeChauffeurAtt> vehiculeChauffeurAtts = attributionService.allAttributionVehiculeChauffeur()
+//                    .stream()
+//                    .filter(VehiculeChauffeurAtt -> VehiculeChauffeurAtt.getStatutAttrib() == TERMINEE || VehiculeChauffeurAtt.getStatutAttrib() == StatutAttrib.ANNULER)
+//                    .sorted(Comparator.comparing(Attribution::getStatutAttrib)
+//                            .reversed())
+//                    .collect(Collectors.toList());
+//            dtoss = attributionService.listAttributionToDtoVehiculeChauffeur(vehiculeAtts,vehiculeChauffeurAtts);
+//            List<CarburantAtt> carburantAtts = attributionService.allAttribution()
+//                    .stream()
+//                    .filter(att -> att.getStatutAttrib() == TERMINEE || att.getStatutAttrib() == StatutAttrib.ANNULER)
+//                    .sorted(Comparator.comparing(Attribution::getStatutAttrib).reversed())
+//                    .collect(Collectors.toList());
+//            dtoss.addAll(attributionService.listAttributionToDtoCarburant(carburantAtts));
+
+//            List<CarburantAtt> carburantAtts = attributionService.allAttribution()
+//                    .stream()
+//                    .filter(CarburantAtt -> CarburantAtt.getStatutAttrib() == TERMINEE || CarburantAtt.getStatutAttrib() == StatutAttrib.ANNULER)
+//                    .sorted(Comparator.comparing(Attribution::getStatutAttrib)
+//                            .reversed())
+//                    .collect(Collectors.toList());
+//            dtoss = attributionService.listAttributionToDtoCarburant(carburantAtts);
 
         } /*else {
 

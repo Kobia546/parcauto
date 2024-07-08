@@ -55,8 +55,8 @@ public class AttributionDtoZ  {
     private List<DetailVehiculeA> detailVehiculeA;
     private List<DetailVehiculeChauffeurA> detailVehiculeChauffeurA;
     private List<DetailCarburantA> detailCarburantA;
-    @Column(name="recuCarburant")
-    private MultipartFile recuCarburant;
+//    @Column(name="recuCarburant")
+//    private MultipartFile recuCarburant;
     private String immatriculationVehicule;
     public Duration calculateDuration() {
         if (dateDeDepart != null && dateArrivee != null) {

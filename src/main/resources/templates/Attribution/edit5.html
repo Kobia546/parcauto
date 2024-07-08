@@ -122,16 +122,16 @@ DOCTYPE HTML>
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label for="recuCarburant" class="col-sm-4 col-form-label text-md-right"><strong>Recu de carburant</strong></label>
-                <div class="col-md-6">
-                    <div class="custom-file">
-                        <input class="custom-file-input" type="file" id="recuCarburant" name="recuCarburant" >
-                        <label class="custom-file-label" for="recuCarburant">Photo</label>
-                    </div>
-                    <img id="previewImage" src="#" alt="Preview" class="img-fluid mt-2" style="display: none; max-width: 100%; max-height: 200px;">
-                </div>
-            </div>
+<!--            <div class="form-group row">-->
+<!--                <label for="recuCarburant" class="col-sm-4 col-form-label text-md-right"><strong>Recu de carburant</strong></label>-->
+<!--                <div class="col-md-6">-->
+<!--                    <div class="custom-file">-->
+<!--                        <input class="custom-file-input" type="file" id="recuCarburant" name="recuCarburant" >-->
+<!--                        <label class="custom-file-label" for="recuCarburant">Photo</label>-->
+<!--                    </div>-->
+<!--                    <img id="previewImage" src="#" alt="Preview" class="img-fluid mt-2" style="display: none; max-width: 100%; max-height: 200px;">-->
+<!--                </div>-->
+<!--            </div>-->
 
 
             <div  class="form-group row d-none">
@@ -184,20 +184,20 @@ DOCTYPE HTML>
 <!-- Include SCRIPT block -->
 <th:block th:include="main/layout/block_script"></th:block>
 <script>
-    const fileInput = document.getElementById('recuCarburant');
-    const previewImage = document.getElementById('previewImage');
-
-    fileInput.addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            previewImage.src = e.target.result;
-            previewImage.style.display = 'block';
-        }
-
-        reader.readAsDataURL(file);
-    });
+    // const fileInput = document.getElementById('recuCarburant');
+    // const previewImage = document.getElementById('previewImage');
+    //
+    // fileInput.addEventListener('change', function(event) {
+    //     const file = event.target.files[0];
+    //     const reader = new FileReader();
+    //
+    //     reader.onload = function(e) {
+    //         previewImage.src = e.target.result;
+    //         previewImage.style.display = 'block';
+    //     }
+    //
+    //     reader.readAsDataURL(file);
+    // });
 
 </script>
 <script type="text/javascript">

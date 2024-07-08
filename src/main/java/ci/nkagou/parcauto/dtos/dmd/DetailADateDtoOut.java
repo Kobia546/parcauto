@@ -34,8 +34,8 @@ public class DetailADateDtoOut {
     //private String vehiculeHistorique;
     //private String chauffeurHistorique;
     private String duration;
-    @Column(name="recuCarburant")
-    private String recuCarburant;
+//    @Column(name="recuCarburant")
+//    private String recuCarburant;
     private String immatriculationVehicule;
     private int montant;
     private int litre;

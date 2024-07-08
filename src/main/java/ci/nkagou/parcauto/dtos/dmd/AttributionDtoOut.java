@@ -44,7 +44,7 @@ public class AttributionDtoOut {
     private String employe;
     private String vehiculeHistorique;
     private String chauffeurHistorique;
-    private String recuCarburant;
+//    private String recuCarburant;
     private String immatriculationVehicule;
     private String duration;
     private int montant;
