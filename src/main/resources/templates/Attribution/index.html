@@ -74,7 +74,7 @@
                             <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')">Statut du vehicule</th>
                             <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')">Chauffeur</th>
                             <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')">Statut du chauffeur</th>
-                            <th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Photo du recu</th>
+<!--                            <th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Photo du recu</th>-->
                             <th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Montant</th>
                             <!--<th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Litre</th>-->
                             <th class="text-center">durée du parcours</th>
@@ -131,9 +131,9 @@
                                 <span class="badge badge-pill badge-danger " th:case="'INDISPONIBLE'" data-toggle="tooltip" data-placement="right" th:title="${c.motifChauffeur + ' : ' + c.observationChauffeur}">INDISPONIBLE</span>
                             </td>
 
-                           <td id="recuCarburant" class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">
-                                <img th:if="${c.typeAttribution == 'ORIENTATION_TRANSPORT'}" id="pop" th:src="'/temp/' + ${c.recuCarburant}" class="md-avatar" onclick="openImageViewer(this)">
-                           </td>
+<!--                           <td id="recuCarburant" class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">-->
+<!--                                <img th:if="${c.typeAttribution == 'ORIENTATION_TRANSPORT'}" id="pop" th:src="'/temp/' + ${c.recuCarburant}" class="md-avatar" onclick="openImageViewer(this)">-->
+<!--                           </td>-->
 
                             <td  id = "montant" th:text = "${c.montant}" class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')"></td>
 
@@ -166,7 +166,7 @@
                                     <i class="material-icons">edit</i>Terminée la course
                                 </a>
                                 <a th:if="${c.statutAttrib == 'EN_ATTENTE' and c.typeAttribution == 'ORIENTATION_TRANSPORT'}" th:href="'/Attribution/attribution/user/editCC/' + ${c.id}" class="btn btn-primary btn-sm">
-                                    <i class="material-icons">edit</i>Terminée la course
+                                    <i class="material-icons">edit</i>Enregistrer
                                 </a>
                             </td>
 <!--                            <td class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')">-->

@@ -1,6 +1,7 @@
 package ci.nkagou.parcauto.services;
 
 import ci.nkagou.parcauto.dtos.dmd.*;
+import ci.nkagou.parcauto.entities.CarburantAtt;
 import ci.nkagou.parcauto.entities.Direction;
 import ci.nkagou.parcauto.entities.Employe;
 import ci.nkagou.parcauto.entities.EmployeDmd;
@@ -50,6 +51,11 @@ public interface DmdService {
 
     //
     EmployeDmd validerDmd (Long id, Employe employe);
+
+    //Validation Dmd de type Carburant
+    CarburantAtt validerDmdCarburant (EmployeDmd employeDmd, Employe employe);
+    //Validation Dmd de type Vehicule & Vehicule + Chauffeur
+    EmployeDmd validerDmdVVC (EmployeDmd employeDmd, Employe employe);
     EmployeDmd annulerDmd (Long id, EmployeDmd employeDmd);
 
 

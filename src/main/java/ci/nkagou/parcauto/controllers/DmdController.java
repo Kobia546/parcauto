@@ -522,10 +522,10 @@ public class DmdController {
 
 
 
-
+//      /Attribution/attribution/user/editVC/{id}
 
             //1 message pour moyen generaux
-            String baseUrl = "http://" + ip + ":" + port + "/dmd/dmdVehiculeChauffeur";
+            String baseUrl = "http://" + ip + ":" + port + "/Attribution/attribution/user/editVC/";
             String linkText = "Cliquez-ici pour la validation";
             String p = "Nom :" + nom + "<br>";
             String m1 = "Moyen :" + moyen.replace("_", " + ") + "<br>";
@@ -628,7 +628,7 @@ public class DmdController {
 
 //        redirectAttributes.addFlashAttribute("messagesucces", "Opération de validation éffectuée avec succès");
 
-        return "redirect:dmd/dmdVehiculeChauffeur/";
+        return "dmd/indexResponsable";
         /*return "dmd/indexResponsable";*/
     }
 
@@ -1542,13 +1542,13 @@ public class DmdController {
         }*/
 
 
-        //EmployeDmd employeDmd = dmdService.findById(id);
+        EmployeDmd employeDmd = dmdService.findById(id);
 
         /* employeDmd.setStatut(VALIDATION);*/
         //Get Employe by user connected
         //Responsable
         Employe employe = employeService.getEmployeByUserName(principal.getName());
-        EmployeDmd employeDmd = dmdService.validerDmd(id, employe);
+        //EmployeDmd employeDmd = dmdService.validerDmd(id, employe);
         //employeDmd.setResponsable(employe.getIdEmploye());
         String nom = employeDmd.getEmploye().toNomComplet();
         String moyen = employeDmd.getDmd().getMoyenDemande().toString();
@@ -1587,6 +1587,7 @@ public class DmdController {
             // 2 messages
             //1 message pour l'emetteur
 
+            CarburantAtt carburantAtt = dmdService.validerDmdCarburant(employeDmd, employe);
             String sujet1 = "Retour sur Demande de deplacement";
             String messageEmetteurMg = "Bonjour M" + nom + "<br><br>Votre demande de Dmd a été approuvée";
             String sujet = "Demande de la validation d'une Demande de deplacement";
@@ -1597,12 +1598,12 @@ public class DmdController {
 
 
 
+// /Attribution/attribution/user/editVC/
 
-
-
+            String idCarburantAtt = Long.toString(carburantAtt.getIdAttribution());
 
             //1 message pour moyen generaux
-            String baseUrl = "http://" + ip + ":" + port + "/dmd/dmdVehiculeChauffeur";
+            String baseUrl = "http://" + ip + ":" + port + "/Attribution/attribution/user/editCC/"+idCarburantAtt;
             String linkText = "Cliquez-ici pour la validation";
             String p = "Nom :" + nom + "<br>";
             String m1 = "Moyen :" + moyen.replace("_", " + ") + "<br>";
@@ -1626,6 +1627,13 @@ public class DmdController {
 
         }
         else {
+
+            //Validation Vehicule & Vehicule + chauffeur
+
+            EmployeDmd eDmd = dmdService.validerDmdVVC(employeDmd, employe);
+
+
+
             //envoi email ParcAuto
 
             // 2 messages

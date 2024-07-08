@@ -84,9 +84,9 @@ public class DetailCarburantAServiceImpl implements DetailCarburantAService {
 
         if (detail.getAttribution() instanceof CarburantAtt) {
             CarburantAtt carburantAtt = (CarburantAtt) detail.getAttribution();
-            dto.setRecuCarburant(carburantAtt.getRecuCarburant() != null ?  carburantAtt.getRecuCarburant() : null);
+//            dto.setRecuCarburant(carburantAtt.getRecuCarburant() != null ?  carburantAtt.getRecuCarburant() : null);
             dto.setMontant(carburantAtt.getMontant() != 0 ? carburantAtt.getMontant() : 0);
-            dto.setLitre(carburantAtt.getLitre() != 0 ? carburantAtt.getLitre() : 0);
+//            dto.setLitre(carburantAtt.getLitre() != 0 ? carburantAtt.getLitre() : 0);
             dto.setVehicule(carburantAtt.getImmatriculationVehicule() != null ? carburantAtt.getImmatriculationVehicule() : null);
 
         }

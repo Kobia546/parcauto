@@ -468,6 +468,36 @@ public class DmdServiceImpl implements DmdService {
     }
 
     @Override
+    public CarburantAtt validerDmdCarburant(EmployeDmd employeDmd, Employe employe) {
+
+        //Creation de Attribution Carburant
+        CarburantAtt carburantAtt = new CarburantAtt();
+        carburantAtt.setDateAttribution(LocalDateTime.now());
+        carburantAtt.setStatutAttrib(EN_ATTENTE);
+        carburantAtt.setTypeAttribution(ORIENTATION_TRANSPORT);
+        CarburantAtt carburantAtt1 = attributionRepository.save(carburantAtt);
+
+        //Mise a jour de EmployeDmd
+        employeDmd.setStatut(Statut.ATTRIBUTION);
+        EmployeDmd employeDmd1 = employeDmdRepository.save(employeDmd);
+
+        //Creation de detailCarburantAttribution
+        DetailCarburantA detail = new DetailCarburantA();
+        detail.setAttribution(carburantAtt1);
+        detail.setEmployeDmd(employeDmd1);
+        detailCarburantARepository.save(detail);
+        return carburantAtt1;
+    }
+
+    @Override
+    public EmployeDmd validerDmdVVC(EmployeDmd employeDmd, Employe employe) {
+
+        employeDmd.setStatut(VALIDATION);
+        employeDmd.setResponsable(employe.getIdEmploye());
+        return employeDmdRepository.save(employeDmd);
+    }
+
+    @Override
     public EmployeDmd annulerDmd(Long id, EmployeDmd employeDmd) {
         EmployeDmd employeDmd2 = this.findById(id);
         employeDmd.setStatut(ANNULER);

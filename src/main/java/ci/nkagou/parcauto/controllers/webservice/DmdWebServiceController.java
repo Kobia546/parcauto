@@ -189,7 +189,7 @@ public class DmdWebServiceController {
               String d1 = "Date de l'attribution :" + date2 + "<br><br>";
               //String d = "Nom :" + d + "<br>";
 
-              String baseUrl = "http://localhost:8089/Attribution/attribution";
+              String baseUrl = "http://localhost:9090/login";
               String sujet = "Reception d'une emission d'attribution";
 
               String linkText = "Cliquez-ici";
