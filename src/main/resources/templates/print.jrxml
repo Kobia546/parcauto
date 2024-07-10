@@ -231,20 +231,6 @@ Version : 1.00]]></text>
                     </jr:column>
                 </jr:table>
             </componentElement>
-            <textField>
-                <reportElement x="2" y="125" width="118" height="30" uuid="f9a52bde-5366-4fb5-8f43-42f9f7cfc00f"/>
-                <textElement>
-                    <font size="14" isBold="true" isItalic="false"/>
-                </textElement>
-                <textFieldExpression><![CDATA["Visa Hierarchie"]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="372" y="126" width="192" height="30" uuid="6b9a47b1-d009-4b2f-ad55-2e7232ed157a"/>
-                <textElement>
-                    <font size="14" isBold="true"/>
-                </textElement>
-                <textFieldExpression><![CDATA["Visa Direction Concernée"]]></textFieldExpression>
-            </textField>
         </band>
     </detail>
     <columnFooter>

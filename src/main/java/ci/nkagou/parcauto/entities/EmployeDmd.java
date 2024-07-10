@@ -48,6 +48,9 @@ public class EmployeDmd{
 
     @Enumerated(EnumType.ORDINAL)
     private Statut statut;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private AppUser user;
 
     @Size(max = 600)
     private String observation;

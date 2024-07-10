@@ -15,6 +15,11 @@ public interface EmployeService {
     List<Employe> all();
     Employe findById(Long id);
     EmployeDtoOut employeToDto (Employe employe);
+
+//    Employe createOrUpdateEmploye(EmployeFormDto employeFormDto);
+
+    Employe createOrUpdateEmploye(EmployeDtoOut employeFormDto);
+
     List<EmployeDtoOut> listEmployesToDto(List<Employe> employes);
     List<Employe> findEmployesByEstUtilisateur (Boolean estUtilisateur);
     Employe findByMatricule(Long matricule);

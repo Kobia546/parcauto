@@ -1,9 +1,6 @@
 package ci.nkagou.parcauto.repositories;
 
-import ci.nkagou.parcauto.entities.Direction;
-import ci.nkagou.parcauto.entities.Dmd;
-import ci.nkagou.parcauto.entities.Employe;
-import ci.nkagou.parcauto.entities.EmployeDmd;
+import ci.nkagou.parcauto.entities.*;
 import ci.nkagou.parcauto.enums.MoyenDemande;
 import ci.nkagou.parcauto.enums.Statut;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +15,9 @@ public interface EmployeDmdRepository extends JpaRepository<EmployeDmd, Long> {
     List<EmployeDmd> findEmployeDmdsByStatut(Statut statut);
 
     EmployeDmd findByStatut(Statut statut);
+    long countByStatut(Statut statut);
+    long countByUser(AppUser user);
+    long countByUserAndStatut(AppUser user, Statut statut);
 
     List<EmployeDmd> findEmployeDmdsByDmdMoyenDemandeAndStatut(MoyenDemande moyenDemande,Statut statut);
 

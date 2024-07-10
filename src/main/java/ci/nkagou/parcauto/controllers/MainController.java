@@ -23,7 +23,7 @@ public class MainController {
         }
 
 
-        return "redirect:/dashboard";
+        return "redirect:/user-info";
 
     }
 
@@ -36,7 +36,7 @@ public class MainController {
         return "main/adminPage";
     }
 
-    @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+    @RequestMapping(value = "/user-info", method = RequestMethod.GET)
     public String userInfo(Model model, Principal principal) {
         //Check if user is connected
         if (null == principal){

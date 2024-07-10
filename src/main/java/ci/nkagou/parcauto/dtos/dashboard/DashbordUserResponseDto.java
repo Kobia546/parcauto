@@ -8,8 +8,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class DashbordUserResponseDto {
-    private Integer nbreDmdValide;
-    private Integer nbreDmdRefuse;
-    private Integer nbreDmdTotal;
-    private Integer nbreDmdAnnule;
+    private Long nbreDmdValide;
+    private Long nbreDmdRefuse;
+    private Long nbreDmdTotal;
+    private Long nbreDmdAnnule;
 }

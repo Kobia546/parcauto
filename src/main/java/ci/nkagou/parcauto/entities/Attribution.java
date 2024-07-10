@@ -70,6 +70,10 @@ public abstract class Attribution {
     @JoinColumn(name = "vehicule_id")
     private Vehicule vehiculeId;
 
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private AppUser user;
+
 
     @ManyToOne
     @JoinColumn(name = "employe_dmd")

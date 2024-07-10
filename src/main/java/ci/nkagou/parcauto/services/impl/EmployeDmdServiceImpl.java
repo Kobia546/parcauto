@@ -50,10 +50,18 @@ public class EmployeDmdServiceImpl implements EmployeDmdService {
         );
     }
 
+//    @Override
+//    public EmployeDmd create(EmployeDmd employeDmd) {
+//        return employeDmdRepository.save(employeDmd);
+//    }
     @Override
-    public EmployeDmd create(EmployeDmd employeDmd) {
-        return employeDmdRepository.save(employeDmd);
-    }
+public void create(EmployeDmd employeDmd, AppUser userConnecte) {
+    // Définir la propriété user de l'entité EmployeDmd
+    employeDmd.setUser(userConnecte);
+
+    // Enregistrer l'entité EmployeDmd dans la base de données
+    employeDmdRepository.save(employeDmd);
+}
 
     @Override
     public EmployeDmd update(EmployeDmd employeDmd) {

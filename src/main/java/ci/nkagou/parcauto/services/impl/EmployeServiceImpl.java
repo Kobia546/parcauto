@@ -1,10 +1,10 @@
 package ci.nkagou.parcauto.services.impl;
 
 import ci.nkagou.parcauto.dtos.chauffeur.EmployeDtoOut;
-import ci.nkagou.parcauto.dtos.dmd.AttributionDtoOut;
 import ci.nkagou.parcauto.dtos.rapport.RapportChauffeurDto;
 import ci.nkagou.parcauto.dtos.rapport.RapportEmployeDto;
 import ci.nkagou.parcauto.entities.*;
+import ci.nkagou.parcauto.enums.Genre;
 import ci.nkagou.parcauto.enums.StatutChauffeur;
 import ci.nkagou.parcauto.exceptions.ResourceNotFoundException;
 import ci.nkagou.parcauto.repositories.EmployeRepository;
@@ -16,11 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Id;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 @Transactional
@@ -58,6 +56,50 @@ public class EmployeServiceImpl implements EmployeService {
         dto.setStatutChauffeur(employe.getStatutChauffeur().toString());
         return dto;
     }
+
+
+    @Override
+    public Employe createOrUpdateEmploye(EmployeDtoOut employeDto) {
+        Employe employe =new Employe();
+
+//        if (employeDto.getNumMatEmpl() != null) {
+//            employe = employeRepository.findByNumMatEmpl(Long.valueOf(employeDto.getNumMatEmpl()));
+//            if (employe == null) {
+//                throw new ResourceNotFoundException("Employé introuvable avec le matricule : " + employeDto.getNumMatEmpl());
+//            }
+////        } else {
+////            employe = new Employe();
+////        }
+
+        employe.setNumMatEmpl(Long.valueOf(employeDto.getNumMatEmpl()));
+        employe.setNom(employeDto.getNom());
+        employe.setPrenom(employeDto.getPrenom());
+        employe.setGenre(Genre.valueOf(employeDto.getGenre()));
+        employe.setFonction(employeDto.getFonction());
+        employe.setDateEmbauche(LocalDate.parse(employeDto.getDateEmbauche()));
+        employe.setEmail(employeDto.getEmail());
+        employe.setTelephoneEmploye(employeDto.getTelephoneEmploye());
+        employe.setDateNaissance(LocalDate.parse(employeDto.getDateNaissance()));
+        employe.setEstSuperieureHierachique(Boolean.parseBoolean(employeDto.getEstSuperieureHierachique()));
+        employe.setEstChauffeur(Boolean.parseBoolean(employeDto.getEstChauffeur()));
+        employe.setStatutChauffeur(StatutChauffeur.valueOf(employeDto.getStatutChauffeur()));
+        employe.setEstUtilisateur(Boolean.parseBoolean(employeDto.getEstUtilisateur()));
+
+        if (employeDto.getSite() != null) {
+            Site site = employeRepository.findById(Long.valueOf(employeDto.getSite()))
+                    .orElseThrow(() -> new ResourceNotFoundException("Site introuvable avec l'identifiant : " + employeDto.getSite())).getSite();
+            employe.setSite(site);
+        }
+
+//        if (employeDto.getDirection() != null) {
+//            Direction direction = employeRepository.findById(Long.valueOf(employeDto.getDirection()))
+//                    .orElseThrow(() -> new ResourceNotFoundException("Direction introuvable avec l'identifiant : " + employeDto.getDirection())).getDirection();
+            employe.setDirection(employeDto.getDirection());
+
+
+        return employeRepository.save(employe);
+    }
+
 
     @Override
     public List<EmployeDtoOut> listEmployesToDto(List<Employe> employes) {

@@ -3,10 +3,7 @@ package ci.nkagou.parcauto.services;
 import ci.nkagou.parcauto.dtos.dmd.EmployeEtatDto;
 import ci.nkagou.parcauto.dtos.dmd.EmployeRapportDto;
 import ci.nkagou.parcauto.dtos.dmd.EtatResponsableDto;
-import ci.nkagou.parcauto.entities.Direction;
-import ci.nkagou.parcauto.entities.Dmd;
-import ci.nkagou.parcauto.entities.Employe;
-import ci.nkagou.parcauto.entities.EmployeDmd;
+import ci.nkagou.parcauto.entities.*;
 import ci.nkagou.parcauto.enums.RapportStatut;
 import ci.nkagou.parcauto.enums.Statut;
 
@@ -20,7 +17,8 @@ public interface EmployeDmdService {
     List<EmployeDmd> all();
     EmployeDmd findById(Long id);
     //EmployeDmd findByLibelle(String libelle);
-    EmployeDmd create (EmployeDmd employeDmd);
+//    EmployeDmd create (EmployeDmd employeDmd);
+    void create(EmployeDmd employeDmd, AppUser userConnecte);
     EmployeDmd update (EmployeDmd employeDmd);
     //EmployeDmd updateTransport (EmployeDmd employeDmd);
     void delete(EmployeDmd employeDmd);

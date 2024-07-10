@@ -1,5 +1,6 @@
 package ci.nkagou.parcauto.controllers;
 
+import ci.nkagou.parcauto.dtos.chauffeur.EmployeDtoOut;
 import ci.nkagou.parcauto.entities.AppRole;
 import ci.nkagou.parcauto.entities.AppUser;
 import ci.nkagou.parcauto.entities.Employe;
@@ -13,9 +14,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -62,6 +63,19 @@ public class UserController {
         model.addAttribute("listusers",users);
         model.addAttribute("title", "Utilisateur - Liste");
         return "user/index";
+    }
+    @RequestMapping(value = "/createOrUpdate", method = RequestMethod.POST)
+    public Employe createOrUpdateEmploye(@RequestBody EmployeDtoOut employeDto) {
+        return employeService.createOrUpdateEmploye(employeDto);
+    }
+//@PostMapping("/createOrUpdate")
+//public RedirectView createOrUpdateEmploye(@ModelAttribute EmployeDtoOut employeDto) {
+//    employeService.createOrUpdateEmploye(employeDto);
+//    return new RedirectView("/acces/users");
+//}
+     @RequestMapping(value = "/acces/users/newuser",method = RequestMethod.GET)
+        public String newcreateuser(){
+            return "dmd/newUser" ;
     }
 
     @RequestMapping(value = "/acces/users/new", method = RequestMethod.GET)

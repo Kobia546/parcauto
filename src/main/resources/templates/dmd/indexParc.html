@@ -65,6 +65,10 @@
                             <td>[[${dmds.datePrevue}]]</td>
                             <td>[[${dmds.heurePrevue}]]</td>
                             <td>[[${dmds.moyenDemande}]]</td>
+
+                            <th class="text-center">Motif</th>
+                            <th class="text-center">Destination</th>
+
                             <td class="text-center"><a th:href="'/user/dmds/edit/' + ${dmds.IdDmd}" class="btn btn-primary btn-sm" ><i class="material-icons">edit</i>Editer</a></td>
                             <td class="text-center"><a onclick="return confirm('Êtes vous sûre d'annuler !!!')" th:href="@{/user/dmds/delete/} + ${dmds.idDmd}"  class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Annuler</a></td>
                             <!--<td class="text-center"><a onclick="return confirm('Êtes vous sûre !!!')" th:href="@{/admin/dmds/delete/} + ${dmds.idDmd}"  class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Supprimer</a></td>-->

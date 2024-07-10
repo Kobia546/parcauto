@@ -2,6 +2,7 @@ package ci.nkagou.parcauto.controllers;
 
 import ci.nkagou.parcauto.dtos.chauffeur.EmployeDtoOut;
 import ci.nkagou.parcauto.dtos.chauffeurhistorique.ChauffeurHistoriqueDtoOut;
+import ci.nkagou.parcauto.dtos.dashboard.DashbordUserResponseDto;
 import ci.nkagou.parcauto.dtos.dmd.*;
 import ci.nkagou.parcauto.dtos.etat.DmdPapierDetailResponse;
 import ci.nkagou.parcauto.dtos.etat.DmdPapierResponse;
@@ -22,7 +23,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -33,9 +33,6 @@ import javax.validation.Valid;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
 
 import java.time.LocalDate;
@@ -55,6 +52,7 @@ import static ci.nkagou.parcauto.enums.StatutVehicule.DISPONIBLE;
 public class DmdController {
 
     private final DmdService dmdService;
+    private final DashboardService dashboardService;
     private  DmdRepository dmdRepository;
 
     private final Environment env;
@@ -90,12 +88,14 @@ public class DmdController {
 
    // private static String UPLOADED_FOLDER = "C://temp//";
 
-    public DmdController(DmdService dmdService, EmployeService employeService, UserService userService, Environment env, DirectionService directionService, VehiculeService vehiculeService, AttributionService attributionService, EmployeDmdService employeDmdService, ChauffeurHistoriqueService chauffeurHistoriqueService, CarburantAttRepository carburantAttRepository, AttributionRepository attributionRepository, ArticleService articleService, ServletContext context, EmailNotificationService emailNotificationService, UserRoleService userRoleService, RoleService roleService, DmdRepository dmdRepository, MotifService motifService, DestinationService destinationService, DetailVehiculeChauffeurAService detailVehiculeChauffeurAService, DetailVehiculeAService detailVehiculeAService, DetailCarburantAService detailCarburantAService, EtatService etatService) {
+    public DmdController(DmdService dmdService, EmployeService employeService, UserService userService, DashboardService dashboardService, Environment env, DirectionService directionService, EmployeDmdRepository employeDmdRepository, VehiculeService vehiculeService, AttributionService attributionService, EmployeDmdService employeDmdService, ChauffeurHistoriqueService chauffeurHistoriqueService, CarburantAttRepository carburantAttRepository, AttributionRepository attributionRepository, ArticleService articleService, ServletContext context, EmailNotificationService emailNotificationService, UserRoleService userRoleService, RoleService roleService, DmdRepository dmdRepository, MotifService motifService, DestinationService destinationService, DetailVehiculeChauffeurAService detailVehiculeChauffeurAService, DetailVehiculeAService detailVehiculeAService, DetailCarburantAService detailCarburantAService, EtatService etatService, UserService userService1) {
         this.dmdService = dmdService;
         this.employeService = employeService;
+        this.dashboardService = dashboardService;
         this.env = env;
         //this.userService = userService;
         this.directionService = directionService;
+        this.employeDmdRepository = employeDmdRepository;
         //this.vehiculeService = vehiculeService;
         this.vehiculeService = vehiculeService;
         this.attributionService = attributionService;
@@ -116,6 +116,7 @@ public class DmdController {
         this.detailCarburantAService = detailCarburantAService;
 
         this.etatService = etatService;
+        this.userService = userService1;
     }
 
     @RequestMapping("/dmd/dmds")
@@ -283,6 +284,7 @@ public class DmdController {
 
         return "dmd/new";
     }
+
 
 
     @RequestMapping(value = "/dmd/dmds/parc", method = RequestMethod.GET)
@@ -2251,6 +2253,16 @@ public class DmdController {
 
         return "dmd/indexRapportEmploye";
     }
+
+
+
+    @GetMapping("/dashboard")
+    public String getDashboardData(Principal principal) {
+         dashboardService.getDmdCountByStatutForUser(principal);
+        return   "main/dashboard";
+
+    }
+
 
     @RequestMapping("/EtatResponsable/etatResponsable")
     public String etatResponsable(Model model, Principal principal, HttpServletRequest request) {

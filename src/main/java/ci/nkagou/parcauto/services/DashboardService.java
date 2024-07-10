@@ -10,5 +10,11 @@ import java.util.List;
 public interface DashboardService {
     List<DashbordUserResponseDto> dashbordUserResponseDto(Principal principal, EmployeRapportDto EmployeRapportDto);
 
-    List<DashbordUserResponseDto> dashbordUserResponseDto(Principal principal, EmployeRapportDto rapportDto, List<Dmd> dmds);
+
+
+//    static DashbordUserResponseDto getDmdCountByStatutForUser(Principal principal);
+
+    DashbordUserResponseDto getDmdCountByStatutForUser(Principal principal);
+
+//    DashbordUserResponseDto getDmdCountByStatutForUser(Principal principal);
 }
