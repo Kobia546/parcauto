@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Authentification Bootstrap 4 Spring Boot.">
+    <meta name="author" content="Ghislain Nkagou">
+    <title th:utext="${title}"></title>
+
+    <!-- Include CSS block -->
+    <th:block th:include="main/layout/block_css"></th:block>
+
+</head>
+<body>
+
+<!-- Include MENU block -->
+<th:block th:include="main/_menu"></th:block>
+
+
+<!-- page content -->
+<br>
+<!-- Message pour succes de l operation -->
+<p class="alert alert-success text-center h6"   role="alert" th:text="${messagesucces}" th:if="${messagesucces}"></p>
+<div class="card mx-auto" style="width: 98rem">
+
+    <div class="card-header">
+        <div class="row">
+
+            <div class="col-md-8">
+                <h5><strong>Liste des employés.</strong></h5>
+            </div>
+
+            <div class="col-md-4 page-action text-right">
+                <a th:href="@{/employes/employes/new}" class="btn btn-sm btn-success pull-right"> <i class="material-icons">open_in_new</i> <b>Nouveau Employé</b></a>
+            </div>
+
+        </div>
+    </div>
+    <div class="card-body">
+        <div>
+            <div class="table-responsive">
+                <table class="table table-sm" id="index-employe">
+                    <thead>
+                    <tr>
+
+                        <th class="text-center">id</th>
+                        <th class="text-center">Matricule</th>
+                        <th class="text-center">Nom</th>
+                        <th class="text-center">Prénom</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Genre</th>
+                        <th class="text-center">Site</th>
+                        <th class="text-center">Direction</th>
+                        <th class="text-center">Fonction</th>
+                        <th class="text-center">Responsable</th>
+                        <th class="text-center">Chauffeur</th>
+                        <th class="text-center">Editer</th>
+                        <div sec:authorize="hasRole('ROLE_ADMIN')">
+                            <th class="text-center">Supprimer</th>
+                        </div>
+
+
+
+
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr th:each = "c:${listEmploye}">
+
+                        <td th:text = "${c.id}" class="text-center"></td>
+                        <td th:text = "${c.matricule}" class="text-center"></td>
+                        <td th:text = "${c.nom}" class="text-center"></td>
+                        <td th:text = "${c.prenoms}" class="text-center"></td>
+                        <td th:text = "${c.email}" class="text-center"></td>
+                        <td th:text = "${c.genre}" class="text-center"></td>
+                        <td th:text = "${c.site}" class="text-center"></td>
+                        <td th:text = "${c.direction}" class="text-center"></td>
+                        <td th:text = "${c.fonction}" class="text-center"></td>
+                        <td th:text = "${c.estResponsable}" class="text-center"></td>
+                        <td th:text = "${c.estChauffeur}" class="text-center"></td>
+
+                        <td class="text-center"><a th:href="@{/employes/employes/edit/} + ${c.id}" class="btn btn-primary btn-sm" ><i class="material-icons">edit</i>Editer</a></td>
+                        <div sec:authorize="hasRole('ROLE_ADMIN')" >
+                            <td class="text-center"><a onclick="return confirm('Êtes vous sûre !!!')" th:href="@{/employes/employes/delete/} + ${c.id}"  class="btn btn-danger btn-sm"><i class="material-icons">delete_forever</i>Supprimer</a></td>
+                        </div>
+
+
+
+                    </tr>
+
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+<!-- page content -->
+
+
+<!-- Include END MENU block -->
+<th:block th:include="main/_end_menu"></th:block>
+
+
+
+<br/><br/>
+
+
+
+<!-- Include SCRIPT block -->
+<th:block th:include="main/layout/block_script"></th:block>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#index-employe').DataTable({
+            order: [ 0, "desc" ],
+            pageLength: 5,
+            language: {
+                /*url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/French.json'*/
+                sProcessing: "Traitement en cours...",
+                sSearch: "Rechercher&nbsp;:",
+                sLengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                sInfo: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                sInfoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+                sInfoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                sInfoPostFix: "",
+                sLoadingRecords: "Chargement en cours...",
+                sZeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                sEmptyTable: "Aucune donn&eacute;e disponible dans le tableau",
+                oPaginate: {
+                    sFirst: "Premier",
+                    sPrevious: "Pr&eacute;c&eacute;dent",
+                    sNext: "Suivant",
+                    sLast: "Dernier"
+                },
+                oAria: {
+                    sSortAscending: ": activer pour trier la colonne par ordre croissant",
+                    sSortDescending: ": activer pour trier la colonne par ordre d&eacute;croissant"
+                }
+            },
+        });
+    } );
+</script>
+</body>
+</html>

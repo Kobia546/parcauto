@@ -136,7 +136,14 @@ public class DmdServiceImpl implements DmdService {
         dto.setHeurePrevue(dmd.getDmd().getHeurePrevue().toString());
         dto.setMoyenDemande(dmd.getDmd().getMoyenDemande().name());
         dto.setMotif(dmd.getMotif().getNomMotif());
-        dto.setDestination(dmd.getDestination().getNomDestination());
+//        dto.setDestination(dmd.getDestination().getNomDestination());
+        if (dmd != null && dmd.getDestination() != null) {
+            dto.setDestination(dmd.getDestination().getNomDestination());
+        } else {
+            // Gérer le cas où dmd ou dmd.getDestination() est null
+            dto.setDestination(null); // Par exemple, vous pouvez définir une valeur par défaut
+        }
+
         dto.setDateOperation(dmd.getDmd().getDateOperation().toString().replace("T", " "));
         dto.setStatut(dmd.getStatut().name());
         dto.setNomComplet(dmd.getEmploye().toNomComplet());

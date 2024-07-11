@@ -80,6 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/assurance/**").access("hasAnyRole('ROLE_PARCAUTO', 'ROLE_ADMIN')"); //Role Parc auto
         http.authorizeRequests().antMatchers("/attribution/**").access("hasAnyRole('ROLE_PARCAUTO', 'ROLE_ADMIN','ROLE_USER','ROLE_MOYEN-GENERAUX')"); //Role Parc auto
         http.authorizeRequests().antMatchers("/dmd/**").access("hasAnyRole('ROLE_PARCAUTO', 'ROLE_ADMIN', 'ROLE_USER','ROLE_RESPONSABLE','ROLE_MOYEN-GENERAUX')"); //Role Parc auto
+        http.authorizeRequests().antMatchers("/employes/**").access("hasAnyRole( 'ROLE_ACCES', 'ROLE_ADMIN')");
         // For ADMIN only.
         http.authorizeRequests().antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')"); //Role Admin
 

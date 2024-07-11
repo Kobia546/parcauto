@@ -70,6 +70,6 @@ public class Employe {
     }
 
 
-    public void setDirection(String direction) {
-    }
+  /*  public void setDirection(String direction) {
+    }*/
 }

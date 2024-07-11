@@ -43,6 +43,7 @@ public class DmdUserDto extends @Valid DmdParcDto {
 
     private Destination destination;
 
+
     private  Integer kilometrageDebut;
 
     private Statut statut;

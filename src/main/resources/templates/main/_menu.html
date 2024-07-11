@@ -245,12 +245,20 @@
 
 
             <ul class="navbar-nav mb-md-3">
+
                 <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_ACCES')">
+
+                    <li class="nav-item">
+                        <a th:href="@{/employes/employes}" class="nav-link" >
+                            <i class="ni ni-single-02 text-pink"></i> EMPLOYES
+                        </a>
+                    </li>
                 <li class="nav-item">
                     <a th:href="@{/acces/users}" class="nav-link" >
                         <i class="ni ni-circle-08"></i> UTILISATEURS
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/acces/roles}">
                         <i class="ni ni-settings-gear-65"></i> ROLES

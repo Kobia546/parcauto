@@ -1,6 +1,8 @@
 package ci.nkagou.parcauto.services.impl;
 
 import ci.nkagou.parcauto.dtos.chauffeur.EmployeDtoOut;
+import ci.nkagou.parcauto.dtos.employe.EmployeRequest;
+import ci.nkagou.parcauto.dtos.employe.EmployeResponse;
 import ci.nkagou.parcauto.dtos.rapport.RapportChauffeurDto;
 import ci.nkagou.parcauto.dtos.rapport.RapportEmployeDto;
 import ci.nkagou.parcauto.entities.*;
@@ -94,7 +96,7 @@ public class EmployeServiceImpl implements EmployeService {
 //        if (employeDto.getDirection() != null) {
 //            Direction direction = employeRepository.findById(Long.valueOf(employeDto.getDirection()))
 //                    .orElseThrow(() -> new ResourceNotFoundException("Direction introuvable avec l'identifiant : " + employeDto.getDirection())).getDirection();
-            employe.setDirection(employeDto.getDirection());
+            //employe.setDirection(employeDto.getDirection());
 
 
         return employeRepository.save(employe);
@@ -317,6 +319,113 @@ public class EmployeServiceImpl implements EmployeService {
             emails.add(employe.getEmail());
         }
         return emails;
+    }
+
+    @Override
+    public EmployeResponse DTO(Employe employe) {
+
+        EmployeResponse e = new EmployeResponse();
+        e.setId(employe.getIdEmploye());
+        e.setMatricule(String.valueOf(employe.getNumMatEmpl()));
+        e.setNom(employe.getNom());
+        e.setPrenoms(employe.getPrenom());
+        e.setEmail(employe.getEmail());
+        e.setGenre(employe.getGenre().name());
+        e.setEstResponsable(EmployeResponse.stringEstResponsable(employe.isEstSuperieureHierachique()));
+        e.setEstChauffeur(EmployeResponse.stringEstChauffeur(employe.isEstChauffeur()));
+        e.setDirection(employe.getDirection().getLibelle());
+        e.setSite(employe.getSite().getLibelle());
+        e.setFonction(employe.getFonction());
+         return  e;
+
+
+//        return EmployeResponse.builder()
+//                .id(employe.getIdEmploye())
+//                .nom(employe.getNom())
+//                .prenoms(employe.getPrenom())
+//                .email(employe.getEmail())
+//                .genre(employe.getGenre().name())
+//                .matricule())
+//                .direction(employe.getDirection().getLibelle())
+//                .site(employe.getSite().getLibelle())
+//                .fonction(employe.getFonction())
+//                .estResponsable(EmployeResponse.stringEstResponsable(employe.isEstSuperieureHierachique()))
+//                .estChauffeur(EmployeResponse.stringEstChauffeur(employe.isEstChauffeur()))
+//                .build();
+
+    }
+
+    @Override
+    public Employe ENTITY(EmployeRequest request) {
+
+        Employe employe = new Employe();
+        employe.setNumMatEmpl(request.getMatricule());
+        employe.setNom(request.getNom());
+        employe.setPrenom(request.getPrenoms());
+        employe.setEmail(request.getEmail());
+        employe.setGenre(request.getGenre());
+        employe.setDirection(request.getDirection());
+        employe.setFonction(request.getFonction());
+        employe.setSite(request.getSite());
+        employe.setEstChauffeur(request.getEstChauffeur());
+        employe.setEstSuperieureHierachique(request.getEstResponsable());
+        employe.setStatutChauffeur(StatutChauffeur.DISPONIBLE);
+        return employe;
+    }
+
+    @Override
+    public List<EmployeResponse> DTOS(List<Employe> employes) {
+
+        List<EmployeResponse> responses = new ArrayList<>();
+        for (Employe employe : employes){
+
+            EmployeResponse response = this.DTO(employe);
+            responses.add(response);
+            String n = "";
+        }
+
+        return responses;
+    }
+
+    @Override
+    public List<EmployeResponse> DTOS() {
+
+        List<Employe> employes = employeRepository.findAll();
+        String n = "";
+        List<EmployeResponse> employeResponseList = this.DTOS(employes);
+        String na = "";
+        return employeResponseList;
+        //return this.DTOS(employes);
+    }
+
+    @Override
+    public void create(EmployeRequest request) {
+
+        employeRepository.save(this.ENTITY(request));
+
+    }
+
+    @Override
+    public void update(EmployeRequest request, Long idEmploye) {
+
+        Employe employe = this.getEmploye(idEmploye);
+
+        employe = this.ENTITY(request);
+
+        employeRepository.save(employe);
+
+    }
+
+    @Override
+    public Employe getEmploye(Long id) {
+        return employeRepository.getById(id);
+    }
+
+    @Override
+    public void delete(Long id) {
+
+        employeRepository.delete(this.getEmploye(id));
+
     }
 
     /*@Override

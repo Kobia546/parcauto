@@ -1,6 +1,8 @@
 package ci.nkagou.parcauto.services;
 
 import ci.nkagou.parcauto.dtos.chauffeur.EmployeDtoOut;
+import ci.nkagou.parcauto.dtos.employe.EmployeRequest;
+import ci.nkagou.parcauto.dtos.employe.EmployeResponse;
 import ci.nkagou.parcauto.dtos.rapport.RapportChauffeurDto;
 import ci.nkagou.parcauto.dtos.rapport.RapportEmployeDto;
 import ci.nkagou.parcauto.dtos.rapport.RapportVehiculeDto;
@@ -55,6 +57,22 @@ public interface EmployeService {
     List<Employe> listMoyenGeneraux();
 
     List<String> listEmailByListEmploye(List<Employe> employes);
+
+    //////////////////
+    EmployeResponse DTO (Employe employe);
+    Employe ENTITY (EmployeRequest request);
+
+    List<EmployeResponse> DTOS (List<Employe> employes);
+    List<EmployeResponse> DTOS ();
+
+    void create(EmployeRequest request);
+
+    void update (EmployeRequest request, Long idEmploye);
+
+    Employe getEmploye(Long id);
+
+    void delete (Long id);
+
 
     /*List<Employe> findEmployesByEstChauffeurStatutChauffeur (Boolean estChauffeur, StatutChauffeur statutChauffeur);*/
 

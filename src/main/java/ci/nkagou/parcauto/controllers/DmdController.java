@@ -266,6 +266,8 @@ public class DmdController {
 
         // Charger les données nécessaires pour le formulaire
         List<Statut> statuts = Arrays.asList(Statut.values());
+        dmdUserDto.setDatePrevue(LocalDate.now());
+        dmdUserDto.setHeurePrevue(LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))));
         List<MoyenDemande> moyenDemandes = Arrays.asList(MoyenDemande.values());
         List<Motif> motif = motifService.all();
         List<Destination> destination = destinationService.all();

@@ -176,20 +176,31 @@
 <th:block th:include="main/layout/block_script"></th:block>
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function () {
+        // Récupérer la date système
+        var currentDate = new Date();
+
+        // Formater la date pour l'input datetime-local (YYYY-MM-DDTHH:MM)
+        var formattedDate = currentDate.toISOString().slice(0, 16);
+
+        // Pré-remplir le champ "Date de départ" avec la date système
+        document.querySelector("[name='dateDeDepart']").value = formattedDate;
+
+        // Ajouter l'écouteur d'événement sur le bouton
         document.getElementById("btn").addEventListener("click", function (e) {
             var dateAttribution = new Date(document.querySelector("[name='dateAttribution']").value);
             var dateDeDepart = new Date(document.querySelector("[name='dateDeDepart']").value);
-            var KilometrageDepart=document.querySelector("[name='KilometrageDepart']").value;
+            var KilometrageDepart = document.querySelector("[name='KilometrageDepart']").value;
             if (dateDeDepart < dateAttribution) {
-                e.preventDefault(); // Prevent form submission
-                document.getElementById("dateDeDepartWarning").textContent = "La date de depart doit être ultérieure à la date d'attribution.";
+                e.preventDefault(); // Empêcher la soumission du formulaire
+                document.getElementById("dateDeDepartWarning").textContent = "La date de départ doit être ultérieure à la date d'attribution.";
             } else {
-                // Reset the warning message if the dates are valid
+                // Réinitialiser le message d'avertissement si les dates sont valides
                 document.getElementById("dateDeDepartWarning").textContent = "";
             }
         });
     });
 </script>
+
 
 
 </body>

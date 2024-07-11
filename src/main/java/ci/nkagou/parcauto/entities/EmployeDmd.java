@@ -41,6 +41,7 @@ public class EmployeDmd{
     @ManyToOne
     @JoinColumn(name = "idDestination")
     private Destination destination;
+//    private String precision;
 
     @ManyToOne
     @JoinColumn(name = "idMotif")
