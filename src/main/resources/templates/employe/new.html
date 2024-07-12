@@ -53,6 +53,145 @@
                     <!--<span>test</span>-->
                 </div>
             </div>
+            <div  class="form-group row">
+                <label th:for="nom" class="col-sm-4 col-form-label text-md-right"><strong>Nom</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="nom" type="text" class="form-control" th:field="*{nom}" placeholder="Nom" >
+                    <span class="text-danger"  th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></span>
+                    <!--<span>test</span>-->
+                </div>
+            </div>
+            <div  class="form-group row">
+                <label th:for="prenom" class="col-sm-4 col-form-label text-md-right"><strong>Prenom</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="prenom" type="text" class="form-control" th:field="*{prenoms}" placeholder="Prenom" >
+                    <span class="text-danger"  th:if="${#fields.hasErrors('prenoms')}" th:errors="*{prenoms}"></span>
+                    <!--<span>test</span>-->
+                </div>
+            </div>
+
+            <div  class="form-group row">
+                <label th:for="email" class="col-sm-4 col-form-label text-md-right"><strong>email</strong></label>
+
+                <div class="col-md-6">
+
+                    <input id="email" type="email" class="form-control" th:field="*{email}" placeholder="Email" >
+                    <span class="text-danger"  th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                    <!--<span>test</span>-->
+                </div>
+            </div>
+            <div class="form-group row">
+                <label th:for="genre" class="col-sm-4 col-form-label text-md-right"><strong>Genre</strong></label>
+                <div class="col-md-6">
+                    <select id="genre" class="form-control" th:field="*{genre}">
+                        <option value="" disabled selected>Choisir Genre</option>
+                        <option th:each="genre : ${genres}" th:value="${genre}" th:text="${genre.getLibelle()}"></option>
+                    </select>
+                    <span class="text-danger" th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}"></span>
+                </div>
+            </div>
+
+            <!--            <div class="form-group row">-->
+<!--                <label th:for="genre" class="col-sm-4 col-form-label text-md-right"><strong>Genre</strong></label>-->
+<!--                <div class="col-md-6">-->
+<!--                    <select id="genre" class="form-control" th:field="*{genre}">-->
+<!--                        <option value="" disabled selected>Choisir Genre</option>-->
+<!--                        <option value="${}">Homme</option>-->
+<!--                        <option value="">Femme</option>-->
+<!--                        &lt;!&ndash; Add more options as needed &ndash;&gt;-->
+<!--                    </select>-->
+<!--                    <span class="text-danger" th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}"></span>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="form-group row">-->
+<!--                <label th:for="site" class="col-sm-4 col-form-label text-md-right"><strong>Site</strong></label>-->
+<!--                <div class="col-md-6">-->
+<!--                    <select id="site" class="form-control" th:field="*{site}">-->
+<!--                        <option value="" disabled selected>Choisir Site</option>-->
+<!--                        <option value="Site1">Site1</option>-->
+<!--                        <option value="Site2">Site2</option>-->
+<!--                        &lt;!&ndash; Add more options as needed &ndash;&gt;-->
+<!--                    </select>-->
+<!--                    <span class="text-danger" th:if="${#fields.hasErrors('site')}" th:errors="*{site}"></span>-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="form-group row">
+                <label th:for="site" class="col-sm-4 col-form-label text-md-right"><strong>Site</strong></label>
+                <div class="col-md-6">
+                    <select id="site" class="form-control" th:field="*{site}">
+                        <option value="" disabled selected>Choisir Site</option>
+                        <option th:each="site : ${sites}" th:value="${site.getIdSite()}" th:text="${site.getLibelle()}"></option>
+                    </select>
+                    <span class="text-danger" th:if="${#fields.hasErrors('site')}" th:errors="*{site}"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label th:for="direction" class="col-sm-4 col-form-label text-md-right"><strong>Direction</strong></label>
+                <div class="col-md-6">
+                    <select id="direction" class="form-control" th:field="*{direction}">
+                        <option value="" disabled selected>Choisir Direction</option>
+                        <option th:each="direction : ${directions}" th:value="${direction.getIdDirection()}" th:text="${direction.getLibelle()}"></option>
+                    </select>
+                    <span class="text-danger" th:if="${#fields.hasErrors('direction')}" th:errors="*{direction}"></span>
+                </div>
+            </div>
+<!--            <div class="form-group row">-->
+<!--                <label th:for="direction" class="col-sm-4 col-form-label text-md-right"><strong>Direction</strong></label>-->
+<!--                <div class="col-md-6">-->
+<!--                    <select id="direction" class="form-control" th:field="*{direction}">-->
+<!--                        <option value="" disabled selected>Choisir Direction</option>-->
+<!--                        <option value="Direction1">Direction1</option>-->
+<!--                        <option value="Direction2">Direction2</option>-->
+<!--                        &lt;!&ndash; Add more options as needed &ndash;&gt;-->
+<!--                    </select>-->
+<!--                    <span class="text-danger" th:if="${#fields.hasErrors('direction')}" th:errors="*{direction}"></span>-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label text-md-right"><strong>Est Chauffeur</strong></label>
+                <div class="col-md-6">
+                    <div class="form-check form-check-inline">
+                        <input id="estChauffeurOui" type="radio" class="form-check-input" th:field="*{estChauffeur}" th:value="true">
+                        <label class="form-check-label" for="estChauffeurOui">Oui</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input id="estChauffeurNon" type="radio" class="form-check-input" th:field="*{estChauffeur}" th:value="false">
+                        <label class="form-check-label" for="estChauffeurNon">Non</label>
+                    </div>
+                    <span class="text-danger" th:if="${#fields.hasErrors('estChauffeur')}" th:errors="*{estChauffeur}"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label text-md-right"><strong>Est Responsable</strong></label>
+                <div class="col-md-6">
+                    <div class="form-check form-check-inline">
+                        <input id="estResponsableOui" type="radio" class="form-check-input" th:field="*{estResponsable}" th:value="true">
+                        <label class="form-check-label" for="estResponsableOui">Oui</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input id="estResponsableNon" type="radio" class="form-check-input" th:field="*{estResponsable}" th:value="false">
+                        <label class="form-check-label" for="estResponsableNon">Non</label>
+                    </div>
+                    <span class="text-danger" th:if="${#fields.hasErrors('estResponsable')}" th:errors="*{estResponsable}"></span>
+                </div>
+            </div>
+
+
+
+            <div class="form-group row">
+                <label th:for="fonction" class="col-sm-4 col-form-label text-md-right"><strong>Fonction</strong></label>
+                <div class="col-md-6">
+                    <input id="fonction" type="text" class="form-control" th:field="*{fonction}" placeholder="Fonction">
+                    <span class="text-danger" th:if="${#fields.hasErrors('fonction')}" th:errors="*{fonction}"></span>
+                </div>
+            </div>
 
 
 
@@ -90,7 +229,6 @@
 <th:block th:include="main/layout/block_script"></th:block>
 <script type="text/javascript">
     $(document).ready(function() {
-        
         $("#username").on("blur", function(e) {
             $('#msg').hide();
             if ($('#username').val() == null || $('#username').val() == "") {
@@ -104,61 +242,54 @@
                 $.ajax({
                     type: "GET",
                     /*url: "http://localhost:8088/admin/users/finByUsername/"+username,*/
-                    url: "/admin/users/finByUsername/"+username,
+                    url: "/admin/users/finByUsername/" + username,
                     cache: false,
                     success: function(msg) {
                         if (msg == true) {
-
                             var messsage = "<span style=\"color:red;\">Nom d'utilisateur indisponible</span>";
                             $('#msg').show();
                             $("#msg").html(messsage);
                             $("#pwd").prop("disabled", true);
                             $("#pwd_conf").prop("disabled", true);
                             $("#btn").prop("disabled", true);
-                        }
-
-                        else {
+                        } else {
                             var mess = "<span style=\"color:green;\">Nom d'utilisateur disponible</span>";
                             $('#msg').show();
                             $("#msg").html(mess);
                             $("#pwd").prop("disabled", false);
                             $("#pwd_conf").prop("disabled", false);
-                            $("#btn").prop("disabled", true);
+                            $("#btn").prop("disabled", false);
                         }
 
-                      /*  $('#msg').show();
-                        $("#msg").html(msg);*/
-
-
-                        console.log(msg)
-                        //console.log(url)
+                        console.log(msg);
                     }
                 });
             }
         });
-        $("#pwd_conf").on("blur", function (e) {
-            $('#pwd_msg').hide();
-            var password = $('#pwd').val();
-            var confirmation = $('#pwd_conf').val();
-            if (confirmation != null || confirmation!= "" ){
-                if (password != confirmation){
-                    $('#pwd_msg').show();
-                    var mes = "<span style=\"color:red;\">Les mots de passe ne correspondent pas !!!</span>";
-                    $('#pwd_msg').html(mes);
-                    $('#btn').prop("disabled", true);
-                }
-
-                else {
-                    $('#btn').prop("disabled", false);
-                }
-            }
-
-            else {
-                $('#btn').prop("disabled", true);
-            }
-
-        })
     });
+       // $("#pwd_conf").on("blur", function (e) {
+        //     $('#pwd_msg').hide();
+        //     var password = $('#pwd').val();
+        //     var confirmation = $('#pwd_conf').val();
+            // if (confirmation != null || confirmation!= "" ){
+            //     if (password != confirmation){
+            //         $('#pwd_msg').show();
+            //         var mes = "<span style=\"color:red;\">Les mots de passe ne correspondent pas !!!</span>";
+            //         $('#pwd_msg').html(mes);
+            //         $('#btn').prop("disabled", true);
+            //     }
+            //
+            //     else {
+            //         $('#btn').prop("disabled", false);
+            //     }
+            // }
+
+            // else {
+            //     $('#btn').prop("disabled", true);
+            // }
+
+
+    // });
 </script>
 </body>
 </html>

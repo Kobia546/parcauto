@@ -3,6 +3,10 @@ package ci.nkagou.parcauto.controllers;
 import ci.nkagou.parcauto.dtos.employe.EmployeRequest;
 import ci.nkagou.parcauto.dtos.employe.EmployeResponse;
 import ci.nkagou.parcauto.entities.AppRole;
+import ci.nkagou.parcauto.entities.Direction;
+import ci.nkagou.parcauto.entities.Employe;
+import ci.nkagou.parcauto.entities.Site;
+import ci.nkagou.parcauto.enums.Genre;
 import ci.nkagou.parcauto.services.EmployeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -50,8 +55,30 @@ public class EmployeController {
 
     @RequestMapping(value = "/employes/employes/new", method = RequestMethod.GET)
     public String newEmploye(Model model){
+//        List<String> genres = Arrays.asList("Homme", "Femme");
+//        List<Genre> genres = Arrays.asList(
+//                new Genre(1L, "Homme"),
+//                new Genre(2L, "Femme")
+//                // Ajoutez d'autres genres si nécessaire
+        List<Site> sites = Arrays.asList(
+                new Site(1L, "SIEGE"),
+                new Site(2L, "PRODUCTION"),
+                new Site(3L,"PERSONNALISATION")
+                // Ajoutez d'autres sites si nécessaire
+        );
+        List<Direction> directions = Arrays.asList(
+                new Direction(1L, "INFORMATIQUE"),
+                new Direction(2L, "PARC AUTO")
 
+                // Ajoutez d'autres directions si nécessaire
+        );
+        model.addAttribute("sites", sites);
+        model.addAttribute("directions",directions);
+//        );
         model.addAttribute("monemploye",new EmployeRequest());
+        model.addAttribute("genres", Genre.values());
+//        model.addAttribute("genres", genres);
+
         model.addAttribute("title", "Employé - Nouveau");
         return "employe/new";
 
@@ -65,7 +92,7 @@ public class EmployeController {
            //  model.addAttribute("monemploye", new EmployeRequest());
             return "employe/new";
         }
-
+        employeService.create(request);
         redirectAttributes.addFlashAttribute("messagesucces","Opération éffectée avec succès");
         return "redirect:/employes/employes";
     }
@@ -80,14 +107,18 @@ public class EmployeController {
         return "employe/edit";
     }
 
-    @RequestMapping(value = "/employes/employes/update", method = RequestMethod.PUT)
-    public String updateEmploye(@Valid EmployeRequest request,Errors errors, Model model){
+    @RequestMapping(value = "/employes/employes/update/{id}", method = RequestMethod.PUT)
+    public String updateEmploye(@Valid EmployeRequest request,@PathVariable Long idEmploye, Errors errors, Model model){
+
+//       employeService.update(request,idEmploye);
+
 
         if (errors.hasErrors()){
             System.out.println("error YES");
             model.addAttribute("monemploye", new EmployeRequest());
             return "employe/edit";
         }
+        employeService.update(request,idEmploye);
 
 
         model.addAttribute("title", "Employe - Edition");
@@ -95,8 +126,10 @@ public class EmployeController {
     }
 
     @RequestMapping(value = "/employes/employes/delete/{id}", method = RequestMethod.GET)
-    public String deleteRole(@PathVariable Long id){
+    public String deleteUtilisateur(@PathVariable Long id){
 
+
+        employeService.delete(id);
 
         return "redirect:/employes/employes";
     }
