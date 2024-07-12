@@ -359,19 +359,21 @@ public class EmployeServiceImpl implements EmployeService {
     public Employe ENTITY(EmployeRequest request) {
 
         Employe employe = new Employe();
-        employe.setNumMatEmpl(request.getMatricule());
+        employe.setNumMatEmpl(request.getNumMatEmpl());
         employe.setNom(request.getNom());
-        employe.setPrenom(request.getPrenoms());
+        employe.setPrenom(request.getPrenom());
         employe.setEmail(request.getEmail());
         employe.setGenre(request.getGenre());
         employe.setDirection(request.getDirection());
         employe.setFonction(request.getFonction());
         employe.setSite(request.getSite());
         employe.setEstChauffeur(request.getEstChauffeur());
-        employe.setEstSuperieureHierachique(request.getEstResponsable());
+        employe.setEstSuperieureHierachique(request.getEstSuperieureHierachique());
         employe.setStatutChauffeur(StatutChauffeur.DISPONIBLE);
+        employe.setEstSuperieureHierachique(false);
         return employe;
     }
+
 
     @Override
     public List<EmployeResponse> DTOS(List<Employe> employes) {
@@ -404,15 +406,31 @@ public class EmployeServiceImpl implements EmployeService {
         employeRepository.save(this.ENTITY(request));
 
     }
+    @Override
+    public void updateEntity(Employe employe, EmployeRequest request) {
+        employe.setNumMatEmpl(request.getNumMatEmpl());
+        employe.setNom(request.getNom());
+        employe.setPrenom(request.getPrenom());
+        employe.setEmail(request.getEmail());
+        employe.setGenre(request.getGenre());
+        employe.setDirection(request.getDirection());
+        employe.setFonction(request.getFonction());
+        employe.setSite(request.getSite());
+        employe.setEstChauffeur(request.getEstChauffeur());
+        employe.setEstSuperieureHierachique(request.getEstSuperieureHierachique());
+    }
 
     @Override
     public void update(EmployeRequest request, Long idEmploye) {
 
-        Employe employe = this.getEmploye(idEmploye);
-
-        employe = this.ENTITY(request);
-
-        employeRepository.save(employe);
+//        Employe employe = this.getEmploye(idEmploye);
+//
+//        employe = this.ENTITY(request);
+//
+//        employeRepository.save(employe);
+        Employe existingEmploye = this.getEmploye(idEmploye);
+        this.updateEntity(existingEmploye, request);
+        employeRepository.save(existingEmploye);
 
     }
 

@@ -48,8 +48,8 @@
 
                 <div class="col-md-6">
 
-                    <input id="matricule" type="number" class="form-control" th:field="*{matricule}" placeholder="Matricule" >
-                    <span class="text-danger"  th:if="${#fields.hasErrors('matricule')}" th:errors="*{matricule}"></span>
+                    <input id="matricule" type="number" class="form-control" th:field="*{getNumMatEmpl}" placeholder="Matricule" >
+                    <span class="text-danger"  th:if="${#fields.hasErrors('matricule')}" th:errors="*{getNumMatEmpl}"></span>
                     <!--<span>test</span>-->
                 </div>
             </div>
@@ -68,8 +68,8 @@
 
                 <div class="col-md-6">
 
-                    <input id="prenom" type="text" class="form-control" th:field="*{prenoms}" placeholder="Prenom" >
-                    <span class="text-danger"  th:if="${#fields.hasErrors('prenoms')}" th:errors="*{prenoms}"></span>
+                    <input id="prenom" type="text" class="form-control" th:field="*{getPrenom}" placeholder="Prenom" >
+                    <span class="text-danger"  th:if="${#fields.hasErrors('prenoms')}" th:errors="*{getPrenom}"></span>
                     <!--<span>test</span>-->
                 </div>
             </div>
@@ -172,14 +172,14 @@
                 <label class="col-sm-4 col-form-label text-md-right"><strong>Est Responsable</strong></label>
                 <div class="col-md-6">
                     <div class="form-check form-check-inline">
-                        <input id="estResponsableOui" type="radio" class="form-check-input" th:field="*{estResponsable}" th:value="true">
+                        <input id="estResponsableOui" type="radio" class="form-check-input" th:field="*{getEstSuperieureHierachique}" th:value="true">
                         <label class="form-check-label" for="estResponsableOui">Oui</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input id="estResponsableNon" type="radio" class="form-check-input" th:field="*{estResponsable}" th:value="false">
+                        <input id="estResponsableNon" type="radio" class="form-check-input" th:field="*{getEstSuperieureHierachique}" th:value="false">
                         <label class="form-check-label" for="estResponsableNon">Non</label>
                     </div>
-                    <span class="text-danger" th:if="${#fields.hasErrors('estResponsable')}" th:errors="*{estResponsable}"></span>
+                    <span class="text-danger" th:if="${#fields.hasErrors('estResponsable')}" th:errors="*{getEstSuperieureHierachique}"></span>
                 </div>
             </div>
 

@@ -67,6 +67,8 @@ public interface EmployeService {
 
     void create(EmployeRequest request);
 
+    void updateEntity(Employe employe, EmployeRequest request);
+
     void update (EmployeRequest request, Long idEmploye);
 
     Employe getEmploye(Long id);

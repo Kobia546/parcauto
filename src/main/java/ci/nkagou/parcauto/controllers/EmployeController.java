@@ -2,12 +2,13 @@ package ci.nkagou.parcauto.controllers;
 
 import ci.nkagou.parcauto.dtos.employe.EmployeRequest;
 import ci.nkagou.parcauto.dtos.employe.EmployeResponse;
-import ci.nkagou.parcauto.entities.AppRole;
 import ci.nkagou.parcauto.entities.Direction;
 import ci.nkagou.parcauto.entities.Employe;
 import ci.nkagou.parcauto.entities.Site;
 import ci.nkagou.parcauto.enums.Genre;
+import ci.nkagou.parcauto.services.DirectionService;
 import ci.nkagou.parcauto.services.EmployeService;
+import ci.nkagou.parcauto.services.SiteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -19,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,10 +27,13 @@ import java.util.List;
 public class EmployeController {
 
     final private EmployeService employeService;
+    final private SiteService siteService;
+    private final DirectionService directionService;
 
-
-    public EmployeController(EmployeService employeService) {
+    public EmployeController(EmployeService employeService, SiteService siteService, DirectionService directionService) {
         this.employeService = employeService;
+        this.siteService = siteService;
+        this.directionService = directionService;
     }
 
     /*
@@ -60,18 +63,14 @@ public class EmployeController {
 //                new Genre(1L, "Homme"),
 //                new Genre(2L, "Femme")
 //                // Ajoutez d'autres genres si nécessaire
-        List<Site> sites = Arrays.asList(
-                new Site(1L, "SIEGE"),
-                new Site(2L, "PRODUCTION"),
-                new Site(3L,"PERSONNALISATION")
-                // Ajoutez d'autres sites si nécessaire
-        );
-        List<Direction> directions = Arrays.asList(
-                new Direction(1L, "INFORMATIQUE"),
-                new Direction(2L, "PARC AUTO")
-
-                // Ajoutez d'autres directions si nécessaire
-        );
+        List<Site> sites = siteService.all();
+        List <Direction> directions=directionService.all();
+//        List<Direction> directions = Arrays.asList(
+//                new Direction(1L, "INFORMATIQUE"),
+//                new Direction(2L, "PARC AUTO")
+//
+//                // Ajoutez d'autres directions si nécessaire
+//        );
         model.addAttribute("sites", sites);
         model.addAttribute("directions",directions);
 //        );
@@ -100,29 +99,36 @@ public class EmployeController {
     @RequestMapping(value = "/employes/employes/edit/{id}", method = RequestMethod.GET)
     public String editEmploye(@PathVariable Long id, Model model){
 
+        Employe employe=employeService.getEmploye(id);
+        List<Site> sites = siteService.all();
+        List <Direction> directions=directionService.all();
 
 
 
-        model.addAttribute("title", "Employe - Edition");
+
+
+
+        model.addAttribute("sites",sites);
+        model.addAttribute("directions",directions);
+        model.addAttribute("genres", Genre.values());
+        model.addAttribute("monemploye", employe);
         return "employe/edit";
     }
 
-    @RequestMapping(value = "/employes/employes/update/{id}", method = RequestMethod.PUT)
-    public String updateEmploye(@Valid EmployeRequest request,@PathVariable Long idEmploye, Errors errors, Model model){
+    @RequestMapping(value = "/employes/employes/update/{id}", method = RequestMethod.POST)
+    public String updateEmploye(@Valid @ModelAttribute("monemploye") EmployeRequest request,@PathVariable Long id, Errors errors, Model model){
 
 //       employeService.update(request,idEmploye);
-
-
         if (errors.hasErrors()){
             System.out.println("error YES");
-            model.addAttribute("monemploye", new EmployeRequest());
+//            model.addAttribute("monemploye", new EmployeRequest());
             return "employe/edit";
         }
-        employeService.update(request,idEmploye);
+        employeService.update(request,id);
 
 
-        model.addAttribute("title", "Employe - Edition");
-        return "employe/index";
+//        model.addAttribute("title", "Employe - Edition");
+        return "redirect:/employes/employes";
     }
 
     @RequestMapping(value = "/employes/employes/delete/{id}", method = RequestMethod.GET)

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Getter
@@ -28,6 +30,8 @@ public class Employe {
     private Long idEmploye;
 
     @Column(unique = true)
+
+
     private Long numMatEmpl;
 
     private String nom;
