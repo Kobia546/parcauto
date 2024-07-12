@@ -696,6 +696,7 @@ public class AttributionServiceImpl implements AttributionService {
         chauffeurHistorique.setDateParcours(LocalDateTime.now());
 
 
+
         VehiculeChauffeurAtt vehiculeChauffeurAtt = vehiculeChauffeurAttRepository.getById(attributionDtoZ.getId());
 
         vehiculeChauffeurAtt.setDateAttribution(attributionDtoZ.getDateAttribution());
@@ -725,7 +726,7 @@ public class AttributionServiceImpl implements AttributionService {
         //vehiculeChauffeurAtt.setMotif(attributionDtoZ.getMotif());
         vehiculeChauffeurAtt.setMotifChauffeur(attributionDtoZ.getMotifChauffeur());
         vehiculeChauffeurAtt.setStatutAttrib(TERMINEE);
-        vehiculeChauffeurAtt.setObservation(attributionDtoZ.getObservation());
+//        vehiculeChauffeurAtt.setObservation(attributionDtoZ.getObservation());
         vehiculeChauffeurAtt.setObservationChauffeur(attributionDtoZ.getObservationChauffeur());
         attributionRepository.save(vehiculeChauffeurAtt);
 

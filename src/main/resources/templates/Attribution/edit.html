@@ -130,6 +130,7 @@
                     <input class="form-control"  type="text" th:field="*{kilometrageFin}" required>
                 </div>
             </div>
+
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label text-md-right"><strong>Statut du véhicule</strong></label>
                 <div class="col-md-6">
@@ -137,13 +138,13 @@
                         <div class="form-row">
                             <div class="col-auto">
                                 <div class="form-check">
-                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutVehiculeA}" th:value="DISPONIBLE" id="radio-disponible">
+                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutVehiculeA}" th:value="DISPONIBLE" id="radio-disponible" onclick="toggleAdditionalFields()">
                                     <label class="form-check-label custom-check-label" for="radio-disponible">Disponible</label>
                                 </div>
                             </div>
                             <div class="col-auto ml-3">
                                 <div class="form-check">
-                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutVehiculeA}" th:value="INDISPONIBLE" id="radio-indisponible">
+                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutVehiculeA}" th:value="INDISPONIBLE" id="radio-indisponible" onclick="toggleAdditionalFields()">
                                     <label class="form-check-label custom-check-label" for="radio-indisponible" th:classappend="${attributionDto.statutVehiculeA == 'INDISPONIBLE'} ? 'text-danger'">Indisponible</label>
                                 </div>
                             </div>
@@ -152,101 +153,7 @@
                 </div>
             </div>
 
-<!--            <div class="form-group row" id="additional-fields">-->
-<!--                &lt;!&ndash; Additional fields here &ndash;&gt;-->
-<!--&lt;!&ndash;                <div class="form-group row">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <label th:for="motif" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div class="col-md-5">&ndash;&gt;-->
-<!--&lt;!&ndash;                        <select th:field="${attributionDto.motif}" id="motif" name="motif" class="select-type form-control">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <option value="">&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Motif -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <option th:each="c:${listMotif}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == attributionDto.motif}"></option>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </select>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--                <div class="form-group row">-->
-<!--                    <label th:for="observation" class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>-->
-<!--                    <div class="col-md-5">-->
-<!--                        <textarea class="form-control" type="text" th:field="${attributionDto.observation}"></textarea>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-            <div class="form-group row" id="additional-fields">
-                <label th:for="observation" class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>
-                <div class="col-md-6">
-                    <textarea class="form-control" th:field="${attributionDto.observation}" rows="5"></textarea>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label text-md-right"><strong>Statut du chauffeur</strong></label>
-                <div class="col-md-6">
-                    <div class="border p-3">
-                        <div class="form-row">
-                            <div class="col-auto">
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutChauffeurA}" th:value="DISPONIBLE" id="radio-disponible2" th:checked="${attributionDto.statutChauffeurA == 'DISPONIBLE'}">
-                                    <label class="form-check-label custom-check-label" for="radio-disponible2">Disponible</label>
-                                </div>
-                            </div>
-                            <div class="col-auto ml-3">
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutChauffeurA}" th:value="INDISPONIBLE" id="radio-indisponible2" th:checked="${attributionDto.statutChauffeurA == 'INDISPONIBLE'}">
-                                    <label class="form-check-label custom-check-label" for="radio-indisponible2" th:classappend="${attributionDto.statutChauffeurA == 'INDISPONIBLE'} ? 'text-danger'">Indisponible</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-<!--            <div class="form-group row" id="additional-fields2">-->
-<!--                &lt;!&ndash; Additional fields here &ndash;&gt;-->
-<!--&lt;!&ndash;                <div class="form-group row">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <label th:for="motifChauffeur" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div class="col-md-5">&ndash;&gt;-->
-<!--&lt;!&ndash;                        <select th:field="${attributionDto.motifChauffeur}" id="motifChauffeur" name="motifChauffeur" class="select-type form-control">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <option value="">&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Motif -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <option th:each="c:${listMotifChauffeur}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == attributionDto.motifChauffeur}"></option>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </select>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--                <div class="form-group row">-->
-<!--                    <label th:for="observationChauffeur" class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>-->
-<!--                    <div class="col-md-5">-->
-<!--                        <textarea class="form-control" type="text" th:field="${attributionDto.observationChauffeur}"></textarea>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-            <div class="form-group row" id="additional-fields2">
-                <label th:for="observationChauffeur" class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>
-                <div class="col-md-6">
-                    <textarea class="form-control" th:field="${attributionDto.observationChauffeur}" rows="5"></textarea>
-                </div>
-            </div>
-
-            <!--            <div class="form-group row">-->
-<!--                <label class="col-sm-4 col-form-label text-md-right"><strong>Statut du véhicule</strong></label>-->
-<!--                <div class="col-md-6">-->
-<!--                    <div class="border p-3">-->
-<!--                        <div class="form-row">-->
-<!--                            <div class="col-auto">-->
-<!--                                <div class="form-check">-->
-<!--                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutVehiculeA}" th:value="DISPONIBLE" id="radio-disponible" onclick="toggleAdditionalFields()">-->
-<!--                                    <label class="form-check-label custom-check-label" for="radio-disponible">Disponible</label>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="col-auto ml-3">-->
-<!--                                <div class="form-check">-->
-<!--                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutVehiculeA}" th:value="INDISPONIBLE" id="radio-indisponible" onclick="toggleAdditionalFields()">-->
-<!--                                    <label class="form-check-label custom-check-label" for="radio-indisponible" th:classappend="${attributionDto.statutVehiculeA == 'INDISPONIBLE'} ? 'text-danger'">Indisponible</label>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="form-group row additional-fields" id="additional-fields">-->
+            <div class="form-group row additional-fields" id="additional-fields">
 <!--                &lt;!&ndash; Additional fields here &ndash;&gt;-->
 <!--                <div class="form-group row">-->
 <!--                    <label th:for="motif" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>-->
@@ -257,55 +164,60 @@
 <!--                        </select>-->
 <!--                    </div>-->
 <!--                </div>-->
-<!--                <div class="form-group row">-->
-<!--                    <label th:for="observation" class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>-->
-<!--                    <div class="col-md-5">-->
-<!--                        <textarea class="form-control" type="text" th:field="${attributionDto.observation}"></textarea>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
+                <div class="form-group row">
+                    <label th:for="observation" class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>
+                    <div class="col-md-5">
+                        <textarea class="form-control" type="text" th:field="${attributionDto.observation}"></textarea>
+                    </div>
+                </div>
+            </div>
 
-<!--            <div class="form-group row">-->
-<!--                <label class="col-sm-4 col-form-label text-md-right"><strong>Statut du chauffeur</strong></label>-->
-<!--                <div class="col-md-6">-->
-<!--                    <div class="border p-3">-->
-<!--                        <div class="form-row">-->
-<!--                            <div class="col-auto">-->
-<!--                                <div class="form-check">-->
-<!--                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutChauffeurA}" th:value="DISPONIBLE" id="radio-disponible2" th:checked="${attributionDto.statutChauffeurA == 'DISPONIBLE'}" onclick="toggleAdditionalFields2()">-->
-<!--                                    <label class="form-check-label custom-check-label" for="radio-disponible2">Disponible</label>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="col-auto ml-3">-->
-<!--                                <div class="form-check">-->
-<!--                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutChauffeurA}" th:value="INDISPONIBLE" id="radio-indisponible2" th:checked="${attributionDto.statutChauffeurA == 'INDISPONIBLE'}" onclick="toggleAdditionalFields2()">-->
-<!--                                    <label class="form-check-label custom-check-label" for="radio-indisponible2" th:classappend="${attributionDto.statutChauffeurA == 'INDISPONIBLE'} ? 'text-danger'">Indisponible</label>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label text-md-right"><strong>Statut du chauffeur</strong></label>
+                <div class="col-md-6">
+                    <div class="border p-3">
+                        <div class="form-row">
+                            <div class="col-auto">
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutChauffeurA}" th:value="DISPONIBLE" id="radio-disponible2" th:checked="${attributionDto.statutChauffeurA == 'DISPONIBLE'}" onclick="toggleAdditionalFields2()">
+                                    <label class="form-check-label custom-check-label" for="radio-disponible2">Disponible</label>
+                                </div>
+                            </div>
+                            <div class="col-auto ml-3">
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input custom-check-input" th:field="${attributionDto.statutChauffeurA}" th:value="INDISPONIBLE" id="radio-indisponible2" th:checked="${attributionDto.statutChauffeurA == 'INDISPONIBLE'}" onclick="toggleAdditionalFields2()">
+                                    <label class="form-check-label custom-check-label" for="radio-indisponible2" th:classappend="${attributionDto.statutChauffeurA == 'INDISPONIBLE'} ? 'text-danger'">Indisponible</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 <!--            <div class="form-group row additional-fields2" id="additional-fields2">-->
 <!--                &lt;!&ndash; Additional fields here &ndash;&gt;-->
-<!--                <div class="form-group row">-->
-<!--                    <label th:for="motifChauffeur" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>-->
-<!--                    <div class="col-md-5">-->
-<!--                        <select th:field="${attributionDto.motifChauffeur}" id="motifChauffeur" name="motifChauffeur" class="select-type form-control">-->
-<!--                            <option value="">&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Motif -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>-->
-<!--                            <option th:each="c:${listMotifChauffeur}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == attributionDto.motifChauffeur}"></option>-->
-<!--                        </select>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="form-group row">-->
-<!--                    <label th:for="observationChauffeur" class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>-->
-<!--                    <div class="col-md-5">-->
-<!--                        <textarea class="form-control" type="text" th:field="${attributionDto.observationChauffeur}"></textarea>-->
-<!--                    </div>-->
-<!--                </div>-->
+<!--&lt;!&ndash;                <div class="form-group row">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <label th:for="motifChauffeur" class="col-sm-4 col-form-label text-md-right"><strong>Motif</strong></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <div class="col-md-5">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <select th:field="${attributionDto.motifChauffeur}" id="motifChauffeur" name="motifChauffeur" class="select-type form-control">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <option value="">&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Motif -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <option th:each="c:${listMotifChauffeur}" th:value="${c.name}" th:text="${c.name}" th:selected="${c.name() == attributionDto.motifChauffeur}"></option>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </select>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="form-group row">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <label th:for="observationChauffeur" class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <div class="col-md-5">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <textarea class="form-control" type="text" th:field="${attributionDto.observationChauffeur}"></textarea>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
 <!--            </div>-->
-
+            <div class="form-group row">
+                <label th:for="observationChauffeur" class="col-sm-4 col-form-label text-md-right"><strong>Observation</strong></label>
+                <div class="col-md-5">
+                    <textarea class="form-control" type="text" th:field="${attributionDto.observationChauffeur}"></textarea>
+                </div>
+            </div>
             <div class="form-group row d-none">
                 <label th:for="employe" class="col-sm-4 col-form-label text-md-right"><strong>Chauffeur</strong></label>
                 <div class="col-md-6">

@@ -96,6 +96,7 @@
                             <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')">Statut du vehicule</th>
                             <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')">Chauffeur</th>
                             <th class="text-center" sec:authorize="hasRole('ROLE_PARCAUTO')">Statut du chauffeur</th>
+                            <th class="text-center" > Observation</th>
 <!--                            <th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Photo du recu</th>-->
                             <th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Montant</th>
                             <th class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">Litre</th>
@@ -133,6 +134,7 @@
                                 <span class="badge badge-pill badge-success" th:case="'DISPONIBLE'">DISPONIBLE</span>
                                 <span class="badge badge-pill badge-danger" th:case="'INDISPONIBLE'" data-toggle="tooltip" th:title="${c.motifChauffeur + ' : ' + c.observationChauffeur}">INDISPONIBLE</span>
                             </td>
+                            <td th:text="${c.getObservationChauffeur()}" class="text-center"></td>
 <!--                            <td class="text-center" sec:authorize="hasRole('ROLE_MOYEN-GENERAUX')">-->
 <!--                                <img th:if="${c.typeAttribution == 'CARBURANT'}" id="thumbnail" th:src="'../../../temp/' + ${c.recuCarburant}" class="md-avatar" onclick="openImageViewer(this)">-->
 <!--                            </td>-->
