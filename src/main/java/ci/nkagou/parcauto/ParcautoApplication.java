@@ -10,9 +10,11 @@ import ci.nkagou.parcauto.repositories.*;
 import ci.nkagou.parcauto.services.*;
 import ci.nkagou.parcauto.utils.ConfigProperties;
 import ci.nkagou.parcauto.utils.EncrytedPasswordUtils;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -33,7 +35,7 @@ public class ParcautoApplication {
 
 		ApplicationContext ctx = SpringApplication.run(ParcautoApplication.class, args);
 
-		UserService userService = ctx.getBean(UserService.class);
+		/*UserService userService = ctx.getBean(UserService.class);
 		EmployeService employeService = ctx.getBean(EmployeService.class);
 		RoleRepository roleRepository = ctx.getBean(RoleRepository.class);
 
@@ -42,7 +44,7 @@ public class ParcautoApplication {
 		List<AppUser> users = userService.listUserByRole(role);
 		List<Employe> parcAutoEmploye = employeService.listParcAuto();
 		List<Employe> MoyenGenerauxEmploye = employeService.listMoyenGeneraux();
-		String ss = "";
+		String ss = "";*/
 
 
 		/*DmdService dmdService = ctx.getBean(DmdService.class);
@@ -627,5 +629,78 @@ public class ParcautoApplication {
 		//String filePath = "C:\\Users\\PC\\Desktop\\parcauto-master-V2\\parcauto-master\\src\\main\\resources\\templates\\newprint.jrxml";
 
     }
+/*
+	@Bean
+	CommandLineRunner site (SiteRepository siteRepository) {
+		return args -> {
+			siteRepository.save(new Site("CENTRE PERSO"));
+			siteRepository.save(new Site("PRODUCTION"));
+			siteRepository.save(new Site("SIEGE"));
+			siteRepository.save(new Site("CENTRE AUTRE"));
+
+
+
+		};
+	}
+
+	@Bean
+	CommandLineRunner direction (DirectionRepository directionRepository) {
+		return args -> {
+			directionRepository.save(new Direction("DIRECTION GENERALE"));
+			directionRepository.save(new Direction("DIRECTION DES SYSTEMES D'INFORMATION"));
+			directionRepository.save(new Direction("DIRECTION TECHNIQUE"));
+			directionRepository.save(new Direction("DIRECTION PRODUCTION"));
+			directionRepository.save(new Direction("DIRECTION FINANCIERE ET ADMINISTRATIVE"));
+			directionRepository.save(new Direction("DIRECTION COMMERCIALE CHARGE DE LA MONETIQUE"));
+			directionRepository.save(new Direction("DIRECTION DES OPERATIONS"));
+			directionRepository.save(new Direction("DIRECTION STRATEGIE ET DEVELOPPEMENT"));
+			directionRepository.save(new Direction("DIRECTION DES AUDITS"));
+
+		};
+	}
+
+
+	@Bean
+	CommandLineRunner user (RoleRepository roleRepository, UserRepository userRepository, UserRoleRepository userRoleRepository, EmployeRepository employeRepository, DirectionRepository directionRepository, SiteRepository siteRepository){
+		return args -> {
+
+			AppRole roleAdmin = roleRepository.save(new AppRole("ROLE_ADMIN"));
+			AppRole roleAccess = roleRepository.save(new AppRole("ROLE_ACCES"));
+			AppRole roleUser = roleRepository.save(new AppRole("ROLE_USER"));
+			AppRole roleResponsable = roleRepository.save(new AppRole("ROLE_RESPONSABLE"));
+			AppRole roleParcAuto = roleRepository.save(new AppRole("ROLE_PARCAUTO"));
+			AppRole roleMoyenGeneraux = roleRepository.save(new AppRole("ROLE_MOYEN-GENERAUX"));
+
+			Direction direction = directionRepository.findByLibelle("DIRECTION GENERALE");
+			Site site = siteRepository.findByLibelle("SIEGE");
+			String p = "J@nvi3r";
+			String password = EncrytedPasswordUtils.encrytePassword(p);
+
+			Employe employeAdmin = new Employe();
+			employeAdmin.setNumMatEmpl(0L);
+			employeAdmin.setNom("ADMIN");
+			employeAdmin.setPrenom("Admin");
+			employeAdmin.setGenre(Genre.MASCULIN);
+			employeAdmin.setEmail("admin@ics.ci");
+			employeAdmin.setEstChauffeur(false);
+			employeAdmin.setEstSuperieureHierachique(false);
+			employeAdmin.setStatutChauffeur(StatutChauffeur.DISPONIBLE);
+			employeAdmin.setSite(site);
+			employeAdmin.setDirection(direction);
+			employeAdmin = employeRepository.save(employeAdmin);
+
+			AppUser userAdmin = userRepository.save(new AppUser("admin", password, true, employeAdmin));
+			System.out.println("--- Compte Admin crée ---- ");
+			System.out.println("--- Compte Admin crée ---- ");
+			userRoleRepository.save(new UserRole(userAdmin, roleAdmin));
+			userRoleRepository.save(new UserRole(userAdmin, roleAccess));
+			userRoleRepository.save(new UserRole(userAdmin, roleUser));
+			System.out.println("--- Les roles [ADMIN, ACCESS, USER] ont été assignés au compte Admin crée ---- ");
+
+			System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&& Données de base inserer avec succes &&&&&&&&&&&&&&&&&&&");
+
+
+		};
+	}*/
 
 }

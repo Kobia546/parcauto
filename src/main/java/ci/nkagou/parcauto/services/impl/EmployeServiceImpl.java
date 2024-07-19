@@ -53,8 +53,8 @@ public class EmployeServiceImpl implements EmployeService {
         dto.setNom(employe.toNomComplet());
         dto.setNumMatEmpl(employe.getNumMatEmpl().toString());
         dto.setGenre(employe.getGenre().toString());
-        dto.setTelephoneEmploye(employe.getTelephoneEmploye());
-        dto.setDateNaissance(employe.getDateNaissance().toString());
+        /*dto.setTelephoneEmploye(employe.getTelephoneEmploye());
+        dto.setDateNaissance(employe.getDateNaissance().toString());*/
         dto.setStatutChauffeur(employe.getStatutChauffeur().toString());
         return dto;
     }
@@ -77,11 +77,11 @@ public class EmployeServiceImpl implements EmployeService {
         employe.setNom(employeDto.getNom());
         employe.setPrenom(employeDto.getPrenom());
         employe.setGenre(Genre.valueOf(employeDto.getGenre()));
-        employe.setFonction(employeDto.getFonction());
-        employe.setDateEmbauche(LocalDate.parse(employeDto.getDateEmbauche()));
+        //employe.setFonction(employeDto.getFonction());
+        /*employe.setDateEmbauche(LocalDate.parse(employeDto.getDateEmbauche()));*/
         employe.setEmail(employeDto.getEmail());
-        employe.setTelephoneEmploye(employeDto.getTelephoneEmploye());
-        employe.setDateNaissance(LocalDate.parse(employeDto.getDateNaissance()));
+       /* employe.setTelephoneEmploye(employeDto.getTelephoneEmploye());
+        employe.setDateNaissance(LocalDate.parse(employeDto.getDateNaissance()));*/
         employe.setEstSuperieureHierachique(Boolean.parseBoolean(employeDto.getEstSuperieureHierachique()));
         employe.setEstChauffeur(Boolean.parseBoolean(employeDto.getEstChauffeur()));
         employe.setStatutChauffeur(StatutChauffeur.valueOf(employeDto.getStatutChauffeur()));
@@ -335,7 +335,7 @@ public class EmployeServiceImpl implements EmployeService {
         e.setEstChauffeur(EmployeResponse.stringEstChauffeur(employe.isEstChauffeur()));
         e.setDirection(employe.getDirection().getLibelle());
         e.setSite(employe.getSite().getLibelle());
-        e.setFonction(employe.getFonction());
+       // e.setFonction(employe.getFonction());
          return  e;
 
 
@@ -365,7 +365,7 @@ public class EmployeServiceImpl implements EmployeService {
         employe.setEmail(request.getEmail());
         employe.setGenre(request.getGenre());
         employe.setDirection(request.getDirection());
-        employe.setFonction(request.getFonction());
+        //employe.setFonction(request.getFonction());
         employe.setSite(request.getSite());
         employe.setEstChauffeur(request.getEstChauffeur());
         employe.setEstSuperieureHierachique(request.getEstSuperieureHierachique());
@@ -414,7 +414,7 @@ public class EmployeServiceImpl implements EmployeService {
         employe.setEmail(request.getEmail());
         employe.setGenre(request.getGenre());
         employe.setDirection(request.getDirection());
-        employe.setFonction(request.getFonction());
+       // employe.setFonction(request.getFonction());
         employe.setSite(request.getSite());
         employe.setEstChauffeur(request.getEstChauffeur());
         employe.setEstSuperieureHierachique(request.getEstSuperieureHierachique());

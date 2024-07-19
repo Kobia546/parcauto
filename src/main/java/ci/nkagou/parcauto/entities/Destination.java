@@ -20,4 +20,5 @@ public class Destination {
     private Long idDestination;
 
     private String nomDestination;
+
 }

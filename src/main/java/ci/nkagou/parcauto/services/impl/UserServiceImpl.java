@@ -4,6 +4,7 @@ import ci.nkagou.parcauto.entities.AppRole;
 import ci.nkagou.parcauto.entities.AppUser;
 import ci.nkagou.parcauto.entities.Employe;
 import ci.nkagou.parcauto.entities.UserRole;
+import ci.nkagou.parcauto.repositories.EmployeRepository;
 import ci.nkagou.parcauto.repositories.RoleRepository;
 import ci.nkagou.parcauto.repositories.UserRepository;
 import ci.nkagou.parcauto.repositories.UserRoleRepository;
@@ -25,6 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private EmployeRepository employeRepository;
     private UserRepository userRepository;
     private UserRoleRepository userRoleRepository;
     private RoleRepository roleRepository;
@@ -104,6 +106,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public AppRole getRoleByName(String roleName) {
         return roleRepository.findByRoleName(roleName);
+    }
+
+    @Override
+    public void updateEmailEmploye(String emailEmploye, Employe employe) {
+
+        employe.setEmail(emailEmploye);
+        employeRepository.save(employe);
+
     }
 
 }

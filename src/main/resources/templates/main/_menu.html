@@ -18,7 +18,7 @@
 
             <!-- Navigation -->
             <ul class="navbar-nav">
-                <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')or hasRole('ROLE_SUPERVISOR') or hasRole('ROLE_AGENT') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_RESPONSABLE')">
+                <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')or hasRole('ROLE_SUPERVISOR') or hasRole('ROLE_AGENT') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_RESPONSABLE')or hasRole('ROLE_MOYEN-GENERAUX')">
                     <li class="nav-item">
                         <a th:href="@{/user-info}"  class="nav-link">
                             <i class="ni ni-tv-2 text-danger"></i>  Tableau de bord
@@ -27,7 +27,7 @@
                 </div>
 
 
-                <div sec:authorize="hasRole('ROLE_ADMIN')  or hasRole('ROLE_ACCES') or hasRole('ROLE_PARCAUTO')">
+                <div sec:authorize="hasRole('ROLE_ADMIN')  or hasRole('ROLE_ACCES') or hasRole('ROLE_PARCAUTO')or hasRole('ROLE_MOYEN-GENERAUX')">
                     <li  class="nav-item">
                         <a th:href="@{/vehicule/vehicules}" class="nav-link" >
                             <i class="ni ni-delivery-fast text-primary" ></i> VEHICULE
@@ -35,7 +35,7 @@
                     </li>
                 </div>
 
-                <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
+                <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')" class="nav-item">
                     <a th:href="@{/Chauffeur/chauffeur}" class="nav-link">
                         <i class="ni ni ni-single-02 text-dark"></i> CHAUFFEUR
                     </a>
@@ -54,13 +54,13 @@
                        </a>
                    </li>
 
-                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
+                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')or hasRole('ROLE_MOYEN-GENERAUX')" class="nav-item">
                        <a th:href="@{/dmd/dmdVehiculeChauffeur}" class="nav-link">
                            <i class="ni ni- ni-books text-pink"></i> DMD
                        </a>
                    </li>
 
-                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')" class="nav-item">
+                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_MOYEN-GENERAUX')or hasRole('ROLE_MOYEN-GENERAUX')" class="nav-item">
                        <a th:href="@{/Attribution/attribution}" class="nav-link">
                            <i class="ni ni ni-curved-next text-brown"></i> SUIVI
                        </a>
@@ -108,13 +108,13 @@
                        </a>
                    </li>
 
-                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
+                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')or hasRole('ROLE_MOYEN-GENERAUX')" class="nav-item">
                        <a th:href="@{/vehiculeHistorique/vehiculeHistoriques}" class="nav-link">
                            <i class="ni ni-bus-front-12 text-orange"></i> HISTORIQUE DES VEHICULES
                        </a>
                    </li>
 
-                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')" class="nav-item">
+                   <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')or hasRole('ROLE_MOYEN-GENERAUX')" class="nav-item">
                        <a th:href="@{/Etat/etat}" class="nav-link">
                            <i class="ni ni-chart-bar-32 text-dark"></i> RAPPORT
                        </a>

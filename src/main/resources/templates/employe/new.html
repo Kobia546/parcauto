@@ -48,8 +48,8 @@
 
                 <div class="col-md-6">
 
-                    <input id="matricule" type="number" class="form-control" th:field="*{getNumMatEmpl}" placeholder="Matricule" >
-                    <span class="text-danger"  th:if="${#fields.hasErrors('matricule')}" th:errors="*{getNumMatEmpl}"></span>
+                    <input id="matricule" type="number" class="form-control" th:field="*{numMatEmpl}" placeholder="Matricule" >
+                    <span class="text-danger"  th:if="${#fields.hasErrors('numMatEmpl')}" th:errors="*{getNumMatEmpl}"></span>
                     <!--<span>test</span>-->
                 </div>
             </div>
@@ -68,22 +68,22 @@
 
                 <div class="col-md-6">
 
-                    <input id="prenom" type="text" class="form-control" th:field="*{getPrenom}" placeholder="Prenom" >
-                    <span class="text-danger"  th:if="${#fields.hasErrors('prenoms')}" th:errors="*{getPrenom}"></span>
+                    <input id="prenom" type="text" class="form-control" th:field="*{prenom}" placeholder="Prenom" >
+                    <span class="text-danger"  th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}"></span>
                     <!--<span>test</span>-->
                 </div>
             </div>
 
-            <div  class="form-group row">
+            <!--<div  class="form-group row">
                 <label th:for="email" class="col-sm-4 col-form-label text-md-right"><strong>email</strong></label>
 
                 <div class="col-md-6">
 
                     <input id="email" type="email" class="form-control" th:field="*{email}" placeholder="Email" >
                     <span class="text-danger"  th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-                    <!--<span>test</span>-->
+                    &lt;!&ndash;<span>test</span>&ndash;&gt;
                 </div>
-            </div>
+            </div>-->
             <div class="form-group row">
                 <label th:for="genre" class="col-sm-4 col-form-label text-md-right"><strong>Genre</strong></label>
                 <div class="col-md-6">
@@ -172,27 +172,27 @@
                 <label class="col-sm-4 col-form-label text-md-right"><strong>Est Responsable</strong></label>
                 <div class="col-md-6">
                     <div class="form-check form-check-inline">
-                        <input id="estResponsableOui" type="radio" class="form-check-input" th:field="*{getEstSuperieureHierachique}" th:value="true">
+                        <input id="estResponsableOui" type="radio" class="form-check-input" th:field="*{estSuperieureHierachique}" th:value="true">
                         <label class="form-check-label" for="estResponsableOui">Oui</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input id="estResponsableNon" type="radio" class="form-check-input" th:field="*{getEstSuperieureHierachique}" th:value="false">
+                        <input id="estResponsableNon" type="radio" class="form-check-input" th:field="*{estSuperieureHierachique}" th:value="false">
                         <label class="form-check-label" for="estResponsableNon">Non</label>
                     </div>
-                    <span class="text-danger" th:if="${#fields.hasErrors('estResponsable')}" th:errors="*{getEstSuperieureHierachique}"></span>
+                    <span class="text-danger" th:if="${#fields.hasErrors('estSuperieureHierachique')}" th:errors="*{estSuperieureHierachique}"></span>
                 </div>
             </div>
 
 
 
-            <div class="form-group row">
+           <!-- <div class="form-group row">
                 <label th:for="fonction" class="col-sm-4 col-form-label text-md-right"><strong>Fonction</strong></label>
                 <div class="col-md-6">
                     <input id="fonction" type="text" class="form-control" th:field="*{fonction}" placeholder="Fonction">
                     <span class="text-danger" th:if="${#fields.hasErrors('fonction')}" th:errors="*{fonction}"></span>
                 </div>
             </div>
-
+-->
 
 
 

@@ -21,6 +21,7 @@ public interface UserService  {
     List<AppUser> listUserByRole(AppRole role);
 
     AppRole getRoleByName(String roleName);
+    void updateEmailEmploye(String emailEmploye, Employe employe);
 
 
 }

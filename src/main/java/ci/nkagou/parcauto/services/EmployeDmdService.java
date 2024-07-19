@@ -18,7 +18,7 @@ public interface EmployeDmdService {
     EmployeDmd findById(Long id);
     //EmployeDmd findByLibelle(String libelle);
 //    EmployeDmd create (EmployeDmd employeDmd);
-    void create(EmployeDmd employeDmd, AppUser userConnecte);
+//    void create(EmployeDmd employeDmd, AppUser userConnecte);
     EmployeDmd update (EmployeDmd employeDmd);
     //EmployeDmd updateTransport (EmployeDmd employeDmd);
     void delete(EmployeDmd employeDmd);

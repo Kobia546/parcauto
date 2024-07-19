@@ -135,7 +135,14 @@ public class DmdServiceImpl implements DmdService {
         dto.setDatePrevue(dmd.getDmd().getDatePrevue().toString());
         dto.setHeurePrevue(dmd.getDmd().getHeurePrevue().toString());
         dto.setMoyenDemande(dmd.getDmd().getMoyenDemande().name());
-        dto.setMotif(dmd.getMotif().getNomMotif());
+//        dto.setMotif(dmd.getMotif().getNomMotif());
+
+        if (dmd != null && dmd.getMotif() != null) {
+            dto.setMotif(dmd.getMotif().getNomMotif());
+        }else{
+            dto.setMotif(null);
+        }
+
 //        dto.setDestination(dmd.getDestination().getNomDestination());
         if (dmd != null && dmd.getDestination() != null) {
             dto.setDestination(dmd.getDestination().getNomDestination());
@@ -245,13 +252,46 @@ public class DmdServiceImpl implements DmdService {
         dmd.setHeurePrevue(dto.getHeurePrevue());
         dmd.setMoyenDemande(MoyenDemande.valueOf(dto.getMoyenDemande()));
         dmd.setDateOperation(LocalDateTime.now());
+
         //Create Dmd on Database.
         Dmd dmdPersist = dmdRepository.save(dmd);
+//        String concatenatedMotif = (dto.getMotif() != null ? dto.getMotif().toString() : "") + (dto.getMotiff() != null ? dto.getMotiff() : "");
+//        String concatenatedDestination = (dto.getDestination() != null ? dto.getDestination().toString() : "") + (dto.getDestinationn() != null ? dto.getDestinationn() : "");
 
-        //Set Value
+        //Set Valuee
         EmployeDmd employeDmd = new EmployeDmd();
+
+//        if(dto.getAutremotif()==null){
+//            employeDmd.setMotif(dto.getMotif());
+//        }else{
+//
+//            employeDmd.setMotif(dto.getAutremotif());
+//        }
+
         employeDmd.setMotif(dto.getMotif());
         employeDmd.setDestination(dto.getDestination());
+        employeDmd.setAutreMotif(dto.getAutremotif());
+        employeDmd.setAutreDestination(dto.getAutreDestination());
+//        if(employeDmd.getAutreMotif().isEmpty()){
+//
+//            dto.setMotif(dto.getMotif());
+//        }else{
+//            Motif motif=new Motif();
+//            motif.setNomMotif(dto.getAutremotif());
+//            dto.setMotif(motif);
+//        }
+//        if(employeDmd.getAutreDestination().isEmpty()){
+////            Destination destination=new Destination();
+////            destination.setNomDestination(dto.getAutreDestination());
+////            dto.setDestination(destination);
+//            dto.setDestination(dto.getDestination());
+//        }else{
+//            Destination destination=new Destination();
+//            destination.setNomDestination(dto.getAutreDestination());
+//            dto.setDestination(destination);
+//        }
+//        employeDmd.setMotif(concatenatedMotif);
+//        employeDmd.setDestination(concatenatedDestination);
         employeDmd.setStatut(DEMANDE);
         employeDmd.setResponsable(dto.getEmploye().getIdEmploye());
         employeDmd.setDmd(dmdPersist);

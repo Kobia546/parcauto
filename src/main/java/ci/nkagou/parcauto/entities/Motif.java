@@ -20,6 +20,4 @@ public class Motif {
     private Long idMotif;
 
     private String nomMotif;
-
-
 }

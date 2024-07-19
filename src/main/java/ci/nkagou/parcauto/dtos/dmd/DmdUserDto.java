@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
@@ -41,7 +42,11 @@ public class DmdUserDto extends @Valid DmdParcDto {
 
     private Motif motif;
 
+   private String Autremotif;
+
     private Destination destination;
+
+    private String AutreDestination;
 
 
     private  Integer kilometrageDebut;

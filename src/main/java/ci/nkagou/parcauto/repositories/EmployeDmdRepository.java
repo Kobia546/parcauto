@@ -16,8 +16,8 @@ public interface EmployeDmdRepository extends JpaRepository<EmployeDmd, Long> {
 
     EmployeDmd findByStatut(Statut statut);
     long countByStatut(Statut statut);
-    long countByUser(AppUser user);
-    long countByUserAndStatut(AppUser user, Statut statut);
+    long countByEmploye(Employe employe);
+    long countByEmployeAndStatut(Employe employe, Statut statut);
 
     List<EmployeDmd> findEmployeDmdsByDmdMoyenDemandeAndStatut(MoyenDemande moyenDemande,Statut statut);
 

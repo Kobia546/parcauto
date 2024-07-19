@@ -49,14 +49,23 @@ public class EmployeDmd{
 
     @Enumerated(EnumType.ORDINAL)
     private Statut statut;
-    @ManyToOne
+
+  /*  @ManyToOne
     @JoinColumn(name = "user_id")
-    private AppUser user;
+    private AppUser user;*/
 
     @Size(max = 600)
     private String observation;
 
+    private String autreMotif;
+    private String autreDestination;
+
    @Column(nullable = true, columnDefinition = "bigint default 0")
     private Long responsable;
-
+//
+//    public void setMotif(String autremotif) {
+//    }
+//
+//    public void setDestination(String autreDestination) {
+//    }
 }

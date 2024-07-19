@@ -3,6 +3,7 @@ package ci.nkagou.parcauto.services.impl;
 import ci.nkagou.parcauto.dtos.dashboard.DashbordUserResponseDto;
 import ci.nkagou.parcauto.dtos.dmd.EmployeRapportDto;
 import ci.nkagou.parcauto.entities.AppUser;
+import ci.nkagou.parcauto.entities.Employe;
 import ci.nkagou.parcauto.enums.Statut;
 import ci.nkagou.parcauto.repositories.EmployeDmdRepository;
 import ci.nkagou.parcauto.repositories.UserRepository;
@@ -36,12 +37,12 @@ public class DashboardServiceImpl implements DashboardService  {
     @Override
     public DashbordUserResponseDto getDmdCountByStatutForUser(Principal principal){
         String username = principal.getName();
-        AppUser user = userRepository.findByUserName(username);
+        Employe employe = userRepository.findByUserName(username).getEmploye();
 
-        long totale = employeDmdRepository.countByUser(user);
-        long annuler = employeDmdRepository.countByUserAndStatut(user, Statut.ANNULER);
-        long valider = employeDmdRepository.countByUserAndStatut(user, Statut.VALIDATION);
-        long refuser = employeDmdRepository.countByUserAndStatut(user, Statut.REFUS);
+        long totale = employeDmdRepository.countByEmploye(employe);
+        long annuler = employeDmdRepository.countByEmployeAndStatut(employe, Statut.ANNULER);
+        long valider = employeDmdRepository.countByEmployeAndStatut(employe, Statut.VALIDATION);
+        long refuser = employeDmdRepository.countByEmployeAndStatut(employe, Statut.REFUS);
 
         DashbordUserResponseDto dto = new DashbordUserResponseDto();
         dto.setNbreDmdTotal( totale);

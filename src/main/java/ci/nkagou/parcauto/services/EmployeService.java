@@ -76,6 +76,10 @@ public interface EmployeService {
     void delete (Long id);
 
 
+
+  /*  List<Fonction> fonctions();*/
+
+
     /*List<Employe> findEmployesByEstChauffeurStatutChauffeur (Boolean estChauffeur, StatutChauffeur statutChauffeur);*/
 
 

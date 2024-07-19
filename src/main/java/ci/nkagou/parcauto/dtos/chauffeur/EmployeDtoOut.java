@@ -16,11 +16,11 @@ public class EmployeDtoOut {
     private String nom;
     private String prenom;
     private String genre;
-    private String fonction;
-    private String dateEmbauche;
+    /*private String fonction;*/
+    /*private String dateEmbauche;*/
     private String email;
-    private String telephoneEmploye;
-    private String dateNaissance;
+   /* private String telephoneEmploye;
+    private String dateNaissance;*/
     private String estSuperieureHierachique;
     private String estChauffeur;
     private String statutChauffeur;

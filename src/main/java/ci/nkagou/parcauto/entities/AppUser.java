@@ -3,6 +3,7 @@ package ci.nkagou.parcauto.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,10 @@ public class AppUser {
 
     @OneToMany(mappedBy = "appUser", fetch = FetchType.EAGER)
     private List<UserRole> userRoles;
+
+    @Transient
+    @Email
+    private String email;
 
 
 

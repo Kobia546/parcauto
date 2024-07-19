@@ -120,6 +120,8 @@ public class UserController {
         // Save User
         AppUser u = userService.create(user);
 
+        userService.updateEmailEmploye(u.getEmail(),u.getEmploye());
+
         //Update <employe table field est utilisateur
 
 

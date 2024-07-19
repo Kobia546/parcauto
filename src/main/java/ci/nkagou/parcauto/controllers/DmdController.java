@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -368,17 +369,32 @@ public class DmdController {
     public String saveDmdUser(@Valid @ModelAttribute("dmdUserDto") DmdUserDto dmdUserDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes, Principal principal) {
 
         if (bindingResult.hasErrors()) {
-            System.out.println("error YES");
-
+//            System.out.println("error YES");
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                System.out.println("Error in field " + error.getField() + ": " + error.getDefaultMessage());
+            }
+//            Motif motif = new Motif();
             List<Statut> statuts = Arrays.asList(Statut.values());
             List<MoyenDemande> moyenDemandes = Arrays.asList(MoyenDemande.values());
             //model.addAttribute("dmdUserDto", new DmdUserDto());
             model.addAttribute("title", "Dmd - Nouveau");
             model.addAttribute("listMoyenDemandes", moyenDemandes);
+//            model.addAttribute("motifs",motif);
             model.addAttribute("listStatuts", statuts);
 
             return "dmd/new";
         }
+//        System.out.println("Motif sélectionné: " + dmdUserDto.getMotif());
+//        System.out.println("Autre motif: " + autreMotif);
+//        if ("Autre".equals(dmdUserDto.getMotif().getNomMotif())) {
+//            // Création d'un nouveau motif
+//            Motif nouveauMotif = new Motif();
+//            nouveauMotif.setNomMotif(autreMotif);
+//            dmdUserDto.setMotif(nouveauMotif);
+//        }
+
+        // Enregistrer la demande utilisateur avec les détails du motif
+
 
         Employe employe = employeService.getEmployeByUserName(principal.getName());
         EmployeDmd dmd = new EmployeDmd();
@@ -428,6 +444,10 @@ public class DmdController {
         for (String part : moyen2) {
             MoyenD.append(part).append(" ");
         }*/
+        if ( employeDmd.getMotif() == null || employeDmd.getDestination() == null) {
+            redirectAttributes.addFlashAttribute("messageerror", "Erreur: Données manquantes pour l'employé ou la demande.");
+            return "redirect:/dmd/dmds";
+        }
         String motif = employeDmd.getMotif().getNomMotif();
         String destination = employeDmd.getDestination().getNomDestination();
         LocalDate date = employeDmd.getDmd().getDatePrevue();
@@ -455,7 +475,7 @@ public class DmdController {
             redirectAttributes.addFlashAttribute("messageerror", "Erreur lors de l'envoi de l'email.");
         }
 
-
+//        dmdService.createDmdUser(dmdUserDto);
         redirectAttributes.addFlashAttribute("messagesucces", "Opération de création effectuée avec succès");
 
         return "redirect:/dmd/dmds";
