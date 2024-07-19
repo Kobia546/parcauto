@@ -21,7 +21,8 @@ public class EmployeResponse {
     private String direction;
     private String estChauffeur;
     private String estResponsable;
-    private String fonction;
+    /*private String fonction;*/
+    private Boolean estUtilisateur;
 
     public static String stringEstChauffeur(Boolean estChauffeur){
 

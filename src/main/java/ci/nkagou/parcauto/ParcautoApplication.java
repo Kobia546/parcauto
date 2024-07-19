@@ -595,7 +595,7 @@ public class ParcautoApplication {
 
 
 
-		String server ="Server start on http://localhost:9090";
+		String server ="Server start on http://localhost:9191";
 		System.out.println(server);
 
         /*EmployeService employeService = ctx.getBean(EmployeService.class);
@@ -629,8 +629,7 @@ public class ParcautoApplication {
 		//String filePath = "C:\\Users\\PC\\Desktop\\parcauto-master-V2\\parcauto-master\\src\\main\\resources\\templates\\newprint.jrxml";
 
     }
-/*
-	@Bean
+	/*@Bean
 	CommandLineRunner site (SiteRepository siteRepository) {
 		return args -> {
 			siteRepository.save(new Site("CENTRE PERSO"));
@@ -687,6 +686,7 @@ public class ParcautoApplication {
 			employeAdmin.setStatutChauffeur(StatutChauffeur.DISPONIBLE);
 			employeAdmin.setSite(site);
 			employeAdmin.setDirection(direction);
+			employeAdmin.setEstUtilisateur(true);
 			employeAdmin = employeRepository.save(employeAdmin);
 
 			AppUser userAdmin = userRepository.save(new AppUser("admin", password, true, employeAdmin));

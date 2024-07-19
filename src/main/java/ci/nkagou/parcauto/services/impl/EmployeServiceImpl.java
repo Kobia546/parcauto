@@ -335,23 +335,10 @@ public class EmployeServiceImpl implements EmployeService {
         e.setEstChauffeur(EmployeResponse.stringEstChauffeur(employe.isEstChauffeur()));
         e.setDirection(employe.getDirection().getLibelle());
         e.setSite(employe.getSite().getLibelle());
+        e.setEstUtilisateur(employe.isEstUtilisateur());
        // e.setFonction(employe.getFonction());
          return  e;
 
-
-//        return EmployeResponse.builder()
-//                .id(employe.getIdEmploye())
-//                .nom(employe.getNom())
-//                .prenoms(employe.getPrenom())
-//                .email(employe.getEmail())
-//                .genre(employe.getGenre().name())
-//                .matricule())
-//                .direction(employe.getDirection().getLibelle())
-//                .site(employe.getSite().getLibelle())
-//                .fonction(employe.getFonction())
-//                .estResponsable(EmployeResponse.stringEstResponsable(employe.isEstSuperieureHierachique()))
-//                .estChauffeur(EmployeResponse.stringEstChauffeur(employe.isEstChauffeur()))
-//                .build();
 
     }
 
@@ -383,9 +370,9 @@ public class EmployeServiceImpl implements EmployeService {
 
             EmployeResponse response = this.DTO(employe);
             responses.add(response);
-            String n = "";
-        }
 
+        }
+        String n = "";
         return responses;
     }
 
