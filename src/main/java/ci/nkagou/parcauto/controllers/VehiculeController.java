@@ -11,6 +11,7 @@ import ci.nkagou.parcauto.entities.*;
 import ci.nkagou.parcauto.enums.*;
 import ci.nkagou.parcauto.repositories.VehiculeAttRepository;
 import ci.nkagou.parcauto.services.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
+@Slf4j
 public class VehiculeController {
 
     private final VehiculeService vehiculeService;
@@ -85,6 +87,7 @@ public class VehiculeController {
         model.addAttribute("listMarques",marques);
         model.addAttribute("listCouleurs",couleurs);
         model.addAttribute("title", "Vehicule - Nouveau");
+        log.info("Vehicule : formulaire creation affiché");
 
         return "vehicule/new";
     }
@@ -109,6 +112,7 @@ public class VehiculeController {
 
         Vehicule vehicule = vehiculeService.dtoToVehicule(dto);
         Vehicule v = vehiculeService.create(vehicule);
+        log.info("Vehicule : immatriculation : [ "+vehicule.getImmatriculation()+" ] cree avec succes");
         //Get user connected
         // AppUser user = userService.findByUserName(principal.getName());
 

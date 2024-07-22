@@ -46,10 +46,10 @@
                         <tr>
                             <th class="text-center">Id</th>
                             <th class="text-center" sec:authorize="hasRole('ROLE_RESPONSABLE') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_ADMIN')">Nom utilisateur</th>
-                            <th class="text-center">Numero d'immatriculation</th>
+                            <th class="text-center">Numero matricule</th>
                             <th class="text-center">Genre</th>
-                            <th class="text-center">Telephone</th>
-                            <th class="text-center">Date de Naissance</th>
+                            <!--<th class="text-center">Telephone</th>-->
+                            <!--<th class="text-center">Date de Naissance</th>-->
                             <th class="text-center">Statut</th>
                             <th class="text-center">Changer statut</th>
                             <!--<th class="text-center" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_PARCAUTO')">Editer</th>-->
@@ -72,8 +72,8 @@
                             <td  sec:authorize="hasRole('ROLE_RESPONSABLE') or hasRole('ROLE_PARCAUTO') or hasRole('ROLE_ADMIN')" id = "nom" th:text = "${c.nom}" class="text-center" ></td>
                             <td  th:text = "${c.numMatEmpl}" class="text-center"></td>
                             <td  th:text = "${c.genre}" class="text-center"></td>
-                            <td  th:text = "${c.telephoneEmploye}" class="text-center"></td>
-                            <td  th:text = "${c.dateNaissance}" class="text-center"></td>
+                            <!--<td  th:text = "${c.telephoneEmploye}" class="text-center"></td>-->
+                            <!--<td  th:text = "${c.dateNaissance}" class="text-center"></td>-->
                             <!--<td  th:text = "${c.statutChauffeur}" class="text-center"></td>-->
 
                             <td id = "statut" th:switch="${c.statutChauffeur}" >

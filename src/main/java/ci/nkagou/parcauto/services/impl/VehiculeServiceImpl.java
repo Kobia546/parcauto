@@ -90,7 +90,7 @@ public class VehiculeServiceImpl implements VehiculeService {
         dto.setStatutVehicule(vehicule.getStatutVehicule().name());
         dto.setCarteGrise(vehicule.getCarteGrise());
         dto.setNumeroChassis(vehicule.getNumeroChassis());
-        dto.setDateAchat(vehicule.getDateAchat().toString());
+       // dto.setDateAchat(vehicule.getDateAchat().toString());
         dto.setRaison(vehicule.getRaison());
         dto.setTypeVehicule(vehicule.getTypevehicule().getLibelle());
         dto.setMarque(vehicule.getMarque().getName());

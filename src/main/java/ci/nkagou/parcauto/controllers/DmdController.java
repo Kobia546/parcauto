@@ -14,6 +14,7 @@ import ci.nkagou.parcauto.enums.*;
 import ci.nkagou.parcauto.enums.Motifs;
 import ci.nkagou.parcauto.repositories.*;
 import ci.nkagou.parcauto.services.*;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
@@ -50,6 +51,7 @@ import static ci.nkagou.parcauto.enums.StatutVehicule.DISPONIBLE;
 
 
 @Controller
+@Slf4j
 public class DmdController {
 
     private final DmdService dmdService;
@@ -133,7 +135,7 @@ public class DmdController {
 
         //Set roleParcauto
         String roleParcauto = "ROLE_PARCAUTO";
-        String roleResponsableDSI = "ROLE_RESPONSABLE";
+        String roleResponsable = "ROLE_RESPONSABLE";
         String roleAdmin = "ROLE_ADMIN";
 
 
@@ -153,9 +155,11 @@ public class DmdController {
             //model.addAttribute("listDmdParcauto",dmds);
             //return "indexParc";
 
-        } else if (request.isUserInRole(roleResponsableDSI)) {
+        } else if (request.isUserInRole(roleResponsable)) {
             //List<Employe> Dmdss = dmdService.getEmployeByDirection();
-            Direction direction = directionService.findById(1L);
+           // Direction direction = directionService.findById(1L);
+            Direction direction = employe.getDirection();
+
             List<EmployeDmd> dmd = dmdService.listEmployeDmdByStatutDirection(Statut.DEMANDE, direction);
             //Direction directions = directionService.findById(1L);
 
@@ -285,6 +289,8 @@ public class DmdController {
             model.addAttribute("hasErrors", true);
         }
 
+        log.info("Dmd | Utilisateur : formulaire affiché avec succès");
+
         return "dmd/new";
     }
 
@@ -300,6 +306,7 @@ public class DmdController {
         model.addAttribute("listMoyenDemandes", moyenDemandes);
         model.addAttribute("listresponsable", employeResponsable);
 
+        log.info("Dmd | Parc-Auto : formulaire affiché avec succès");
         return "dmd/newParc";
     }
 
@@ -328,6 +335,8 @@ public class DmdController {
         model.addAttribute("dto", new EmployeDmdDto());
         model.addAttribute("listMotif", motif);
         model.addAttribute("listDestination", destination);
+
+        log.info("Dmd | Parc-Auto | Suivant : formulaire affiché avec succès");
 
         return "dmd/newParcSuivant";
     }
@@ -404,11 +413,18 @@ public class DmdController {
 
         EmployeDmd dmd1 = dmdService.createDmdUser(dmdUserDto);
 
+
+
         Long id = dmd1.getIdEmployeDmd();
 
         //Direction direction = directionService.findById(1L);
 
         List<String> emailSuperieurs = employeService.listEmailsSuperieur(employe);
+        String emails = String.join(", ", emailSuperieurs);
+
+        log.info("Dmd | Utilisateur : Dmd id : " + id +" crée | Demande validation ( " + emails + ")");
+
+
         /*List<Employe> superieurs = employeService.listSuperieurByEmploye(employe);
         List<String> emailSuperieurs = new ArrayList<>();
         for (Employe e : superieurs){

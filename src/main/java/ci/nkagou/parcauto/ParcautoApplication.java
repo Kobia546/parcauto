@@ -35,6 +35,12 @@ public class ParcautoApplication {
 
 		ApplicationContext ctx = SpringApplication.run(ParcautoApplication.class, args);
 
+		/*List<String> emails = new ArrayList<>();
+		emails.add("test1@test.ci");
+		//emails.add("2test@test.ci");
+
+		String s = String.join(", ", emails);
+		String string ="";*/
 		/*UserService userService = ctx.getBean(UserService.class);
 		EmployeService employeService = ctx.getBean(EmployeService.class);
 		RoleRepository roleRepository = ctx.getBean(RoleRepository.class);

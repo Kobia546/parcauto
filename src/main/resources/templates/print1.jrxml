@@ -114,7 +114,8 @@ Version : 1.00]]></text>
                     </staticText>
                     <image>
                         <reportElement x="1" y="16" width="85" height="60" uuid="4b6a530d-4c98-4823-add8-a36df1d0c5c5"/>
-                        <imageExpression><![CDATA["src/main/resources/templates/logo.png"]]></imageExpression>
+                        <imageExpression><![CDATA["src/main/resources/static/asset/brand/logo.png"]]></imageExpression>
+                        <!--<imageExpression><![CDATA["src/main/resources/templates/logo.png"]]></imageExpression>-->
                     </image>
                 </frame>
             </band>
