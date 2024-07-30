@@ -35,5 +35,4 @@ public class VehiculePeriodeVisite {
     @JoinColumn(name = "idVisite")
     private Visitetechnique visitetechnique;
 
-
 }
